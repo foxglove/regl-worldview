@@ -1,9 +1,8 @@
 // @flow
 
 // $FlowFixMe flow doesn't like file-loader
-import textureAtlasDataUrl from "file-loader!./textureAtlasData.bin";
-
 import { type GeneratedAtlas } from "../commands/GLText";
+import textureAtlasDataUrl from "file-loader!./textureAtlasData.bin";
 
 const charInfo = {
   "0": { x: 1380, y: 0, width: 88.984375 },

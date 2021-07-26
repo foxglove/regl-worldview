@@ -6,7 +6,7 @@ dist
 
 [libs]
 ./flow-typed
-./packages/webviz-core/src/globals.js.flow
+./src/globals.js.flow
 
 [options]
 emoji=true

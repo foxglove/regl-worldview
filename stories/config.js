@@ -9,12 +9,8 @@ import { addDecorator, addParameters } from "@storybook/react";
 import React from "react";
 import { withScreenshot } from "storycap";
 
-import "webviz-core/src/styles/global.scss";
 import prepareForScreenshots from "./prepareForScreenshots";
 import withStateReset from "./withStateReset";
-import storiesSetup from "webviz-core/src/stories/setup";
-import waitForFonts from "webviz-core/src/styles/waitForFonts";
-import installChartjs from "webviz-core/src/util/installChartjs";
 
 if (global.FinalizationRegistry == null) {
   global.FinalizationRegistry = class {
@@ -27,10 +23,6 @@ export const SCREENSHOT_VIEWPORT = {
   height: 745,
 };
 
-storiesSetup();
-global.GIT_INFO = {};
-installChartjs();
-
 addDecorator((storyFn) => {
   document.querySelectorAll("[data-modalcontainer]").forEach((el) => el.remove()); // Remove leftover modals
   return React.createElement(storyFn);
@@ -41,7 +33,6 @@ addDecorator(withScreenshot);
 addParameters({
   screenshot: {
     delay: 100,
-    waitFor: waitForFonts,
     viewport: SCREENSHOT_VIEWPORT,
   },
 });
