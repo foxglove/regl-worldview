@@ -124,7 +124,10 @@ export const blend = defaultBlend;
 // inserts some glsl helpers to apply the pose to points in a fragment shader
 export function withPose(command: ReglCommand): ReglCommand {
   const { vert, uniforms } = command;
-  const newVert = vert.replace("#WITH_POSE", rotateGLSL);
+  const newVert =
+    typeof vert === "function"
+      ? (context, props) => vert(context, props).replace("#WITH_POSE", rotateGLSL)
+      : vert.replace("#WITH_POSE", rotateGLSL);
   const newUniforms = {
     ...uniforms,
     _position: (context, props) => {

@@ -20,7 +20,7 @@ export type Dimensions = {|
 |};
 
 export type ReglCommand = {
-  vert: string,
+  vert: string | ((props: mixed, context: mixed) => string),
   frag: string,
   uniforms?: any,
 };
