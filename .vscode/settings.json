@@ -1,13 +1,20 @@
+// -*- jsonc -*-
 {
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.detectIndentation": false,
   "editor.formatOnSave": true,
-  "flow.useNPMPackagedFlow": true,
-  "javascript.validate.enable": false,
-  "typescript.validate.enable": false,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "eslint.options": {
+    "reportUnusedDisableDirectives": true
+  },
   "files.associations": {
     "*.mdx": "markdown"
   },
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": false,
-    "source.fixAll.eslint": true
-  }
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true
 }

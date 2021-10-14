@@ -1,4 +1,4 @@
-<!-- Thanks for contributing to Webviz! To help us understand and review your PR, please fill out the following sections: -->
+<!-- Thanks for contributing to Worldview! To help us understand and review your PR, please fill out the following sections: -->
 
 ## Summary
 

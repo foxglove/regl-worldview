@@ -14,13 +14,7 @@ module.exports = {
   plugins: ["jest", "import-order-alphabetical", "react-hooks"],
   parser: "babel-eslint",
   settings: {
-    "import/external-packages": [
-      "packages/@cruise-automation/button",
-      "packages/@cruise-automation/hooks",
-      "packages/@cruise-automation/tooltip",
-      "packages/react-key-listener",
-      "packages/regl-worldview",
-    ],
+    "import/core-modules": "regl-worldview",
     "import/resolver": { webpack: { config: `${__dirname}/webpack.config.js` } },
   },
   globals: {
@@ -51,11 +45,22 @@ module.exports = {
     // within those groups.
     "import-order-alphabetical/order": [
       "error",
-      { "newlines-between": "always", groups: [["builtin", "external"], ["internal", "parent", "sibling", "index"]] },
+      {
+        "newlines-between": "always",
+        groups: [["builtin", "external"], ["internal", "parent", "sibling", "index"]],
+      },
     ],
     // TODO(JP): Fix this instead of disabling it:
     "import/no-named-as-default": "off",
     "prefer-arrow-callback": ["error", { allowNamedFunctions: true }],
     "react-hooks/rules-of-hooks": "error",
   },
+  overrides: [
+    {
+      files: "docs/src/jsx/**/*.js",
+      rules: {
+        "import/no-unresolved": "off",
+      },
+    },
+  ],
 };
