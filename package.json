@@ -13,6 +13,7 @@
     "dist"
   ],
   "scripts": {
+    "prepack": "rollup -c",
     "build": "rollup -c",
     "build:watch": "rollup -c --watch",
     "clean": "rimraf dist",
