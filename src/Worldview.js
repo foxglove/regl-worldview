@@ -171,6 +171,10 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     if (!this._canvas.current) {
       return console.warn("missing canvas element");
     }
+
+    this._canvas.current.addEventListener("webglcontextlost", this._handleContextLost);
+    this._canvas.current.addEventListener("webglcontextrestored", this._handleContextRestored);
+
     const { worldviewContext } = this.state;
     worldviewContext.initialize(this._canvas.current);
     // trigger rendering in children that require camera to be present, e.g. Text component
@@ -184,6 +188,9 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     if (this._tick) {
       cancelAnimationFrame(this._tick);
     }
+
+    this._canvas.current.removeEventListener("webglcontextlost", this._handleContextLost);
+    this._canvas.current.removeEventListener("webglcontextrestored", this._handleContextRestored);
     this.state.worldviewContext.destroy();
   }
 
@@ -212,6 +219,54 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     } else if (mouseEventName === "onMouseUp") {
       this._onMouseUp(e, true);
     }
+  };
+
+  _handleContextLost = (ev) => {
+    const {
+      width,
+      height,
+      top,
+      left,
+      backgroundColor,
+      onCameraStateChange,
+      cameraState,
+      defaultCameraState,
+      contextAttributes,
+    } = this.props;
+
+    if (this._tick) {
+      cancelAnimationFrame(this._tick);
+    }
+
+    this.state.worldviewContext.destroy();
+
+    // prepare a new worldview context for when we are restored
+    this.setState({
+      worldviewContext: new WorldviewContext({
+        dimension: {
+          width,
+          height,
+          top,
+          left,
+        },
+        canvasBackgroundColor: backgroundColor || DEFAULT_BACKGROUND_COLOR,
+        // DEFAULT_CAMERA_STATE is applied if both `cameraState` and `defaultCameraState` are not present
+        cameraState: cameraState || defaultCameraState || DEFAULT_CAMERA_STATE,
+        onCameraStateChange: onCameraStateChange || undefined,
+        contextAttributes: contextAttributes || {},
+      }),
+    });
+
+    ev.preventDefault();
+  };
+
+  _handleContextRestored = (ev) => {
+    this.state.worldviewContext.initialize(this._canvas.current);
+    // update internal dimensions
+    this.state.worldviewContext.paint();
+
+    // trigger rendering since our worldviewContext is initialized
+    this.setState({}); //eslint-disable-line
   };
 
   _onDoubleClick = (e: SyntheticMouseEvent<HTMLCanvasElement>, fromOffscreenTarget: boolean) => {
