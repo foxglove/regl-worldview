@@ -13,7 +13,7 @@ import { isColorDark, type TextMarker } from "./Text";
 
 // HACK: TinySDF doesn't agree with workers. Until support is added, hack this to make it work.
 // TODO(steel): Upstream the fix in memoizedCreateCanvas.
-if (!self.document) {
+if (typeof self !== "undefined" && !self.document) {
   // $FlowFixMe: Flow doesn't know about OffscreenCanvas.
   self.document = { createElement: () => new OffscreenCanvas(0, 0) };
 }
