@@ -151,8 +151,8 @@ const drawModel = (regl) => {
           data: bitmap,
           min: glConstantToRegl(sampler.minFilter),
           mag: glConstantToRegl(sampler.magFilter),
-          wrapS: glConstantToRegl(sampler.wrapS),
-          wrapT: glConstantToRegl(sampler.wrapT),
+          wrapS: sampler.wrapS ? glConstantToRegl(sampler.wrapS) : "repeat",
+          wrapT: sampler.wrapT ? glConstantToRegl(sampler.wrapT) : "repeat",
         });
         return texture;
       });
