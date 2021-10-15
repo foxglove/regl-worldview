@@ -8,7 +8,7 @@
 
 import { quat, vec3 } from "gl-matrix";
 import React, { useState } from "react";
-import Worldview, { Arrows, Spheres, Axes, Grid, cameraStateSelectors, type CameraState } from "regl-worldview";
+import Worldview, { Arrows, Spheres, Axes, Grid, cameraStateSelectors, type CameraState } from "@foxglove/regl-worldview";
 
 import CameraStateControls from "../utils/CameraStateControls";
 

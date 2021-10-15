@@ -6,7 +6,7 @@
 
 // #BEGIN EXAMPLE
 import React, { useState } from "react";
-import Worldview, { Lines, Points, Axes } from "regl-worldview";
+import Worldview, { Lines, Points, Axes } from "@foxglove/regl-worldview";
 import seedrandom from "seedrandom";
 
 import LineControls from "../utils/LineControls";

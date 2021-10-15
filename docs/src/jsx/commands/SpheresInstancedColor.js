@@ -6,7 +6,7 @@
 
 // #BEGIN EXAMPLE
 import React from "react";
-import Worldview, { Spheres } from "regl-worldview";
+import Worldview, { Spheres } from "@foxglove/regl-worldview";
 import seedrandom from "seedrandom";
 
 // #BEGIN EDITABLE

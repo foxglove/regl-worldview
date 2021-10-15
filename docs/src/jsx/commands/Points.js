@@ -6,7 +6,7 @@
 
 // #BEGIN EXAMPLE
 import React from "react";
-import Worldview, { Axes, Points } from "regl-worldview";
+import Worldview, { Axes, Points } from "@foxglove/regl-worldview";
 
 import useRange from "../utils/useRange";
 

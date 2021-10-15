@@ -6,7 +6,7 @@
 
 // #BEGIN EXAMPLE
 import React from "react";
-import Worldview, { PolygonBuilder, DrawPolygons } from "regl-worldview";
+import Worldview, { PolygonBuilder, DrawPolygons } from "@foxglove/regl-worldview";
 
 // #BEGIN EDITABLE
 class Example extends React.Component {

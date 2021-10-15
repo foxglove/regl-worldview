@@ -6,7 +6,7 @@
 
 // #BEGIN EXAMPLE
 import React, { useState } from "react";
-import Worldview, { Axes, GLTFScene } from "regl-worldview";
+import Worldview, { Axes, GLTFScene } from "@foxglove/regl-worldview";
 
 import duckModel from "common/fixtures/Duck.glb"; // Webpack magic: we actually import a URL pointing to a .glb file
 

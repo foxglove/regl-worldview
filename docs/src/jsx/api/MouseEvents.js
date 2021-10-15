@@ -5,11 +5,11 @@
 //  You may not use this file except in compliance with the License.
 
 // #BEGIN EXAMPLE
+import Worldview, { Cubes } from "@foxglove/regl-worldview";
 import last from "lodash/last";
 import remove from "lodash/remove";
 import sample from "lodash/sample";
 import React, { useState } from "react";
-import Worldview, { Cubes } from "regl-worldview";
 import seedrandom from "seedrandom";
 
 // #BEGIN EDITABLE

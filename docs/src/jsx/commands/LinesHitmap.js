@@ -6,7 +6,7 @@
 
 // #BEGIN EXAMPLE
 import React, { useState } from "react";
-import Worldview, { Lines } from "regl-worldview";
+import Worldview, { Lines } from "@foxglove/regl-worldview";
 
 import LinesWithClickableInterior from "../utils/LinesWithClickableInterior";
 

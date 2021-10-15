@@ -1,5 +1,5 @@
-import CodeSandboxEmbed from './jsx/utils/CodeSandboxEmbed.js';
-import { HelloWorld, CustomObject, ColorfulKnot, InstancedRendering } from './jsx/allLiveEditors';
+import CodeSandboxEmbed from "./jsx/utils/CodeSandboxEmbed.js";
+import { HelloWorld, CustomObject, ColorfulKnot, InstancedRendering } from "./jsx/allLiveEditors";
 
 # Rendering Objects
 
@@ -12,10 +12,10 @@ In this step, you'll learn how to:
 
 ## Building a Hello World App
 
-Add `regl-worldview` to your [package dependencies](https://docs.npmjs.com/specifying-dependencies-and-devdependencies-in-a-package-json-file), for instance by running `npm install regl-worldview`:
+Add `@foxglove/regl-worldview` to your [package dependencies](https://docs.npmjs.com/specifying-dependencies-and-devdependencies-in-a-package-json-file), for instance by running `npm install @foxglove/regl-worldview`:
 
 ```json
-"regl-worldview": "latest"
+"@foxglove/regl-worldview": "latest"
 ```
 
 Create a new file titled `Example.js` in the `src/` directory, and add the code below which uses the Worldview component to render a red cube, x/y/z axes, and "Hello, Worldview!" text.
@@ -23,7 +23,7 @@ Create a new file titled `Example.js` in the `src/` directory, and add the code 
 ```js
 // src/Example.js
 import React from "react";
-import Worldview, { Cubes, Axes, Text } from "regl-worldview";
+import Worldview, { Cubes, Axes, Text } from "@foxglove/regl-worldview";
 
 export default function Example() {
   return (

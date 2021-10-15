@@ -6,7 +6,7 @@
 
 // #BEGIN EXAMPLE
 import React, { useState } from "react";
-import Worldview, { Cubes, Axes } from "regl-worldview";
+import Worldview, { Cubes, Axes } from "@foxglove/regl-worldview";
 
 // #BEGIN EDITABLE
 function Example() {

@@ -7,7 +7,7 @@
 // #BEGIN EXAMPLE
 import polygonGenerator from "polygon-generator";
 import React, { useState } from "react";
-import Worldview, { FilledPolygons, Axes } from "regl-worldview";
+import Worldview, { FilledPolygons, Axes } from "@foxglove/regl-worldview";
 
 // #BEGIN EDITABLE
 function Example() {

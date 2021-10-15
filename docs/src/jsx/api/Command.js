@@ -5,7 +5,7 @@
 //  You may not use this file except in compliance with the License.
 
 import React from "react";
-import Worldview, { Command } from "regl-worldview";
+import Worldview, { Command } from "@foxglove/regl-worldview";
 
 const reglTriangle = (regl) => ({
   vert: `

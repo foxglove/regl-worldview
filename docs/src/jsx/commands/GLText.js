@@ -8,7 +8,7 @@
 import { useAnimationFrame } from "@cruise-automation/hooks";
 import { quat } from "gl-matrix";
 import React, { useState, useRef } from "react";
-import Worldview, { GLText, DEFAULT_CAMERA_STATE } from "regl-worldview";
+import Worldview, { GLText, DEFAULT_CAMERA_STATE } from "@foxglove/regl-worldview";
 import seedrandom from "seedrandom";
 
 import { inScreenshotTests } from "../utils/codeSandboxUtils";

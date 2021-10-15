@@ -5,8 +5,8 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 
+import { Lines, FilledPolygons, type CommonCommandProps, type Line } from "@foxglove/regl-worldview";
 import React from "react";
-import { Lines, FilledPolygons, type CommonCommandProps, type Line } from "regl-worldview";
 
 // type LineProps = CommandProps<Line> & {
 //   // when enabled, a polygon will be drawn using the line points, and the user will get the original
