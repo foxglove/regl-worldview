@@ -200,6 +200,7 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     if (this.props.cameraState) {
       worldviewContext.cameraStore.setCameraState(this.props.cameraState);
     }
+    worldviewContext.canvasBackgroundColor = this.props.backgroundColor || DEFAULT_BACKGROUND_COLOR;
     worldviewContext.onDirty();
   }
 
