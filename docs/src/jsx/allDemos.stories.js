@@ -72,8 +72,7 @@ const stories = storiesOf("Worldview docs", module).addParameters({
   },
 });
 
-Object.keys(allDemos).map((demoName) => {
-  const Component = allDemos[demoName];
+for (const [demoName, Component] of Object.entries(allDemos)) {
   const story = () => {
     return (
       <div style={{ height: 500 }}>
@@ -82,14 +81,15 @@ Object.keys(allDemos).map((demoName) => {
     );
   };
   const hasScreenshotTest = !demosWithoutScreenshotTests.includes(Component);
-  return stories.add(
+  stories.add(
     demoName,
-    hasScreenshotTest
-      ? story
-      : addParameters({
-          screenshot: {
-            skip: true,
-          },
-        })(story)
+    story
+    // hasScreenshotTest
+    //   ? story
+    //   : addParameters({
+    //       screenshot: {
+    //         skip: true,
+    //       },
+    //     })(story)
   );
-});
+}

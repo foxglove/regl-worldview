@@ -55,15 +55,9 @@ const gitInfo = (() => {
 
 module.exports = {
   devtool: "cheap-module-eval-source-map",
-  entry:
-    STATIC_WEBVIZ || WEBVIZ_DEV
-      ? {
-          webvizCoreBundle: "./packages/webviz-core/src/index.js",
-        }
-      : {
-          docs: "./docs/src/index.js",
-          webvizCoreBundle: "./packages/webviz-core/src/index.js",
-        },
+  entry: {
+    docs: "./docs/src/index.js",
+  },
   output: {
     path: WEBVIZ_DEV
       ? path.resolve(`${__dirname}/dist`)
@@ -76,13 +70,15 @@ module.exports = {
     devtoolModuleFilenameTemplate: (info) => path.resolve(info.absoluteResourcePath),
   },
   resolve: {
-    modules: [path.resolve("."), "node_modules"],
+    // modules: [path.resolve("."), "node_modules"],
     extensions: [".js"],
     // Doesn't work properly with linked packages, see
     // https://webpack.js.org/configuration/resolve/#resolve-symlinks
     // and https://github.com/webpack/webpack/issues/1866
     symlinks: false,
     alias: {
+      "~": path.resolve(__dirname),
+      "regl-worldview": path.resolve(__dirname),
       // The Buffer bundled by webpack copies data when doing Buffer.from(sharedArrayBuffer).
       // Force use of the version in webviz-core/node_modules.
       buffer$: path.resolve(`${__dirname}/packages/webviz-core/node_modules/buffer`),
