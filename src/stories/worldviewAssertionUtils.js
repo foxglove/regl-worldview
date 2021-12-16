@@ -14,7 +14,8 @@ import React, { type ComponentType } from "react";
 import type { CommonCommandProps } from "../commands/Command";
 import type { CameraState } from "../types";
 import Worldview, { type Props } from "../Worldview";
-import { assertionTest, timeout } from "stories/assertionTestUtils";
+
+import { assertionTest, timeout } from "~/stories/assertionTestUtils";
 
 export const defaultCameraState: $Shape<CameraState> = {
   distance: 75,

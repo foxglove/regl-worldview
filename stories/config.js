@@ -40,8 +40,10 @@ addParameters({
 prepareForScreenshots();
 
 // automatically import all files ending in *.stories.js
+const req = require.context("../src", true, /\.stories\.js$/);
 // $FlowFixMe - require.context seems not correctly typed.
 const reqDocs = require.context("../docs", true, /\.stories\.js$/);
 
 // load the stories
+req.keys().forEach((filename) => req(filename));
 reqDocs.keys().forEach((filename) => reqDocs(filename));

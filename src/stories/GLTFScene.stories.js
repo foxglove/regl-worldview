@@ -11,7 +11,7 @@ import Worldview, { Axes, GLTFScene, Grid } from "../index";
 
 storiesOf("Worldview/GLTFScene", module)
   .add("<GLTFScene> - Load a scene from file", () => {
-    const model = require("common/fixtures/Duck.glb");
+    const model = require("~/common/fixtures/Duck.glb");
     return (
       <Worldview
         defaultCameraState={{
@@ -33,7 +33,7 @@ storiesOf("Worldview/GLTFScene", module)
     );
   })
   .add("<GLTFScene> - Load a scene from a file with Draco-compressed buffers", () => {
-    const model = require("common/fixtures/Duck-Compressed.glb");
+    const model = require("~/common/fixtures/Duck-Compressed.glb");
     return (
       <Worldview
         defaultCameraState={{
@@ -55,7 +55,7 @@ storiesOf("Worldview/GLTFScene", module)
     );
   })
   .add("<GLTFScene> - Load a scene with default texture samplers", () => {
-    const model = require("common/fixtures/gltf_bug_sampler.glb");
+    const model = require("~/common/fixtures/gltf_bug_sampler.glb");
     return (
       <Worldview
         defaultCameraState={{

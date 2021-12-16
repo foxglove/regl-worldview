@@ -14,7 +14,8 @@ import React from "react";
 
 import GLTFScene from "../../commands/GLTFScene";
 import { clickAtOrigin, WorldviewWrapper } from "../worldviewAssertionUtils";
-import { assertionTest, timeout } from "stories/assertionTestUtils";
+
+import { assertionTest, timeout } from "~/stories/assertionTestUtils";
 
 const firstModelPosition = {
   pose: {
@@ -41,7 +42,7 @@ stories
     `Clicks on a single GLTFScene object - worldview event handler`,
     assertionTest({
       story: (setTestData) => {
-        const duckModel = require("common/fixtures/Duck.glb");
+        const duckModel = require("~/common/fixtures/Duck.glb");
         return (
           <WorldviewWrapper onClick={(_, { objects }) => setTestData(objects)}>
             <GLTFScene model={duckModel}>{firstModelPosition}</GLTFScene>
@@ -61,7 +62,7 @@ stories
     `Clicks on a GLTFSCene object with an object behind it - worldview event handler`,
     assertionTest({
       story: (setTestData) => {
-        const duckModel = require("common/fixtures/Duck.glb");
+        const duckModel = require("~/common/fixtures/Duck.glb");
         let testData = [];
         return (
           <WorldviewWrapper enableStackedObjectEvents>

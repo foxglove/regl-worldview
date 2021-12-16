@@ -15,7 +15,8 @@ import React from "react";
 import Cubes from "../../commands/Cubes";
 import Grid from "../../commands/Grid";
 import { WorldviewWrapper, clickAtOrigin } from "../worldviewAssertionUtils";
-import { assertionTest } from "stories/assertionTestUtils";
+
+import { assertionTest } from "~/stories/assertionTestUtils";
 
 const COUNT = 6;
 
