@@ -16,7 +16,8 @@ import Cubes from "../../commands/Cubes";
 import GLText from "../../commands/GLText";
 import { type TextMarker } from "../../commands/Text";
 import { clickAtOrigin, WorldviewWrapper } from "../worldviewAssertionUtils";
-import { assertionTest } from "stories/assertionTestUtils";
+
+import { assertionTest } from "~/stories/assertionTestUtils";
 
 function textMarkers({
   text,

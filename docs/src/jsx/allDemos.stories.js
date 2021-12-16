@@ -4,7 +4,7 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 
-import { storiesOf, addParameters } from "@storybook/react";
+import { storiesOf } from "@storybook/react";
 import React from "react";
 
 import CameraStateControlled from "./api/CameraStateControlled";
@@ -66,30 +66,16 @@ const allDemos = {
 // Some of these demos have movement, which we do want to allow, but which doesn't play well with screenshot tests.
 const demosWithoutScreenshotTests = [DynamicCommands, FilledPolygons, Overlay, Points, SpheresInstanced];
 
-const stories = storiesOf("Worldview docs", module).addParameters({
-  screenshot: {
-    delay: 200,
-  },
-});
-
-Object.keys(allDemos).map((demoName) => {
-  const Component = allDemos[demoName];
+for (const [demoName, Component] of Object.entries(allDemos)) {
   const story = () => {
     return (
-      <div style={{ height: 500 }}>
+      <div style={{ width: "100%", height: "100%" }}>
         <Component />
       </div>
     );
   };
   const hasScreenshotTest = !demosWithoutScreenshotTests.includes(Component);
-  return stories.add(
-    demoName,
-    hasScreenshotTest
-      ? story
-      : addParameters({
-          screenshot: {
-            skip: true,
-          },
-        })(story)
-  );
-});
+  storiesOf("Worldview docs", module)
+    .addParameters({ screenshot: hasScreenshotTest ? { delay: 200 } : { skip: true } })
+    .add(demoName, story);
+}

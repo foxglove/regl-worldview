@@ -14,7 +14,8 @@ import React from "react";
 
 import Cubes from "../../commands/Cubes";
 import { WorldviewWrapper, clickAtOrigin, WORLDVIEW_SIZE, defaultCameraState } from "../worldviewAssertionUtils";
-import { assertionTest, timeout } from "stories/assertionTestUtils";
+
+import { assertionTest, timeout } from "~/stories/assertionTestUtils";
 
 const cube = {
   pose: {
