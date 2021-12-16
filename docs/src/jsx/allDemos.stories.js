@@ -66,30 +66,16 @@ const allDemos = {
 // Some of these demos have movement, which we do want to allow, but which doesn't play well with screenshot tests.
 const demosWithoutScreenshotTests = [DynamicCommands, FilledPolygons, Overlay, Points, SpheresInstanced];
 
-const stories = storiesOf("Worldview docs", module).addParameters({
-  screenshot: {
-    delay: 200,
-  },
-});
-
 for (const [demoName, Component] of Object.entries(allDemos)) {
   const story = () => {
     return (
-      <div style={{ height: 500 }}>
+      <div style={{ width: "100%", height: "100%" }}>
         <Component />
       </div>
     );
   };
   const hasScreenshotTest = !demosWithoutScreenshotTests.includes(Component);
-  stories.add(
-    demoName,
-    story
-    // hasScreenshotTest
-    //   ? story
-    //   : addParameters({
-    //       screenshot: {
-    //         skip: true,
-    //       },
-    //     })(story)
-  );
+  storiesOf("Worldview docs", module)
+    .addParameters({ screenshot: hasScreenshotTest ? { delay: 200 } : { skip: true } })
+    .add(demoName, story);
 }
