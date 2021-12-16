@@ -112,6 +112,9 @@ export default async function parseGLB(arrayBuffer: ArrayBuffer): Promise<GLBMod
         throw new Error(`unrecognized type ${accessorInfo.type}`);
     }
     const bufferView = json.bufferViews[accessorInfo.bufferView];
+    if ((bufferView.byteStride ?? 0) > 0) {
+      throw new Error("non-zero byteStride is not supported");
+    }
     if (bufferView.buffer !== 0) {
       throw new Error("only GLB-stored buffers are supported");
     }

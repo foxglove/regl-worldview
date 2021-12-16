@@ -47,6 +47,9 @@ const decodeAttributes = (draco, decoder, dracoGeometry, attributes) => {
     const numComponents = attribute.num_components();
     const numPoints = dracoGeometry.num_points();
     const numValues = numPoints * numComponents;
+    if (attribute.data_type() !== draco.DT_FLOAT32) {
+      throw new Error("Only DT_FLOAT32 is supported");
+    }
     const attributeType = Float32Array;
     const byteLength = numValues * attributeType.BYTES_PER_ELEMENT;
     const dataType = draco.DT_FLOAT32;

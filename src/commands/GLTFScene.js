@@ -86,6 +86,7 @@ const drawModel = (regl) => {
       texCoord: regl.prop("texCoords"),
     },
     elements: regl.prop("indices"),
+    count: regl.prop("count"),
     vert: `
   uniform mat4 projection, view;
   uniform mat4 nodeMatrix;
@@ -168,12 +169,14 @@ const drawModel = (regl) => {
         const texInfo = material.pbrMetallicRoughness.baseColorTexture;
 
         let primitiveAccessors = accessors;
+        let primitiveAttributes = primitive.attributes;
         const { extensions = {} } = primitive;
         const dracoCompressionEXT = extensions.KHR_draco_mesh_compression;
         if (dracoCompressionEXT) {
           // If mesh contains compressed data, accessors will be available inside
           // the draco extension. See `parseGLB.js` and `draco.js` files.
           primitiveAccessors = dracoCompressionEXT.accessors;
+          primitiveAttributes = dracoCompressionEXT.attributes;
         }
         if (!primitiveAccessors) {
           throw new Error("Error decoding GLB model: Missing `accessors` in JSON data");
@@ -181,10 +184,12 @@ const drawModel = (regl) => {
 
         drawCalls.push({
           indices: primitiveAccessors[primitive.indices],
-          positions: primitiveAccessors[primitive.attributes.POSITION],
-          normals: primitiveAccessors[primitive.attributes.NORMAL],
+          count:
+            primitiveAccessors[primitive.indices]?.length ?? primitiveAccessors[primitiveAttributes.POSITION].length,
+          positions: primitiveAccessors[primitiveAttributes.POSITION],
+          normals: primitiveAccessors[primitiveAttributes.NORMAL],
           texCoords: texInfo
-            ? primitiveAccessors[primitive.attributes[`TEXCOORD_${texInfo.texCoord || 0}`]]
+            ? primitiveAccessors[primitiveAttributes[`TEXCOORD_${texInfo.texCoord || 0}`]]
             : { divisor: 1, buffer: singleTexCoord },
           baseColorTexture: texInfo ? textures[texInfo.index] : whiteTexture,
           baseColorFactor: material.pbrMetallicRoughness.baseColorFactor || [1, 1, 1, 1],
