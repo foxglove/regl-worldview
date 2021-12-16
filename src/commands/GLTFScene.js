@@ -86,7 +86,6 @@ const drawModel = (regl) => {
       texCoord: regl.prop("texCoords"),
     },
     elements: regl.prop("indices"),
-    count: regl.prop("count"),
     vert: `
   uniform mat4 projection, view;
   uniform mat4 nodeMatrix;
@@ -184,8 +183,6 @@ const drawModel = (regl) => {
 
         drawCalls.push({
           indices: primitiveAccessors[primitive.indices],
-          count:
-            primitiveAccessors[primitive.indices]?.length ?? primitiveAccessors[primitiveAttributes.POSITION].length,
           positions: primitiveAccessors[primitiveAttributes.POSITION],
           normals: primitiveAccessors[primitiveAttributes.NORMAL],
           texCoords: texInfo

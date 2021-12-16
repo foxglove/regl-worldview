@@ -16,6 +16,8 @@ export type GLBModel = {
   images?: ImageBitmap[],
 };
 
+const SUPPORTED_EXTENSIONS = ["KHR_draco_mesh_compression"];
+
 // Parse a GLB file: https://github.com/KhronosGroup/glTF/tree/master/specification/2.0
 //
 // Returns an object containing the raw json data as well as parsed images (Image) and
@@ -77,6 +79,12 @@ export default async function parseGLB(arrayBuffer: ArrayBuffer): Promise<GLBMod
     throw new Error("expected GLB-stored buffer");
   }
 
+  for (const ext of json.extensionsRequired ?? []) {
+    if (!SUPPORTED_EXTENSIONS.includes(ext)) {
+      console.warn(`Extension ${ext} not supported by parseGLB()`);
+    }
+  }
+
   // create a TypedArray for each accessor
   const accessors = json.accessors.map((accessorInfo) => {
     if (accessorInfo.bufferView == null) {
@@ -113,7 +121,7 @@ export default async function parseGLB(arrayBuffer: ArrayBuffer): Promise<GLBMod
     }
     const bufferView = json.bufferViews[accessorInfo.bufferView];
     if ((bufferView.byteStride ?? 0) > 0) {
-      // throw new Error("non-zero byteStride is not supported");
+      console.warn("non-zero byteStride is not supported");
     }
     if (bufferView.buffer !== 0) {
       throw new Error("only GLB-stored buffers are supported");
