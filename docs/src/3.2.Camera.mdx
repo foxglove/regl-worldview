@@ -1,5 +1,5 @@
-import { CameraStateControlled, CameraStateUncontrolled } from './jsx/allLiveEditors'
-import CameraState from './jsx/api/CameraState.js';
+import { CameraStateControlled, CameraStateUncontrolled } from "./jsx/allLiveEditors";
+import CameraState from "./jsx/api/CameraState.js";
 
 # Camera
 
@@ -11,7 +11,7 @@ With `phi = 0` the camera points straight down from above the target, and with `
 
 CameraStore holds the camera state and offers methods to handle camera rotation, zoom and move. It also provides `setCameraState` methods to allow you to reset the full/partial camera state. These methods are currently encapsulated inside Worldview.
 
-You can move the camera around using the mouse/trackpad, or by using the keyboard: *a/s/d/f* (for `targetOffset`), *q/e* (for `thetaOffset`), *r/f* (for `phi`), and *z/x* (for `distance`).
+You can move the camera around using the mouse/trackpad, or by using the keyboard: _a/s/d/f_ (for `targetOffset`), _q/e_ (for `thetaOffset`), _r/f_ (for `phi`), and _z/x_ (for `distance`).
 
 ## cameraState
 
@@ -49,7 +49,7 @@ If none of the three props are passed in, Worldview is **Uncontrolled** using `D
 We export a set of selectors to allow you to get additional information based on the cameraState:
 
 ```js
-import { cameraStateSelectors } from "regl-worldview";
+import { cameraStateSelectors } from "@foxglove/regl-worldview";
 
 // Full cameraState is required
 const targetHeading = cameraStateSelectors.targetHeading(cameraState);

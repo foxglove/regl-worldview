@@ -123,8 +123,8 @@ function Example() {
   );
 }`}
         nonEditableCode={`
-import React from 'react';
-import { Worldview, Spheres } from 'regl-worldview'`}
+import React from "react";
+import { Worldview, Spheres } from "@foxglove/regl-worldview"`}
         hideNonEditableCode
       />
     </React.Fragment>

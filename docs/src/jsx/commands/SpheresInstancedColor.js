@@ -5,8 +5,8 @@
 //  You may not use this file except in compliance with the License.
 
 // #BEGIN EXAMPLE
+import Worldview, { Spheres } from "@foxglove/regl-worldview";
 import React from "react";
-import Worldview, { Spheres } from "regl-worldview";
 import seedrandom from "seedrandom";
 
 // #BEGIN EDITABLE

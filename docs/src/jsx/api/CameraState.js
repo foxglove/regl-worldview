@@ -6,9 +6,16 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 
+import Worldview, {
+  Arrows,
+  Spheres,
+  Axes,
+  Grid,
+  cameraStateSelectors,
+  type CameraState,
+} from "@foxglove/regl-worldview";
 import { quat, vec3 } from "gl-matrix";
 import React, { useState } from "react";
-import Worldview, { Arrows, Spheres, Axes, Grid, cameraStateSelectors, type CameraState } from "regl-worldview";
 
 import CameraStateControls from "../utils/CameraStateControls";
 

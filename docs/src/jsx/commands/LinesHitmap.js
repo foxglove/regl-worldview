@@ -5,8 +5,8 @@
 //  You may not use this file except in compliance with the License.
 
 // #BEGIN EXAMPLE
+import Worldview, { Lines } from "@foxglove/regl-worldview";
 import React, { useState } from "react";
-import Worldview, { Lines } from "regl-worldview";
 
 import LinesWithClickableInterior from "../utils/LinesWithClickableInterior";
 

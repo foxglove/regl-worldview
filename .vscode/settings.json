@@ -16,5 +16,8 @@
   "files.eol": "\n",
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
-  "files.trimTrailingWhitespace": true
+  "files.trimTrailingWhitespace": true,
+
+  "flow.useNPMPackagedFlow": true,
+  "javascript.validate.enable": false
 }

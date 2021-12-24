@@ -5,9 +5,9 @@
 //  You may not use this file except in compliance with the License.
 
 // #BEGIN EXAMPLE
+import Worldview, { FilledPolygons, Axes } from "@foxglove/regl-worldview";
 import polygonGenerator from "polygon-generator";
 import React from "react";
-import Worldview, { FilledPolygons, Axes } from "regl-worldview";
 
 import useRange from "../utils/useRange";
 

@@ -1,4 +1,4 @@
-# regl-worldview
+# @foxglove/regl-worldview
 
 **Worldview** is a React library for rendering 2D and 3D scenes using [regl](https://github.com/regl-project/regl).
 
@@ -6,16 +6,10 @@ Visit the [homepage](https://cruise-automation.github.io/webviz/worldview) to se
 
 ## Quick start
 
-Add regl-worldview to your React project:
+Add `@foxglove/regl-worldview` to your React project:
 
 ```bash
-npm install --save regl-worldview
-```
-
-If you’re not using a module bundler or package manager we also have a global (“UMD”) build hosted on the unpkg CDN. Simply add the following script tag to the bottom of your HTML file:
-
-```html
-<script src="https://unpkg.com/regl-worldview/dist/index.umd.js" />
+npm install --save @foxglove/regl-worldview
 ```
 
 Then try rendering the [basic example](https://cruise-automation.github.io/webviz/worldview/#/docs/examples/basicexample):
@@ -25,7 +19,7 @@ Then try rendering the [basic example](https://cruise-automation.github.io/webvi
 ```js
 import React from "react";
 
-import Worldview, { Cubes, Axes } from "regl-worldview";
+import Worldview, { Cubes, Axes } from "@foxglove/regl-worldview";
 
 function BasicExample() {
   const markers = [

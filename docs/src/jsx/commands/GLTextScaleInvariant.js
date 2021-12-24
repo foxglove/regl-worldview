@@ -5,9 +5,9 @@
 //  You may not use this file except in compliance with the License.
 
 // #BEGIN EXAMPLE
+import Worldview, { GLText, Grid, DEFAULT_CAMERA_STATE } from "@foxglove/regl-worldview";
 import { quat } from "gl-matrix";
 import React, { useState } from "react";
-import Worldview, { GLText, Grid, DEFAULT_CAMERA_STATE } from "regl-worldview";
 
 // #BEGIN EDITABLE
 const RADIUS = 20; // distance from the origin for placing columns

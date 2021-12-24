@@ -6,8 +6,8 @@
 
 // #BEGIN EXAMPLE
 import { useAnimationFrame } from "@cruise-automation/hooks";
+import Worldview, { Cubes, Spheres, Axes, GLTFScene } from "@foxglove/regl-worldview";
 import React, { useState, useEffect } from "react";
-import Worldview, { Cubes, Spheres, Axes, GLTFScene } from "regl-worldview";
 
 import duckModel from "~/common/fixtures/Duck.glb"; // Webpack magic: we actually import a URL pointing to a .glb file
 

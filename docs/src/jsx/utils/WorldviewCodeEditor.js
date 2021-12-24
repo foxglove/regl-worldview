@@ -5,12 +5,6 @@
 //  You may not use this file except in compliance with the License.
 
 import { useAnimationFrame } from "@cruise-automation/hooks";
-import { quat, vec3 } from "gl-matrix";
-import last from "lodash/last";
-import remove from "lodash/remove";
-import sample from "lodash/sample";
-import polygonGenerator from "polygon-generator";
-import React, { useRef, useState, useCallback, useEffect } from "react";
 import Worldview, {
   Command,
   Arrows,
@@ -36,7 +30,13 @@ import Worldview, {
   intToRGB,
   cameraStateSelectors,
   getRayFromClick,
-} from "regl-worldview";
+} from "@foxglove/regl-worldview";
+import { quat, vec3 } from "gl-matrix";
+import last from "lodash/last";
+import remove from "lodash/remove";
+import sample from "lodash/sample";
+import polygonGenerator from "polygon-generator";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import seedrandom from "seedrandom";
 import styled from "styled-components";
 
@@ -57,7 +57,7 @@ const CODE_SANDBOX_CONFIG = {
   dependencies: {
     react: "latest",
     "react-dom": "latest",
-    "regl-worldview": "latest",
+    "@foxglove/regl-worldview": "latest",
     "@cruise-automation/hooks": "latest",
     seedrandom: "latest",
     "polygon-generator": "latest",

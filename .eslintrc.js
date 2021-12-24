@@ -14,7 +14,6 @@ module.exports = {
   plugins: ["jest", "import-order-alphabetical", "react-hooks"],
   parser: "babel-eslint",
   settings: {
-    "import/core-modules": "regl-worldview",
     "import/resolver": { webpack: { config: `${__dirname}/webpack.config.js` } },
   },
   globals: {

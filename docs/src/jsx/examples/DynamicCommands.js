@@ -5,8 +5,8 @@
 //  You may not use this file except in compliance with the License.
 
 // #BEGIN EXAMPLE
+import Worldview, { Cubes, Spheres, Axes } from "@foxglove/regl-worldview";
 import React, { useState } from "react";
-import Worldview, { Cubes, Spheres, Axes } from "regl-worldview";
 
 import useRange from "../utils/useRange";
 

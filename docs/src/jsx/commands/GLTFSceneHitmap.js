@@ -5,8 +5,8 @@
 //  You may not use this file except in compliance with the License.
 
 // #BEGIN EXAMPLE
+import Worldview, { Axes, GLTFScene } from "@foxglove/regl-worldview";
 import React, { useState } from "react";
-import Worldview, { Axes, GLTFScene } from "regl-worldview";
 
 import duckModel from "~/common/fixtures/Duck.glb"; // Webpack magic: we actually import a URL pointing to a .glb file
 

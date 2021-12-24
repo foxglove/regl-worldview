@@ -5,8 +5,8 @@
 //  You may not use this file except in compliance with the License.
 
 // #BEGIN EXAMPLE
+import Worldview, { PolygonBuilder, DrawPolygons } from "@foxglove/regl-worldview";
 import React from "react";
-import Worldview, { PolygonBuilder, DrawPolygons } from "regl-worldview";
 
 // #BEGIN EDITABLE
 class Example extends React.Component {
