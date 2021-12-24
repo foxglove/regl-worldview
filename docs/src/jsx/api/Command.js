@@ -4,8 +4,8 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 
-import React from "react";
 import Worldview, { Command } from "@foxglove/regl-worldview";
+import React from "react";
 
 const reglTriangle = (regl) => ({
   vert: `

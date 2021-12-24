@@ -5,8 +5,8 @@
 //  You may not use this file except in compliance with the License.
 
 // #BEGIN EXAMPLE
-import React, { useState } from "react";
 import Worldview, { Lines, Points, Axes } from "@foxglove/regl-worldview";
+import React, { useState } from "react";
 import seedrandom from "seedrandom";
 
 import LineControls from "../utils/LineControls";

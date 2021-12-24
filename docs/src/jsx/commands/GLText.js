@@ -6,9 +6,9 @@
 
 // #BEGIN EXAMPLE
 import { useAnimationFrame } from "@cruise-automation/hooks";
+import Worldview, { GLText, DEFAULT_CAMERA_STATE } from "@foxglove/regl-worldview";
 import { quat } from "gl-matrix";
 import React, { useState, useRef } from "react";
-import Worldview, { GLText, DEFAULT_CAMERA_STATE } from "@foxglove/regl-worldview";
 import seedrandom from "seedrandom";
 
 import { inScreenshotTests } from "../utils/codeSandboxUtils";

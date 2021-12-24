@@ -5,8 +5,8 @@
 //  You may not use this file except in compliance with the License.
 
 // #BEGIN EXAMPLE
-import React from "react";
 import Worldview, { Text, Axes } from "@foxglove/regl-worldview";
+import React from "react";
 
 // #BEGIN EDITABLE
 function Example() {
