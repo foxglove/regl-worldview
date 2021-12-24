@@ -12,7 +12,7 @@ import { storiesOf } from "@storybook/react";
 import expect from "expect";
 import React from "react";
 
-import { assertionTest } from "stories/assertionTestUtils";
+import { assertionTest } from "~/stories/assertionTestUtils";
 
 storiesOf("Integration/ExampleTest", module).add(
   // Store this as a failed test to ensure that our tests will actually fail.

@@ -38,31 +38,29 @@ const decodeGeometry = (draco, decoder, json, binary, dracoCompression) => {
   return dracoGeometry;
 };
 
-const decodeAttributes = (draco, decoder, dracoGeometry, attributes) => {
-  const accessors = [];
-  for (const attributeName in attributes) {
-    const attributeId = attributes[attributeName];
-    const attribute = decoder.GetAttributeByUniqueId(dracoGeometry, attributeId);
+const decodeAttribute = (draco, decoder, dracoGeometry, attributeId) => {
+  const attribute = decoder.GetAttributeByUniqueId(dracoGeometry, attributeId);
 
-    const numComponents = attribute.num_components();
-    const numPoints = dracoGeometry.num_points();
-    const numValues = numPoints * numComponents;
-    const attributeType = Float32Array;
-    const byteLength = numValues * attributeType.BYTES_PER_ELEMENT;
-    const dataType = draco.DT_FLOAT32;
-
-    // eslint-disable-next-line no-underscore-dangle
-    const ptr = draco._malloc(byteLength);
-
-    decoder.GetAttributeDataArrayForAllPoints(dracoGeometry, attribute, dataType, byteLength, ptr);
-    const array = new attributeType(draco.HEAPF32.buffer, ptr, numValues).slice();
-
-    // eslint-disable-next-line no-underscore-dangle
-    draco._free(ptr);
-
-    accessors.push(array);
+  const numComponents = attribute.num_components();
+  const numPoints = dracoGeometry.num_points();
+  const numValues = numPoints * numComponents;
+  if (attribute.data_type() !== draco.DT_FLOAT32) {
+    throw new Error("Only DT_FLOAT32 is supported");
   }
-  return accessors;
+  const attributeType = Float32Array;
+  const byteLength = numValues * attributeType.BYTES_PER_ELEMENT;
+  const dataType = draco.DT_FLOAT32;
+
+  // eslint-disable-next-line no-underscore-dangle
+  const ptr = draco._malloc(byteLength);
+
+  decoder.GetAttributeDataArrayForAllPoints(dracoGeometry, attribute, dataType, byteLength, ptr);
+  const array = new attributeType(draco.HEAPF32.buffer, ptr, numValues).slice();
+
+  // eslint-disable-next-line no-underscore-dangle
+  draco._free(ptr);
+
+  return array;
 };
 
 const decodeIndices = (draco, decoder, dracoGeometry) => {
@@ -83,20 +81,19 @@ const decodeIndices = (draco, decoder, dracoGeometry) => {
 };
 
 const decodePrimitive = (draco, decoder, json, binary, primitive) => {
-  const { extensions = {} } = primitive;
-  const dracoCompression = extensions.KHR_draco_mesh_compression;
-  if (!dracoCompression) {
+  const { extensions: { KHR_draco_mesh_compression } = {} } = primitive;
+  if (!KHR_draco_mesh_compression) {
     return;
   }
 
-  const dracoGeometry = decodeGeometry(draco, decoder, json, binary, dracoCompression);
+  const dracoGeometry = decodeGeometry(draco, decoder, json, binary, KHR_draco_mesh_compression);
 
-  dracoCompression.accessors = [];
+  KHR_draco_mesh_compression.accessors = [];
 
-  const { attributes } = dracoCompression;
-  dracoCompression.accessors.push(...decodeAttributes(draco, decoder, dracoGeometry, attributes));
-
-  dracoCompression.accessors.push(decodeIndices(draco, decoder, dracoGeometry));
+  for (const attributeId of Object.values(KHR_draco_mesh_compression.attributes)) {
+    KHR_draco_mesh_compression.accessors[attributeId] = decodeAttribute(draco, decoder, dracoGeometry, attributeId);
+  }
+  KHR_draco_mesh_compression.accessors[primitive.indices] = decodeIndices(draco, decoder, dracoGeometry);
 
   draco.destroy(dracoGeometry);
 };

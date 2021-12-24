@@ -49,7 +49,8 @@ import InputNumber from "./InputNumber";
 import LineControls from "./LineControls";
 import LinesWithClickableInterior from "./LinesWithClickableInterior";
 import useRange from "./useRange";
-import duckModel from "common/fixtures/Duck.glb"; // Webpack magic: we actually import a URL pointing to a .glb file
+
+import duckModel from "~/common/fixtures/Duck.glb"; // Webpack magic: we actually import a URL pointing to a .glb file
 
 // Add required packages and files for all examples to run
 const CODE_SANDBOX_CONFIG = {
