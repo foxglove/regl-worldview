@@ -113,7 +113,6 @@ Step 1: translate target to the origin
  <T---C----
 
 Step 2: rotate around the origin so the target points forward
-(Here we use the target's heading only, ignoring other components of its rotation)
 
   |
   ^
@@ -157,7 +156,7 @@ const viewSelector: (CameraState) => Mat4 = createSelector(
   orientationSelector,
   positionSelector,
   targetHeadingSelector,
-  ({ target, targetOffset, perspective }, orientation, position, targetHeading) => {
+  ({ target, targetOffset, targetOrientation, perspective }, orientation, position, targetHeading) => {
     const m = mat4.identity([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
     // apply the steps described above in reverse because we use right-multiplication
@@ -174,7 +173,7 @@ const viewSelector: (CameraState) => Mat4 = createSelector(
     mat4.translate(m, m, vec3.negate(TEMP_VEC3, targetOffset));
 
     // 2. rotate target to point forward
-    mat4.rotateZ(m, m, targetHeading);
+    mat4.multiply(m, m, mat4.fromQuat(TEMP_MAT, targetOrientation));
 
     // 1. move target to the origin
     vec3.negate(TEMP_VEC3, target);

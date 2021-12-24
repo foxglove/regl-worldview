@@ -238,40 +238,7 @@ describe("camera store", () => {
         far: 10000,
       });
       expect(vec3.transformMat4([0, 0, 0], [2, 0, 0], view2)).toEqual([-25, 0, -3]);
-      expect(vec3.transformMat4([0, 0, 0], [2, 25, 0], view2)).toEqual([0, nearlyZero, -3]);
-    });
-
-    it("follows target orientation in yaw only", () => {
-      const view1 = selectors.view({
-        thetaOffset: 0,
-        phi: 0,
-        distance: 3,
-        target: [2, 0, 0],
-        targetOffset: [25, 0, 0],
-        targetOrientation: [0, 0, 0, 1],
-        perspective: true,
-        fovy: Math.PI / 2,
-        near: 0.01,
-        far: 10000,
-      });
-
-      expect(vec3.transformMat4([0, 0, 0], [2, 0, 0], view1)).toEqual([-25, 0, -3]);
-      expect(vec3.transformMat4([0, 0, 0], [2 + 25, 0, 0], view1)).toEqual([0, 0, -3]);
-
-      const view2 = selectors.view({
-        thetaOffset: 0,
-        phi: 0,
-        distance: 3,
-        target: [2, 0, 0],
-        targetOffset: [25, 0, 0],
-        targetOrientation: quat.rotateX([0, 0, 0, 1], [0, 0, 0, 1], Math.PI / 8),
-        perspective: true,
-        fovy: Math.PI / 2,
-        near: 0.01,
-        far: 10000,
-      });
-      expect(vec3.transformMat4([0, 0, 0], [2, 0, 0], view2)).toEqual([-25, 0, -3]);
-      expect(vec3.transformMat4([0, 0, 0], [2 + 25, 7, 0], view2)).toEqual([0, 7, -3]);
+      expect(vec3.transformMat4([0, 0, 0], [2, 25, 0], view2)).toEqual([-50, nearlyZero, -3]);
     });
   });
 });
