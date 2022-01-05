@@ -77,7 +77,7 @@ module.exports = {
     symlinks: false,
     alias: {
       "~": path.resolve(__dirname),
-      "regl-worldview": path.resolve(__dirname),
+      "@foxglove/regl-worldview": path.resolve(__dirname),
       // The Buffer bundled by webpack copies data when doing Buffer.from(sharedArrayBuffer).
       // Force use of the version in webviz-core/node_modules.
       buffer$: path.resolve(`${__dirname}/packages/webviz-core/node_modules/buffer`),

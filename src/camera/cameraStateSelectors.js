@@ -155,8 +155,7 @@ const viewSelector: (CameraState) => Mat4 = createSelector(
   stateSelector,
   orientationSelector,
   positionSelector,
-  targetHeadingSelector,
-  ({ target, targetOffset, targetOrientation, perspective }, orientation, position, targetHeading) => {
+  ({ target, targetOffset, targetOrientation, perspective }, orientation, position) => {
     const m = mat4.identity([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
     // apply the steps described above in reverse because we use right-multiplication
@@ -176,13 +175,18 @@ const viewSelector: (CameraState) => Mat4 = createSelector(
     mat4.multiply(m, m, mat4.fromQuat(TEMP_MAT, targetOrientation));
 
     // 1. move target to the origin
-    vec3.negate(TEMP_VEC3, target);
+    mat4.translate(m, m, vec3.negate(TEMP_VEC3, target));
+
+    // if using orthographic camera ensure the distance from "ground"
+    // stays large so no reasonably tall item goes past the camera
     if (!perspective) {
-      // if using orthographic camera ensure the distance from "ground"
-      // stays large so no reasonably tall item goes past the camera
+      TEMP_VEC3[0] = 0;
+      TEMP_VEC3[1] = 0;
       TEMP_VEC3[2] = -2500;
+
+      vec3.transformMat4(TEMP_VEC3, TEMP_VEC3, mat4.fromQuat(TEMP_MAT, quat.invert(TEMP_QUAT, targetOrientation)));
+      mat4.translate(m, m, TEMP_VEC3);
     }
-    mat4.translate(m, m, TEMP_VEC3);
 
     return m;
   }
