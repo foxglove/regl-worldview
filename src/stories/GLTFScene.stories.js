@@ -101,4 +101,26 @@ storiesOf("Worldview/GLTFScene", module)
         </GLTFScene>
       </Worldview>
     );
+  })
+  .add("UnlitTest", () => {
+    const model = require("~/common/fixtures/UnlitTest.glb");
+    return (
+      <Worldview
+        defaultCameraState={{
+          distance: 25,
+          thetaOffset: (-3 * Math.PI) / 4,
+        }}>
+        <Axes />
+        <Grid />
+        <GLTFScene model={model}>
+          {{
+            pose: {
+              position: { x: 0, y: 0, z: 0 },
+              orientation: { x: 0, y: 0, z: 0, w: 1 },
+            },
+            scale: { x: 1, y: 1, z: 1 },
+          }}
+        </GLTFScene>
+      </Worldview>
+    );
   });

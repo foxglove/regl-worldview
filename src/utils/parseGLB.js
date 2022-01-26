@@ -16,7 +16,7 @@ export type GLBModel = {
   images?: ImageBitmap[],
 };
 
-const SUPPORTED_EXTENSIONS = ["KHR_draco_mesh_compression"];
+const SUPPORTED_EXTENSIONS = ["KHR_draco_mesh_compression", "KHR_materials_unlit"];
 
 // Parse a GLB file: https://github.com/KhronosGroup/glTF/tree/master/specification/2.0
 //

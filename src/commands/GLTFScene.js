@@ -79,6 +79,7 @@ const drawModel = (regl) => {
       "light.diffuseIntensity": 0.5,
       hitmapColor: regl.context("hitmapColor"),
       isHitmap: regl.context("isHitmap"),
+      unlit: regl.prop("unlit"),
     },
     attributes: {
       position: regl.prop("positions"),
@@ -106,6 +107,7 @@ const drawModel = (regl) => {
     frag: `
   precision mediump float;
   uniform bool isHitmap;
+  uniform bool unlit;
   uniform vec4 hitmapColor;
   uniform float globalAlpha;
   uniform sampler2D baseColorTexture;
@@ -125,7 +127,13 @@ const drawModel = (regl) => {
   void main() {
     vec4 baseColor = texture2D(baseColorTexture, vTexCoord) * baseColorFactor;
     float diffuse = light.diffuseIntensity * max(0.0, dot(vNormal, -light.direction));
-    gl_FragColor = isHitmap ? hitmapColor : vec4((light.ambientIntensity + diffuse) * baseColor.rgb, baseColor.a * globalAlpha);
+    if (isHitmap) {
+      gl_FragColor = hitmapColor;
+    } else if (unlit) {
+      gl_FragColor = vec4(baseColor.rgb, baseColor.a * globalAlpha);
+    } else {
+      gl_FragColor = vec4((light.ambientIntensity + diffuse) * baseColor.rgb, baseColor.a * globalAlpha);
+    }
   }
   `,
   });
@@ -181,10 +189,13 @@ const drawModel = (regl) => {
           throw new Error("Error decoding GLB model: Missing `accessors` in JSON data");
         }
 
+        const unlit = material.extensions?.KHR_materials_unlit !== undefined;
+
         drawCalls.push({
           indices: primitiveAccessors[primitive.indices],
           positions: primitiveAccessors[primitiveAttributes.POSITION],
-          normals: primitiveAccessors[primitiveAttributes.NORMAL],
+          normals: unlit ? { constant: 0 } : primitiveAccessors[primitiveAttributes.NORMAL],
+          unlit,
           texCoords: texInfo
             ? primitiveAccessors[primitiveAttributes[`TEXCOORD_${texInfo.texCoord || 0}`]]
             : { divisor: 1, buffer: singleTexCoord },
