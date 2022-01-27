@@ -172,6 +172,12 @@ const drawModel = (regl) => {
     // helper to draw the primitives comprising a mesh
     function drawMesh(mesh, nodeMatrix) {
       for (const primitive of mesh.primitives) {
+        if ((primitive.mode ?? 4) !== 4) {
+          console.warn(
+            `GLTFScene: ignoring glTF primitive with mode ${primitive.mode}, only TRIANGLES are currently supported`
+          );
+          continue;
+        }
         const material = model.json.materials[primitive.material];
         const texInfo = material.pbrMetallicRoughness.baseColorTexture;
 
