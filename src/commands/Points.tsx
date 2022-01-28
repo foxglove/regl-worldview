@@ -4,11 +4,13 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import React, { useState } from "react";
+
 import type { PointType, Regl } from "../types";
 import { getVertexColors, pointToVec3, withPose } from "../utils/commandUtils";
 import { createInstancedGetChildrenForHitmap } from "../utils/getChildrenForHitmapDefaults";
 import type { CommonCommandProps } from "./Command";
 import Command from "./Command";
+
 type PointsProps = {
   useWorldSpaceSize?: boolean;
 };

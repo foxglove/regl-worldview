@@ -2,6 +2,7 @@ import TinySDF from "@mapbox/tiny-sdf";
 import difference from "lodash/difference";
 import memoizeOne from "memoize-one";
 import React, { useState } from "react";
+
 import type { Color } from "../types";
 import { defaultBlend, defaultDepth, toColor } from "../utils/commandUtils";
 import { createInstancedGetChildrenForHitmap } from "../utils/getChildrenForHitmapDefaults";

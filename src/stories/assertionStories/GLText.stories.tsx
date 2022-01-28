@@ -8,11 +8,13 @@
 import { storiesOf } from "@storybook/react";
 import expect from "expect";
 import React from "react";
+
 import Cubes from "../../commands/Cubes";
 import GLText from "../../commands/GLText";
 import type { TextMarker } from "../../commands/Text";
 import "../../commands/Text";
 import { clickAtOrigin, WorldviewWrapper } from "../worldviewAssertionUtils";
+
 import { assertionTest } from "~/stories/assertionTestUtils";
 
 function textMarkers({

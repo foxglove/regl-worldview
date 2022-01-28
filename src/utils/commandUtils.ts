@@ -4,6 +4,7 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import type { Color, Point, Orientation, ReglCommand, Vec4, Vec3 } from "../types";
+
 const rotateGLSL = `
   uniform vec3 _position;
   uniform vec4 _rotation;
@@ -190,7 +191,7 @@ export function getVertexColors({
   color: Color;
   points: ReadonlyArray<Point>;
 }): Float32Array | ReadonlyArray<Vec4> {
-  if ((!colors || !colors.length) && color) {
+  if ((!colors || (colors.length === 0)) && color) {
     return constantRGBAArray(points.length, color);
   }
 
@@ -203,7 +204,7 @@ export function getVertexColors({
 }
 
 function hasNestedArrays(arr: any[]) {
-  return arr.length && Array.isArray(arr[0]);
+  return (arr.length > 0) && Array.isArray(arr[0]);
 }
 
 // Returns a function which accepts a single color, an array of colors, and the number of instances,
@@ -243,7 +244,7 @@ export function shouldConvert(props: any) {
 
   return true;
 }
-export function intToRGB(i: number = 0): Vec4 {
+export function intToRGB(i = 0): Vec4 {
   const r = (i >> 16 & 255) / 255;
   const g = (i >> 8 & 255) / 255;
   const b = (i & 255) / 255;

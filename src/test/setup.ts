@@ -11,20 +11,22 @@ import { TextDecoder } from "text-encoding";
 import UrlSearchParams from "url-search-params";
 import util from "util";
 import ws from "ws";
+
 process.env.WASM_LZ4_ENVIRONMENT = "NODE";
 
 function noOp() {}
 
 if (typeof window.URL.createObjectURL === "undefined") {
   Object.defineProperty(window.URL, "createObjectURL", {
-    value: noOp
+    value: noOp,
   });
 }
 
 if (typeof window !== "undefined") {
-  global.requestAnimationFrame = window.requestAnimationFrame = global.requestAnimationFrame || (cb => setTimeout(cb, 0));
+  global.requestAnimationFrame = window.requestAnimationFrame =
+    global.requestAnimationFrame || ((cb) => setTimeout(cb, 0));
 
-  global.cancelAnimationFrame = window.cancelAnimationFrame = global.cancelAnimationFrame || (id => clearTimeout(id));
+  global.cancelAnimationFrame = window.cancelAnimationFrame = global.cancelAnimationFrame || ((id) => clearTimeout(id));
 
   global.TextDecoder = TextDecoder;
   // polyfill URLSearchParams in jsdom
@@ -35,13 +37,13 @@ if (typeof window !== "undefined") {
 // from libraries anyway, since for user-code we should be using `Logger`, which
 // automatically gets silenced on tests.
 // @ts-expect-error - Flow doesn't like that we're overwriting this.
-console.error = function (message) {
+console.error = function(message) {
   // $FlowFixMe
   fail(message); // eslint-disable-line
 };
 
 // @ts-expect-error - Flow doesn't like that we're overwriting this.
-console.warn = function (message) {
+console.warn = function(message) {
   // We'll have to update these methods, but for now we just ignore their
   // warning messages.
   if (message.includes("https://fb.me/react-unsafe-component-lifecycles")) {
@@ -69,6 +71,5 @@ global.TextEncoder = util.TextEncoder;
 if (global.FinalizationRegistry == null) {
   global.FinalizationRegistry = class {
     register() {}
-
   };
 }

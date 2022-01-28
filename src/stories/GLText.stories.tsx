@@ -3,13 +3,15 @@ import { quat } from "gl-matrix";
 import { range } from "lodash";
 import React, { useState, useLayoutEffect, useCallback, useEffect } from "react";
 import tinyColor from "tinycolor2";
+
+import { GLText } from "..";
 import { Axes, Cubes } from "../commands";
 import type { Color } from "../types";
 import { vec4ToOrientation } from "../utils/commandUtils";
 import Container from "./Container";
 import getTextAtlas from "./pregeneratedTextAtlas";
 import { rng } from "./util";
-import { GLText } from "..";
+
 const getAtlasPromise = getTextAtlas();
 
 function textMarkers({

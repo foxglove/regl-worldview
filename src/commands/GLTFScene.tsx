@@ -6,12 +6,13 @@
 import { mat4 } from "gl-matrix";
 import memoizeWeak from "memoize-weak";
 import React, { useContext, useState, useEffect, useCallback, useDebugValue } from "react";
+
+import WorldviewReactContext from "../WorldviewReactContext";
 import type { Color, Pose, Scale, MouseHandler } from "../types";
 import { defaultBlend, pointToVec3, orientationToVec4, toRGBA } from "../utils/commandUtils";
 import { getChildrenForHitmapWithOriginalMarker } from "../utils/getChildrenForHitmapDefaults";
 import type { GLBModel } from "../utils/parseGLB";
 import parseGLB from "../utils/parseGLB";
-import WorldviewReactContext from "../WorldviewReactContext";
 import Command from "./Command";
 
 function glConstantToRegl(value: number | null | undefined): string | null | undefined {
@@ -324,7 +325,7 @@ function useModel(model: string | (() => Promise<GLBModel>)): GLBModel | null | 
   useDebugValue(model);
   return useAsyncValue(async () => {
     if (typeof model === "function") {
-      return model();
+      return await model();
     }
 
     if (typeof model === "string") {
@@ -334,7 +335,7 @@ function useModel(model: string | (() => Promise<GLBModel>)): GLBModel | null | 
         throw new Error(`failed to fetch GLTF model: ${response.status}`);
       }
 
-      return parseGLB(await response.arrayBuffer());
+      return await parseGLB(await response.arrayBuffer());
     }
 
     /*:: (model: empty) */

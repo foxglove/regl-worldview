@@ -4,10 +4,12 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import React from "react";
+
 import type { Line, Point, Vec3, Scale, GetChildrenForHitmap, SphereList } from "../../types";
 import { vec4ToRGBA, vec3ToPoint } from "../../utils/commandUtils";
 import Lines from "../Lines";
 import Spheres from "../Spheres";
+
 export function multiplyScale(scale: Scale, factor: number): Scale {
   return {
     x: scale.x * factor,
@@ -49,7 +51,7 @@ let count = 1;
 export class PolygonPoint {
   id: number;
   point: Vec3;
-  active: boolean = false;
+  active = false;
 
   constructor(points: Vec3) {
     this.id = count++;
@@ -61,9 +63,9 @@ export class Polygon {
   id: number;
   name: string;
   points: PolygonPoint[] = [];
-  active: boolean = false;
+  active = false;
 
-  constructor(name: string = "") {
+  constructor(name = "") {
     this.name = name;
     this.id = count++;
   }
@@ -74,7 +76,7 @@ type Props = {
   children: DrawPolygonType[];
 };
 
-const polygonLinesGetChildrenForHitmap: GetChildrenForHitmap = <T extends any>(props: T, assignNextColors, excludedObjects) => {
+const polygonLinesGetChildrenForHitmap: GetChildrenForHitmap = <T,>(props: T, assignNextColors, excludedObjects) => {
   // This is almost identical to the default nonInstancedGetChildrenForHitmap, with changes marked.
   return props.map(prop => {
     if (excludedObjects.some(({
@@ -128,7 +130,7 @@ class PolygonLines extends React.Component<Props> {
 
 }
 
-const polygonPointsGetChildrenForHitmap: GetChildrenForHitmap = <T extends any>(props: T, assignNextColors, excludedObjects) => {
+const polygonPointsGetChildrenForHitmap: GetChildrenForHitmap = <T,>(props: T, assignNextColors, excludedObjects) => {
   // This is similar to the default nonInstancedGetChildrenForHitmap, with changes marked.
   return props.map(prop => {
     if (excludedObjects.some(({

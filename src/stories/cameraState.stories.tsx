@@ -7,10 +7,12 @@ import { withKnobs, boolean, number } from "@storybook/addon-knobs";
 import { storiesOf } from "@storybook/react";
 import { quat, vec3 } from "gl-matrix";
 import * as React from "react";
-import { vec4ToOrientation, vec3ToPoint } from "../utils/commandUtils";
-import Container from "./Container";
+
 import type { CameraState } from "..";
 import { Arrows, Spheres, Axes, Grid, cameraStateSelectors } from "..";
+import { vec4ToOrientation, vec3ToPoint } from "../utils/commandUtils";
+import Container from "./Container";
+
 type Props = {
   cameraStateFromKnobs: CameraState;
   controlled: boolean; // eslint-disable-line react/no-unused-prop-types

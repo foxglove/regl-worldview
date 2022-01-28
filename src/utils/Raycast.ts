@@ -4,7 +4,9 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import { vec3, mat4 } from "gl-matrix";
+
 import type { CameraCommand, Vec3 } from "../types";
+
 type ClickInfo = {
   clientX: number;
   clientY: number;

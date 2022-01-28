@@ -6,7 +6,9 @@
 // Copied from Jam3/camera-project
 // in order to replace gl-vec4 dependency with gl-matrix
 import { vec3, mat4 } from "gl-matrix";
+
 import project from "./cameraProject";
+
 describe("cameraProject", () => {
   it("projects 3D point into 2D window space", () => {
     const viewport = [0, 0, 128, 256];

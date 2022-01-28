@@ -18,14 +18,14 @@ global.expect.extend({
       pass = false;
     } else {
       for (const expectedItem of expectedArray) {
-        if (!receivedArray.some(receivedItem => isEqual(receivedItem, expectedItem))) {
+        if (!receivedArray.some((receivedItem) => isEqual(receivedItem, expectedItem))) {
           pass = false;
           break;
         }
       }
 
       for (const receivedItem of receivedArray) {
-        if (!expectedArray.some(expectedItem => isEqual(receivedItem, expectedItem))) {
+        if (!expectedArray.some((expectedItem) => isEqual(receivedItem, expectedItem))) {
           pass = false;
           break;
         }
@@ -37,11 +37,14 @@ global.expect.extend({
       actual: receivedArray,
       message: () => {
         const diffString = diff(expectedArray, receivedArray, {
-          expand: this.expand
+          expand: this.expand,
         });
-        return `${this.utils.matcherHint(pass ? ".not.toContainOnly" : ".toContainOnly")}\n\nExpected value${pass ? " not" : ""} to contain only:\n  ${this.utils.printExpected(expectedArray)}\nReceived:\n  ${this.utils.printReceived(receivedArray)}\n\nDifference:\n\n${diffString}`;
-      }
+        return `${this.utils.matcherHint(pass ? ".not.toContainOnly" : ".toContainOnly")}\n\nExpected value${
+          pass ? " not" : ""
+        } to contain only:\n  ${this.utils.printExpected(expectedArray)}\nReceived:\n  ${this.utils.printReceived(
+          receivedArray
+        )}\n\nDifference:\n\n${diffString}`;
+      },
     };
-  }
-
+  },
 });

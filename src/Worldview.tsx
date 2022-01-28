@@ -1,21 +1,23 @@
+import mapValues from "lodash/mapValues";
+import pickBy from "lodash/pickBy";
+import * as React from "react";
 import { $Shape, $Diff } from "utility-types";
 //  Copyright (c) 2018-present, GM Cruise LLC
 //
 //  This source code is licensed under the Apache License, Version 2.0,
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
-import mapValues from "lodash/mapValues";
-import pickBy from "lodash/pickBy";
-import * as React from "react";
+
+import { WorldviewContext } from "./WorldviewContext";
+import WorldviewReactContext from "./WorldviewReactContext";
 import { CameraListener, DEFAULT_CAMERA_STATE } from "./camera/index";
 import Command from "./commands/Command";
 import type { MouseHandler, Dimensions, Vec4, CameraState, CameraKeyMap, MouseEventEnum, MouseEventObject } from "./types";
-import aggregate from "./utils/aggregate";
-import { getNodeEnv } from "./utils/common";
 import ContainerDimensions from "./utils/Dimensions";
 import { Ray } from "./utils/Raycast";
-import { WorldviewContext } from "./WorldviewContext";
-import WorldviewReactContext from "./WorldviewReactContext";
+import aggregate from "./utils/aggregate";
+import { getNodeEnv } from "./utils/common";
+
 const DEFAULT_BACKGROUND_COLOR = [0, 0, 0, 1];
 export const DEFAULT_MOUSE_CLICK_RADIUS = 3;
 const DEFAULT_MAX_NUMBER_OF_HITMAP_LAYERS = 100;

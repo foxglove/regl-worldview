@@ -1,12 +1,14 @@
+import { vec3, quat } from "gl-matrix";
 import { $Shape } from "utility-types";
+
 //  Copyright (c) 2018-present, GM Cruise LLC
 //
 //  This source code is licensed under the Apache License, Version 2.0,
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
-import { vec3, quat } from "gl-matrix";
 import type { Vec2, Vec3, Vec4 } from "../types";
 import selectors from "./cameraStateSelectors";
+
 export type CameraState = {
   distance: number;
   perspective: boolean;

@@ -6,14 +6,16 @@
 import * as React from "react";
 import createREGL from "regl";
 import shallowequal from "shallowequal";
+
 import { camera, CameraStore } from "./camera/index";
 import Command from "./commands/Command";
 import type { Dimensions, RawCommand, CompiledReglCommand, CameraCommand, Vec4, CameraState, MouseEventObject, GetChildrenForHitmap, AssignNextColorsFn } from "./types";
+import HitmapObjectIdManager from "./utils/HitmapObjectIdManager";
+import { getRayFromClick } from "./utils/Raycast";
 import { getIdFromPixel, intToRGB } from "./utils/commandUtils";
 import { getNodeEnv } from "./utils/common";
-import HitmapObjectIdManager from "./utils/HitmapObjectIdManager";
 import queuePromise from "./utils/queuePromise";
-import { getRayFromClick } from "./utils/Raycast";
+
 type Props = any;
 type ConstructorArgs = {
   dimension: Dimensions;
@@ -273,9 +275,9 @@ export class WorldviewContext {
       this._needsPaint = true;
     }
   };
-  readHitmap = queuePromise((canvasX: number, canvasY: number, enableStackedObjectEvents: boolean, maxStackedObjectCount: number): Promise<Array<[MouseEventObject, Command<any>]>> => {
+  readHitmap = queuePromise(async (canvasX: number, canvasY: number, enableStackedObjectEvents: boolean, maxStackedObjectCount: number): Promise<Array<[MouseEventObject, Command<any>]>> => {
     if (!this.initializedData) {
-      return Promise.reject(new Error("regl data not initialized yet"));
+      throw new Error("regl data not initialized yet");
     }
 
     const args = [canvasX, canvasY, enableStackedObjectEvents, maxStackedObjectCount];
@@ -287,7 +289,7 @@ export class WorldviewContext {
         // callers have done with it.
         const result = cachedReadHitmapCall.result.map(([mouseEventObject, command]) => [{ ...mouseEventObject
         }, command]);
-        return Promise.resolve(result);
+        return await Promise.resolve(result);
       }
 
       this._cachedReadHitmapCall = undefined;
@@ -310,7 +312,7 @@ export class WorldviewContext {
     // it uses floored whole pixel values
     _fbo.resize(Math.floor(width), Math.floor(height));
 
-    return new Promise(resolve => {
+    return await new Promise(resolve => {
       // tell regl to use a framebuffer for this render
       regl({
         framebuffer: _fbo

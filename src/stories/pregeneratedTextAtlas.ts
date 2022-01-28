@@ -1,7 +1,9 @@
 // @ts-expect-error flow doesn't like file-loader
 import type { GeneratedAtlas } from "../commands/GLText";
+
 import "../commands/GLText";
 import textureAtlasDataUrl from "file-loader!./textureAtlasData.bin";
+
 const charInfo = {
   "0": {
     x: 1380,

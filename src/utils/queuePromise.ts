@@ -6,6 +6,7 @@
 //  You may not use this file except in compliance with the License.
 import type { Signal } from "./signal";
 import { signal } from "./signal";
+
 type QueuedFn = ((...args: any[]) => Promise<any>) & {
   currentPromise: Promise<any> | null | undefined;
 }; // Wait for the previous promise to resolve before starting the next call to the function.
@@ -19,26 +20,26 @@ export default function queuePromise(fn: (...args: any[]) => Promise<any>): Queu
     promise: Signal<any>;
   }[] = [];
 
-  function queuedFn(...args) {
+  async function queuedFn(...args) {
     if (calling) {
       const returnPromise = signal();
       nextCalls.push({
         args,
         promise: returnPromise
       });
-      return returnPromise;
+      return await returnPromise;
     }
 
-    return start(...args);
+    return await start(...args);
   }
 
-  function start(...args) {
+  async function start(...args) {
     calling = true;
     const promise = fn(...args).finally(() => {
       calling = false;
       queuedFn.currentPromise = undefined;
 
-      if (nextCalls.length) {
+      if (nextCalls.length > 0) {
         const {
           promise: nextPromise,
           args: nextArgs
@@ -47,7 +48,7 @@ export default function queuePromise(fn: (...args: any[]) => Promise<any>): Queu
       }
     });
     queuedFn.currentPromise = promise;
-    return promise;
+    return await promise;
   }
 
   return queuedFn;

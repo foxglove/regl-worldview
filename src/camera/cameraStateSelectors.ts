@@ -5,8 +5,10 @@
 //  You may not use this file except in compliance with the License.
 import { vec3, quat, mat4 } from "gl-matrix";
 import { createSelector } from "reselect";
+
 import type { CameraState, Vec4, Vec3, Mat4 } from "../types";
 import { fromSpherical } from "../utils/commandUtils";
+
 const UNIT_X_VECTOR = Object.freeze([1, 0, 0]);
 // reusable arrays for intermediate calculations
 const TEMP_VEC3 = [0, 0, 0];

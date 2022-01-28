@@ -5,10 +5,12 @@
 //  You may not use this file except in compliance with the License.
 import earcut from "earcut";
 import React from "react";
+
 import type { Vec3, Point, PolygonType } from "../types";
 import { shouldConvert, pointToVec3 } from "../utils/commandUtils";
 import { getChildrenForHitmapWithOriginalMarker } from "../utils/getChildrenForHitmapDefaults";
 import Triangles, { makeTrianglesCommand } from "./Triangles";
+
 const NO_POSE = {
   position: {
     x: 0,

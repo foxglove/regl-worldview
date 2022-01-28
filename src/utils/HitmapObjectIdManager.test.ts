@@ -3,13 +3,14 @@
 //  This source code is licensed under the Apache License, Version 2.0,
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
-import { getIdFromColor, intToRGB } from "./commandUtils";
 import HitmapObjectIdManager from "./HitmapObjectIdManager";
+import { getIdFromColor, intToRGB } from "./commandUtils";
+
 describe("HitmapObjectIdManager", () => {
   describe("assignNextColors", () => {
     const commandInstanceId: any = "test";
     const childObject: any = {
-      isChildObject: true
+      isChildObject: true,
     };
     it("assigns a single color correctly", () => {
       const manager: HitmapObjectIdManager = new HitmapObjectIdManager();
@@ -40,13 +41,13 @@ describe("HitmapObjectIdManager", () => {
   describe("getObjectByObjectHitmapId", () => {
     const commandInstanceId: any = "test";
     const childObject: any = {
-      isChildObject: true
+      isChildObject: true,
     };
     it("does not error when the hitmap id is not found", () => {
       const manager: HitmapObjectIdManager = new HitmapObjectIdManager();
       expect(manager.getObjectByObjectHitmapId(100)).toEqual({
         object: undefined,
-        instanceIndex: undefined
+        instanceIndex: undefined,
       });
     });
     it("returns the correct hitmap object", () => {

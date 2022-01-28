@@ -4,11 +4,13 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import React from "react";
+
+import type { WorldviewContextType } from "../WorldviewContext";
 import type { Point, CameraCommand, Dimensions, Color, Pose, Scale, Vec4 } from "../types";
 import { getCSSColor, toColor } from "../utils/commandUtils";
-import type { WorldviewContextType } from "../WorldviewContext";
 import "../WorldviewContext";
 import WorldviewReactContext from "../WorldviewReactContext";
+
 const BG_COLOR_LIGHT = "#ffffff";
 const BG_COLOR_DARK = "rgba(0,0,0,0.8)";
 const BRIGHTNESS_THRESHOLD = 128;

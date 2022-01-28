@@ -4,6 +4,7 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import { vec3, quat } from "gl-matrix";
+
 import CameraStore, { selectors, DEFAULT_CAMERA_STATE } from "./CameraStore";
 
 class NearlyEqual {
@@ -25,7 +26,6 @@ class NearlyEqual {
   toAsymmetricMatcher() {
     return `NearlyEqual(${this.value})`;
   }
-
 }
 
 const nearlyZero = new NearlyEqual(0);
@@ -89,15 +89,10 @@ describe("camera store", () => {
       store.cameraMove([2, 1]);
       expect(vec3.distance(store.state.target, [0, 0, 0])).toBeCloseTo(0);
       expect(vec3.distance(store.state.targetOffset, [2, 1, 0])).toBeCloseTo(0);
-      store.setCameraState({ ...store.state,
-        target: [1, 1, 1],
-        targetOffset: [4, 3, 0]
-      });
+      store.setCameraState({ ...store.state, target: [1, 1, 1], targetOffset: [4, 3, 0] });
       expect(vec3.distance(store.state.target, [1, 1, 1])).toBeCloseTo(0);
       expect(vec3.distance(store.state.targetOffset, [4, 3, 0])).toBeCloseTo(0);
-      store.setCameraState({ ...store.state,
-        target: [2, 2, 2]
-      });
+      store.setCameraState({ ...store.state, target: [2, 2, 2] });
       expect(vec3.distance(store.state.target, [2, 2, 2])).toBeCloseTo(0);
       expect(vec3.distance(store.state.targetOffset, [4, 3, 0])).toBeCloseTo(0);
     });
@@ -113,7 +108,7 @@ describe("camera store", () => {
       perspective: false,
       fovy: Math.PI / 3,
       near: 0.2,
-      far: 1000
+      far: 1000,
     };
     let store;
     describe("initial store state", () => {
@@ -123,41 +118,33 @@ describe("camera store", () => {
       });
       it("has missing properties filled in from DEFAULT_CAMERA_STATE", () => {
         store = new CameraStore(undefined, {
-          near: 10
+          near: 10,
         });
-        expect(store.state).toEqual({ ...DEFAULT_CAMERA_STATE,
-          near: 10
-        });
+        expect(store.state).toEqual({ ...DEFAULT_CAMERA_STATE, near: 10 });
       });
     });
     it("has missing properties filled in from DEFAULT_CAMERA_STATE on update", () => {
       store = new CameraStore(undefined, cameraState);
       store.setCameraState({
-        near: 10
+        near: 10,
       });
-      expect(store.state).toEqual({ ...DEFAULT_CAMERA_STATE,
-        near: 10
-      });
+      expect(store.state).toEqual({ ...DEFAULT_CAMERA_STATE, near: 10 });
     });
     it("has null properties filled in from DEFAULT_CAMERA_STATE", () => {
       // Null properties are not allowed according to the Flow types,
       // but CameraStore should handle them anyway.
-      store = new CameraStore(undefined, ({
+      store = new CameraStore(undefined, {
         near: null,
         far: undefined,
-        fovy: 0
-      } as any));
-      expect(store.state).toEqual({ ...DEFAULT_CAMERA_STATE,
-        fovy: 0
-      });
-      store.setCameraState(({
+        fovy: 0,
+      } as any);
+      expect(store.state).toEqual({ ...DEFAULT_CAMERA_STATE, fovy: 0 });
+      store.setCameraState({
         near: 0,
         far: null,
-        fovy: undefined
-      } as any));
-      expect(store.state).toEqual({ ...DEFAULT_CAMERA_STATE,
-        near: 0
-      });
+        fovy: undefined,
+      } as any);
+      expect(store.state).toEqual({ ...DEFAULT_CAMERA_STATE, near: 0 });
     });
   });
   describe("selectors", () => {
@@ -171,7 +158,7 @@ describe("camera store", () => {
       perspective: false,
       fovy: Math.PI / 3,
       near: 0.2,
-      far: 1000
+      far: 1000,
     };
     it("orientation selector returns camera orientation", () => {
       expect(selectors.orientation(camState)).toEqual([0, 0, -0.7071067811865475, 0.7071067811865476]);
@@ -182,12 +169,10 @@ describe("camera store", () => {
     it("targetHeading selector returns the correct theta based on targetOrientation", () => {
       let output = selectors.targetHeading(camState);
       expect(output).toBeCloseTo(0, 2);
-      output = selectors.targetHeading({ ...camState,
-        targetOrientation: [1, 0.4, 0, 1]
-      });
+      output = selectors.targetHeading({ ...camState, targetOrientation: [1, 0.4, 0, 1] });
       expect(output).toBeCloseTo(-0.87, 2);
     });
-    it("view selector ", () => {
+    it("view selector", () => {
       expect(selectors.view(camState)).toEqual([nearlyZero, 1, 0, 0, -1, nearlyZero, 0, 0, 0, 0, 1, 0, 0, 0, -2500, 1]);
     });
     it("target offset is relative to target orientation", () => {
@@ -204,7 +189,7 @@ describe("camera store", () => {
         perspective: true,
         fovy: Math.PI / 2,
         near: 0.01,
-        far: 10000
+        far: 10000,
       });
       expect(vec3.transformMat4([0, 0, 0], [2, 0, 0], view1)).toEqual([-25, 0, -3]);
       expect(vec3.transformMat4([0, 0, 0], [2 + 25, 0, 0], view1)).toEqual([0, 0, -3]);
@@ -225,7 +210,7 @@ describe("camera store", () => {
         perspective: true,
         fovy: Math.PI / 2,
         near: 0.01,
-        far: 10000
+        far: 10000,
       });
       expect(vec3.transformMat4([0, 0, 0], [2, 0, 0], view2)).toEqual([-25, 0, -3]);
       expect(vec3.transformMat4([0, 0, 0], [2, 25, 0], view2)).toEqual([-50, nearlyZero, -3]);

@@ -4,12 +4,13 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import { shouldConvert } from "./commandUtils";
+
 describe("command utils", () => {
   describe("shouldConvert", () => {
     const pointObj = {
       x: -1,
       y: 0,
-      z: 0
+      z: 0,
     };
     const pointArr = [-1, 23, 5];
     it("point objects/color objects, e.g. { x:0, y:0, z:0 }, should be converted", () => {

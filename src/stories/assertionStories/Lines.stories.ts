@@ -4,9 +4,11 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import { storiesOf } from "@storybook/react";
+
 import Lines from "../../commands/Lines";
 import type { Line } from "../../types";
 import { generateNonInstancedClickAssertions } from "../worldviewAssertionUtils";
+
 const twoLinesInARow = [{
   pose: {
     orientation: {

@@ -6,6 +6,7 @@
 import flatten from "lodash/flatten";
 import memoize from "lodash/memoize";
 import * as React from "react";
+
 import type { Line, Vec4, Color, Pose, DepthState, BlendState } from "../types";
 import { defaultBlend, withPose, toRGBA, shouldConvert, pointToVec3, defaultReglDepth, defaultReglBlend } from "../utils/commandUtils";
 import { nonInstancedGetChildrenForHitmap } from "../utils/getChildrenForHitmapDefaults";

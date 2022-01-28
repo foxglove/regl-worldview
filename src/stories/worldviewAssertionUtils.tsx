@@ -1,4 +1,3 @@
-import { $Shape } from "utility-types";
 //  Copyright (c) 2018-present, GM Cruise LLC
 //
 //  This source code is licensed under the Apache License, Version 2.0,
@@ -9,11 +8,15 @@ import { $Shape } from "utility-types";
 import expect from "expect";
 import type { ComponentType } from "react";
 import React from "react";
-import type { CommonCommandProps } from "../commands/Command";
-import type { CameraState } from "../types";
+import { $Shape } from "utility-types";
+
 import type { Props } from "../Worldview";
 import Worldview from "../Worldview";
+import type { CommonCommandProps } from "../commands/Command";
+import type { CameraState } from "../types";
+
 import { assertionTest, timeout } from "~/stories/assertionTestUtils";
+
 export const defaultCameraState: $Shape<CameraState> = {
   distance: 75,
   perspective: true,

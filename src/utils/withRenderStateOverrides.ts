@@ -4,6 +4,7 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import memoize from "lodash/memoize";
+
 import type { DepthState, BlendState } from "../types";
 import { defaultReglDepth, defaultReglBlend } from "./commandUtils";
 

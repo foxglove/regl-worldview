@@ -5,9 +5,11 @@
 //  You may not use this file except in compliance with the License.
 import normalizeWheel from "normalize-wheel";
 import * as React from "react";
+
 import type { CameraKeyMap, CameraAction, Vec2 } from "../types";
 import getOrthographicBounds from "../utils/getOrthographicBounds";
 import CameraStore from "./CameraStore";
+
 const PAN_SPEED = 4;
 const MOUSE_ZOOM_SPEED = 0.3;
 const KEYBOARD_MOVE_SPEED = 0.3;
@@ -149,7 +151,7 @@ export default class CameraListener extends React.Component<Props> {
     return this._buttons.has(2);
   }
 
-  _getMagnitude(base: number = 1) {
+  _getMagnitude(base = 1) {
     return this._shiftKey ? base / 10 : base;
   }
 
@@ -360,7 +362,7 @@ export default class CameraListener extends React.Component<Props> {
         return null;
 
       default:
-        (action as never);
+        (action );
         console.warn("Unrecognized key action:", action);
         return null;
     }

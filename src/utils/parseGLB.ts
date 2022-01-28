@@ -4,6 +4,7 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import decodeCompressedGLB from "./draco";
+
 type TypedArray = Int8Array | Uint8Array | Int16Array | Uint16Array | Uint32Array | Float32Array;
 export type GLBModel = {
   json: Record<string, any>;
@@ -185,10 +186,10 @@ export default async function parseGLB(arrayBuffer: ArrayBuffer): Promise<GLBMod
   });
   await decodeCompressedGLB(json, binary);
   // load embedded images
-  const images = json.images && (await Promise.all(json.images.map(imgInfo => {
+  const images = json.images && (await Promise.all(json.images.map(async imgInfo => {
     const bufferView = json.bufferViews[imgInfo.bufferView];
     const data = new DataView(binary.buffer, binary.byteOffset + (bufferView.byteOffset || 0), bufferView.byteLength);
-    return self.createImageBitmap(new Blob([data], {
+    return await self.createImageBitmap(new Blob([data], {
       type: imgInfo.mimeType
     }));
   })));

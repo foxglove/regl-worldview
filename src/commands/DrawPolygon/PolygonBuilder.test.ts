@@ -4,8 +4,9 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import type { ReglClickInfo } from "../../types";
-import { Polygon, PolygonPoint } from "./index";
 import PolygonBuilder from "./PolygonBuilder";
+import { Polygon, PolygonPoint } from "./index";
+
 const mag = 10;
 
 const buildPolygon = () => {

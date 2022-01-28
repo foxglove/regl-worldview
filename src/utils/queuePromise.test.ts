@@ -44,9 +44,12 @@ describe("queuePromise", () => {
     });
     const arePromisesResolved = [false, false];
     const promiseResults = [queuedFn(), queuedFn()];
-    promiseResults.forEach((promise, index) => promise.then(() => {
-      arePromisesResolved[index] = true;
-    }));
+    promiseResults.forEach(
+      async (promise, index) =>
+        await promise.then(() => {
+          arePromisesResolved[index] = true;
+        })
+    );
     expect(calls).toEqual(1);
     expect(arePromisesResolved).toEqual([false, false]);
     // resolve the first promise. This should move on to the second promise.

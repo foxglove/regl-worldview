@@ -4,12 +4,14 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import * as React from "react";
+
 import type { SphereList } from "../types";
 import fromGeometry from "../utils/fromGeometry";
 import { createInstancedGetChildrenForHitmap } from "../utils/getChildrenForHitmapDefaults";
 import withRenderStateOverrides from "../utils/withRenderStateOverrides";
 import type { CommonCommandProps } from "./Command";
 import Command from "./Command";
+
 const NUM_PARALLELS = 15;
 const NUM_MERIDIANS = 15;
 const RADIUS = 0.5;

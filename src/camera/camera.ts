@@ -4,11 +4,13 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import { mat4 } from "gl-matrix";
+
 import type { Vec3, Mat4, CameraCommand, Viewport } from "../types";
 import getOrthographicBounds from "../utils/getOrthographicBounds";
-import project from "./cameraProject";
 import type { CameraState } from "./CameraStore";
 import { selectors, DEFAULT_CAMERA_STATE } from "./CameraStore";
+import project from "./cameraProject";
+
 const TEMP_MAT = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // This is the regl command which encapsulates the camera projection and view matrices.
 // It adds the matrices to the regl context so they can be used by other commands.
 
@@ -18,8 +20,8 @@ export default ((regl: any) => {
   }
 
   return class Camera implements CameraCommand {
-    viewportWidth: number = 0;
-    viewportHeight: number = 0;
+    viewportWidth = 0;
+    viewportHeight = 0;
     cameraState: CameraState = DEFAULT_CAMERA_STATE;
 
     getProjection(): Mat4 {

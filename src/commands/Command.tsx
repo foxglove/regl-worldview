@@ -4,12 +4,14 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import * as React from "react";
-import type { ComponentMouseHandler, GetChildrenForHitmap, MouseEventEnum, RawCommand, Color, Point, MouseEventObject } from "../types";
-import { getNodeEnv } from "../utils/common";
-import { Ray } from "../utils/Raycast";
+
 import type { WorldviewContextType } from "../WorldviewContext";
+import type { ComponentMouseHandler, GetChildrenForHitmap, MouseEventEnum, RawCommand, Color, Point, MouseEventObject } from "../types";
+import { Ray } from "../utils/Raycast";
+import { getNodeEnv } from "../utils/common";
 import "../WorldviewContext";
 import WorldviewReactContext from "../WorldviewReactContext";
+
 export const SUPPORTED_MOUSE_EVENTS = ["onClick", "onMouseUp", "onMouseMove", "onMouseDown", "onDoubleClick"];
 export type MarkerDefault = {
   id?: number;
@@ -106,7 +108,7 @@ export default class Command<T> extends React.Component<Props<T>> {
   handleMouseEvent(objects: MouseEventObject[], ray: Ray, e: React.MouseEvent<HTMLCanvasElement>, mouseEventName: MouseEventEnum) {
     const mouseHandler = this.props[mouseEventName];
 
-    if (!mouseHandler || !objects.length) {
+    if (!mouseHandler || (objects.length === 0)) {
       return;
     }
 

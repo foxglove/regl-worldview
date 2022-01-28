@@ -19,14 +19,13 @@ class BoundingBox {
     this.width = Math.abs(left) * 2;
     this.height = Math.abs(top) * 2;
   }
-
 }
 
 export default function getOrthographicBounds(zDistance: number, width: number, height: number): BoundingBox {
   const aspect = width / height;
   // never go below ground level
   const distanceToGround = Math.abs(zDistance);
-  const left = -distanceToGround / 2 * aspect;
+  const left = (-distanceToGround / 2) * aspect;
   const top = distanceToGround / 2;
   return new BoundingBox(left, top);
 }

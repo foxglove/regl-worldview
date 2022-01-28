@@ -12,37 +12,58 @@ describe("custom expectations", () => {
       expect([1, 2]).not.toContainOnly([1]);
       // $FlowFixMe
       expect([2]).not.toContainOnly([1]);
-      expect([{
-        foo: "bar"
-      }]).toContainOnly([{
-        foo: "bar"
-      }]);
-      expect([{
-        foo: "bar"
-      }, 2, {
-        foo: "baz"
-      }]).toContainOnly([2, {
-        foo: "baz"
-      }, {
-        foo: "bar"
-      }]);
+      expect([
+        {
+          foo: "bar",
+        },
+      ]).toContainOnly([
+        {
+          foo: "bar",
+        },
+      ]);
+      expect([
+        {
+          foo: "bar",
+        },
+        2,
+        {
+          foo: "baz",
+        },
+      ]).toContainOnly([
+        2,
+        {
+          foo: "baz",
+        },
+        {
+          foo: "bar",
+        },
+      ]);
     });
     it("throws when arrays do not match", () => {
       expect(() => {
-        expect([{
-          foo: "bar"
-        }]).toContainOnly([{
-          foo: "bar2"
-        }]);
+        expect([
+          {
+            foo: "bar",
+          },
+        ]).toContainOnly([
+          {
+            foo: "bar2",
+          },
+        ]);
       }).toThrow();
       expect(() => {
-        expect([{
-          foo: "bar"
-        }]).toContainOnly([{
-          foo: "bar"
-        }, {
-          foo: "baz"
-        }]);
+        expect([
+          {
+            foo: "bar",
+          },
+        ]).toContainOnly([
+          {
+            foo: "bar",
+          },
+          {
+            foo: "baz",
+          },
+        ]);
       }).toThrow();
     });
     it("handles same-length arrays", () => {

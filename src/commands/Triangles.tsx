@@ -4,6 +4,7 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import * as React from "react";
+
 import type { Regl, TriangleList } from "../types";
 import { defaultBlend, getVertexColors, pointToVec3Array, shouldConvert, toRGBA, withPose } from "../utils/commandUtils";
 import { createInstancedGetChildrenForHitmap } from "../utils/getChildrenForHitmapDefaults";
@@ -146,7 +147,7 @@ const triangles = (regl: Regl) => {
     items.forEach(item => {
       // If the item has onlyRenderInHitmap set, only render it in the hitmap.
       if (isHitmap || !item.onlyRenderInHitmap) {
-        if (item.colors && item.colors.length) {
+        if (item.colors && (item.colors.length > 0)) {
           vertexColorItems.push(item);
         } else {
           singleColorItems.push(item);

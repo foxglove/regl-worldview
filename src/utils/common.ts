@@ -8,4 +8,5 @@ export function getNodeEnv() {
 }
 
 /* eslint-disable no-undef */
-export const inWebWorker = () => global.postMessage && typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+export const inWebWorker = () =>
+  global.postMessage && typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;

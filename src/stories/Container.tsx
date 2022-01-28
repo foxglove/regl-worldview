@@ -6,8 +6,10 @@
 // TODO(JP): Should remove this and properly fix Flow.
 
 import React from "react";
+
 import type { Props } from "../index";
 import Worldview from "../index";
+
 export default class Container extends React.Component<Props> {
   state = {
     worldviewCamState: this.props.cameraState || this.props.defaultCameraState

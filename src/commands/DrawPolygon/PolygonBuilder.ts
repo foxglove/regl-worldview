@@ -4,8 +4,10 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import distance from "distance-to-line-segment";
+
 import type { Vec3, MouseHandler } from "../../types";
 import { PolygonPoint, Polygon } from "./index";
+
 type OptionalZPoint = {
   x: number;
   y: number;
@@ -44,7 +46,7 @@ function isClosed(polygon: Polygon): boolean {
 
 
 export default class PolygonBuilder {
-  mouseDown: boolean = false;
+  mouseDown = false;
   polygons: Polygon[];
   onChange: () => void = () => {};
   activePolygon: Polygon | null | undefined;
@@ -322,7 +324,7 @@ export default class PolygonBuilder {
       return;
     }
 
-    if (!args.objects.length) {
+    if (args.objects.length === 0) {
       return;
     }
 

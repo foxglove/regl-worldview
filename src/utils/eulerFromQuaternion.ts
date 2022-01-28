@@ -4,7 +4,9 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import { mat3 } from "gl-matrix";
+
 import type { Vec3, Vec4 } from "../types";
+
 const scratch = [0, 0, 0, 0, 0, 0, 0, 0, 0]; // gl-matrix clone of three.js Euler.setFromQuaternion
 // assumes default XYZ order
 

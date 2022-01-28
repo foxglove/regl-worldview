@@ -5,9 +5,11 @@
 //  You may not use this file except in compliance with the License.
 import { storiesOf } from "@storybook/react";
 import polygonGenerator from "polygon-generator";
+
 import FilledPolygons from "../../commands/FilledPolygons";
 import type { PolygonType } from "../../types";
 import { generateNonInstancedClickAssertions } from "../worldviewAssertionUtils";
+
 const polygon = polygonGenerator.coordinates(5, 10, 30);
 const twoFilledPolygonsInARow = [{
   scale: {

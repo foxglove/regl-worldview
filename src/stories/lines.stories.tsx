@@ -6,7 +6,9 @@
 import { withKnobs } from "@storybook/addon-knobs";
 import { storiesOf } from "@storybook/react";
 import React from "react";
+
 import Worldview, { Lines } from "../index";
+
 const DEFAULT_CAMERA = {
   perspective: false,
   target: [0, 0, 0],
@@ -14,93 +16,106 @@ const DEFAULT_CAMERA = {
   thetaOffset: Math.PI / 2,
   phi: Math.PI / 4,
   distance: 20,
-  targetOrientation: [0, 0, 0, 1]
+  targetOrientation: [0, 0, 0, 1],
 };
-storiesOf("Worldview/Lines", module).addDecorator(withKnobs).add("<Lines> does not render empty points", () => {
-  const normalLine = [{
-    primitive: "line strip",
-    pose: {
-      position: {
-        x: 0,
-        y: 0,
-        z: 0
-      },
-      orientation: {
-        x: 0,
-        y: 0,
-        z: 0,
-        w: 1
-      }
-    },
-    scale: {
-      x: 2,
-      y: 0,
-      z: 0
-    },
-    points: [[0, -4, 0], [0, 4, 0]],
-    color: [1, 1, 1, 1]
-  }];
-  const emptyLine = [{
-    primitive: "line strip",
-    pose: {
-      position: {
-        x: 0,
-        y: 0,
-        z: 0
-      },
-      orientation: {
-        x: 0,
-        y: 0,
-        z: 0,
-        w: 1
-      }
-    },
-    points: [],
-    color: [1, 0, 0, 1],
-    scale: {
-      x: 6,
-      y: 0,
-      z: 0
-    }
-  }];
-  return <Worldview defaultCameraState={DEFAULT_CAMERA}>
-        <Lines>{normalLine}</Lines>
-        <Lines>{emptyLine}</Lines>
-      </Worldview>;
-}).add("<Lines> with custom depth and blend values", () => {
-  return <Worldview defaultCameraState={DEFAULT_CAMERA}>
-        <Lines>
-          {[{
+storiesOf("Worldview/Lines", module)
+  .addDecorator(withKnobs)
+  .add("<Lines> does not render empty points", () => {
+    const normalLine = [
+      {
         primitive: "line strip",
         pose: {
           position: {
             x: 0,
             y: 0,
-            z: 0
+            z: 0,
           },
           orientation: {
             x: 0,
             y: 0,
             z: 0,
-            w: 1
-          }
+            w: 1,
+          },
         },
         scale: {
           x: 2,
           y: 0,
-          z: 0
+          z: 0,
         },
         points: [[0, -4, 0], [0, 4, 0]],
         color: [1, 1, 1, 1],
-        blend: {
-          enable: true,
-          func: {
-            src: "constant color",
-            dst: "one"
+      },
+    ];
+    const emptyLine = [
+      {
+        primitive: "line strip",
+        pose: {
+          position: {
+            x: 0,
+            y: 0,
+            z: 0,
           },
-          color: [1, 0, 0, 1]
-        }
-      }]}
+          orientation: {
+            x: 0,
+            y: 0,
+            z: 0,
+            w: 1,
+          },
+        },
+        points: [],
+        color: [1, 0, 0, 1],
+        scale: {
+          x: 6,
+          y: 0,
+          z: 0,
+        },
+      },
+    ];
+    return (
+      <Worldview defaultCameraState={DEFAULT_CAMERA}>
+        <Lines>{normalLine}</Lines>
+        <Lines>{emptyLine}</Lines>
+      </Worldview>
+    );
+  })
+  .add("<Lines> with custom depth and blend values", () => {
+    return (
+      <Worldview defaultCameraState={DEFAULT_CAMERA}>
+        <Lines>
+          {[
+            {
+              primitive: "line strip",
+              pose: {
+                position: {
+                  x: 0,
+                  y: 0,
+                  z: 0,
+                },
+                orientation: {
+                  x: 0,
+                  y: 0,
+                  z: 0,
+                  w: 1,
+                },
+              },
+              scale: {
+                x: 2,
+                y: 0,
+                z: 0,
+              },
+              points: [[0, -4, 0], [0, 4, 0]],
+              color: [1, 1, 1, 1],
+              blend: {
+                enable: true,
+                func: {
+                  src: "constant color",
+                  dst: "one",
+                },
+                color: [1, 0, 0, 1],
+              },
+            },
+          ]}
         </Lines>
-      </Worldview>;
-});
+      </Worldview>
+    );
+  });

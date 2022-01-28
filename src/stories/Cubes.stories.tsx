@@ -1,10 +1,11 @@
 import { storiesOf } from "@storybook/react";
 import React from "react";
+
+import { Cubes, DEFAULT_CAMERA_STATE } from "..";
 import type { MouseHandler } from "../types";
 import Container from "./Container";
 import { cube, p, UNIT_QUATERNION, buildMatrix, rng, withCustomRenderStates } from "./util";
 import withRange from "./withRange";
-import { Cubes, DEFAULT_CAMERA_STATE } from "..";
 
 class Wrapper extends React.Component<any> {
   render() {
@@ -58,7 +59,7 @@ class DynamicCubes extends React.Component<any, any> {
     cubeId: -1
   };
   onContainerClick: MouseHandler = (e, clickInfo) => {
-    if (clickInfo.objects.length && clickInfo.objects[0].object.id % 2) {
+    if ((clickInfo.objects.length > 0) && clickInfo.objects[0].object.id % 2) {
       this.setState({
         cubeId: clickInfo.objects[0].object.id || -1
       });

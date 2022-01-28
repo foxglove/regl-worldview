@@ -4,13 +4,14 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import React, { Component } from "react";
+
 import inScreenshotTests from "~/stories/inScreenshotTests"; // storybook helper to render a story over and over w/ an oscillating value
 
-export default (fn => {
+export default (fn) => {
   class WithRange extends Component {
     static displayName = "withRange";
     state = {
-      range: 0
+      range: 0,
     };
 
     componentDidMount() {
@@ -25,10 +26,10 @@ export default (fn => {
     }
 
     loop(count) {
-      this.stop = requestAnimationFrame(tick => {
+      this.stop = requestAnimationFrame((tick) => {
         const range = (1 + Math.sin(count / 30)) / 2;
         this.setState({
-          range
+          range,
         });
 
         if (!this.stopped) {
@@ -40,11 +41,10 @@ export default (fn => {
     render() {
       return fn(this.state.range);
     }
-
   }
 
   const inner = () => <WithRange />;
 
   inner.displayName = "WithRangeInner";
   return inner;
-});
+};

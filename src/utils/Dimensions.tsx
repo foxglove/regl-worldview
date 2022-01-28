@@ -6,7 +6,9 @@
 //  You may not use this file except in compliance with the License.
 import type { Node } from "react";
 import React, { useEffect, useState, useCallback } from "react";
+
 import { inWebWorker } from "./common";
+
 type DimensionsParams = {
   height: number;
   width: number;

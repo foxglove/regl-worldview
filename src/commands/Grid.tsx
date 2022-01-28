@@ -4,10 +4,12 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import React from "react";
+
 import { withPose } from "../utils/commandUtils";
 import { nonInstancedGetChildrenForHitmap } from "../utils/getChildrenForHitmapDefaults";
 import type { CommonCommandProps } from "./Command";
 import Command from "./Command";
+
 const DEFAULT_GRID_COLOR = [0.3, 0.3, 0.3, 1];
 export function grid() {
   return withPose({
