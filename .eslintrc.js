@@ -1,7 +1,6 @@
 module.exports = {
-  env: { browser: true, node: true, jest: true },
+  env: { es6: true, browser: true, node: true, jest: true },
   extends: ["plugin:@foxglove/base", "plugin:@foxglove/react", "plugin:@foxglove/jest"],
-  plugins: ["jest", "import-order-alphabetical", "react-hooks"],
   settings: {
     "import/resolver": { webpack: { config: `${__dirname}/webpack.config.js` } },
   },
@@ -27,15 +26,6 @@ module.exports = {
     "import/newline-after-import": "error",
     "import/no-duplicates": "error", // https://github.com/benmosher/eslint-plugin-import/issues/242#issuecomment-230118951
     "no-duplicate-imports": "off", // False positives on flow type imports, so we use import/no-duplicates instead which handles them correctly.
-    // Group imports into two groups: packages and files. Sort alphabetically
-    // within those groups.
-    "import-order-alphabetical/order": [
-      "error",
-      {
-        "newlines-between": "always",
-        groups: [["builtin", "external"], ["internal", "parent", "sibling", "index"]],
-      },
-    ],
     // TODO(JP): Fix this instead of disabling it:
     "import/no-named-as-default": "off",
     "prefer-arrow-callback": ["error", { allowNamedFunctions: true }],
@@ -49,5 +39,10 @@ module.exports = {
     //     "import/no-unresolved": "off",
     //   },
     // },
+    {
+      files: ["*.ts", "*.tsx"],
+      extends: ["plugin:@foxglove/typescript"],
+      parserOptions: { project: "src/tsconfig.json" },
+    },
   ],
 };
