@@ -1,6 +1,6 @@
 {
   "name": "@foxglove/regl-worldview",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "A reusable component for rendering 2D and 3D views using regl",
   "license": "Apache-2.0",
   "repository": {
