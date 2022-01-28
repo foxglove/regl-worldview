@@ -1,18 +1,7 @@
 module.exports = {
   env: { browser: true, node: true, jest: true },
-  extends: [
-    "eslint:recommended",
-    "plugin:jest/recommended",
-    "plugin:react/recommended",
-    "plugin:flowtype/recommended",
-    "plugin:import/recommended",
-    "problems",
-    "plugin:prettier/recommended",
-    "prettier/flowtype",
-    "prettier/react",
-  ],
+  extends: ["plugin:@foxglove/base", "plugin:@foxglove/react", "plugin:@foxglove/jest"],
   plugins: ["jest", "import-order-alphabetical", "react-hooks"],
-  parser: "babel-eslint",
   settings: {
     "import/resolver": { webpack: { config: `${__dirname}/webpack.config.js` } },
   },
@@ -27,9 +16,7 @@ module.exports = {
     "prettier/prettier": "error",
     "no-console": ["error", { allow: ["warn", "error", "debug"] }],
     "no-unused-vars": ["error", { args: "none", varsIgnorePattern: "^_" }],
-    "flowtype/no-unused-expressions": "error",
     "no-underscore-dangle": ["error", { allowAfterThis: true }],
-    "react/prop-types": "off", // We use Flow instead.
     "no-useless-computed-key": "off", // https://github.com/facebook/flow/issues/380#issuecomment-224380551
     yoda: "off", // https://github.com/RyanZim/eslint-config-problems/pull/1 and https://github.com/eslint/eslint/issues/10591
     // Some good ones that people really should be adding to import/recommended:
@@ -53,13 +40,14 @@ module.exports = {
     "import/no-named-as-default": "off",
     "prefer-arrow-callback": ["error", { allowNamedFunctions: true }],
     "react-hooks/rules-of-hooks": "error",
+    "filenames/match-exported": "off",
   },
   overrides: [
-    {
-      files: "docs/src/jsx/**/*.js",
-      rules: {
-        "import/no-unresolved": "off",
-      },
-    },
+    // {
+    //   files: "docs/src/jsx/**/*.js",
+    //   rules: {
+    //     "import/no-unresolved": "off",
+    //   },
+    // },
   ],
 };

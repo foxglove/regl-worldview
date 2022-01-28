@@ -5,7 +5,6 @@
 //  You may not use this file except in compliance with the License.
 // TODO(JP): Should remove this and properly fix Flow.
 
-/* eslint-disable flowtype/no-types-missing-file-annotation */
 import React from "react";
 import type { Props } from "../index";
 import Worldview from "../index";
