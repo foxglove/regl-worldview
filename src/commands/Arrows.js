@@ -41,12 +41,16 @@ const generateArrowPrimitives = (markers: Arrow[]) => {
     let dir;
     if (marker.points && marker.points.length === 2) {
       const [start, end] = marker.points;
-      basePosition = [start.x, start.y, start.z];
-      const tipPosition = [end.x, end.y, end.z];
+      const posePosition = pointToVec3(marker.pose.position);
+      const poseOrientation = orientationToVec4(marker.pose.orientation);
+
+      basePosition = vec3.add([0, 0, 0], posePosition, [start.x, start.y, start.z]);
+      const tipPosition = vec3.add([0, 0, 0], posePosition, [end.x, end.y, end.z]);
       const length = vec3.distance(basePosition, tipPosition);
 
       dir = vec3.subtract([0, 0, 0], tipPosition, basePosition);
       vec3.normalize(dir, dir);
+      vec3.transformQuat(dir, dir, poseOrientation);
       orientation = quat.rotationTo([0, 0, 0, 0], UNIT_X_VECTOR, dir);
 
       headWidthX = headWidthY = marker.scale.y;
