@@ -17,49 +17,52 @@ const TEMP_QUAT = [0, 0, 0, 0];
 
 const stateSelector = (state: CameraState) => state;
 
-const perspectiveSelector = createSelector(stateSelector, ({
-  perspective
-}) => perspective);
-const distanceSelector = createSelector(stateSelector, ({
-  distance
-}) => distance);
-const phiSelector = createSelector(stateSelector, ({
-  phi
-}) => phi);
-const thetaOffsetSelector = createSelector(stateSelector, ({
-  thetaOffset
-}) => thetaOffset);
-const targetOrientationSelector = createSelector(stateSelector, ({
-  targetOrientation
-}) => targetOrientation);
+const perspectiveSelector = createSelector(stateSelector, ({ perspective }) => perspective);
+const distanceSelector = createSelector(stateSelector, ({ distance }) => distance);
+const phiSelector = createSelector(stateSelector, ({ phi }) => phi);
+const thetaOffsetSelector = createSelector(stateSelector, ({ thetaOffset }) => thetaOffset);
+const targetOrientationSelector = createSelector(stateSelector, ({ targetOrientation }) => targetOrientation);
 // the heading direction of the target
-const targetHeadingSelector: (arg0: CameraState) => number = createSelector(targetOrientationSelector, targetOrientation => {
-  const out = vec3.transformQuat(TEMP_VEC3, UNIT_X_VECTOR, targetOrientation);
-  const heading = -Math.atan2(out[1], out[0]);
-  return heading;
-});
-// orientation of the camera
-const orientationSelector: (arg0: CameraState) => Vec4 = createSelector(perspectiveSelector, phiSelector, thetaOffsetSelector, (perspective, phi, thetaOffset) => {
-  const result = quat.identity([0, 0, 0, 0]);
-  quat.rotateZ(result, result, -thetaOffset);
-
-  // phi is ignored in 2D mode
-  if (perspective) {
-    quat.rotateX(result, result, phi);
+const targetHeadingSelector: (arg0: CameraState) => number = createSelector(
+  targetOrientationSelector,
+  (targetOrientation) => {
+    const out = vec3.transformQuat(TEMP_VEC3, UNIT_X_VECTOR, targetOrientation);
+    const heading = -Math.atan2(out[1], out[0]);
+    return heading;
   }
+);
+// orientation of the camera
+const orientationSelector: (arg0: CameraState) => Vec4 = createSelector(
+  perspectiveSelector,
+  phiSelector,
+  thetaOffsetSelector,
+  (perspective, phi, thetaOffset) => {
+    const result = quat.identity([0, 0, 0, 0]);
+    quat.rotateZ(result, result, -thetaOffset);
 
-  return result;
-});
+    // phi is ignored in 2D mode
+    if (perspective) {
+      quat.rotateX(result, result, phi);
+    }
+
+    return result;
+  }
+);
 // position of the camera
-const positionSelector: (arg0: CameraState) => Vec3 = createSelector(thetaOffsetSelector, phiSelector, distanceSelector, (thetaOffset, phi, distance) => {
-  const position = fromSpherical([], distance, thetaOffset, phi);
-  // poles are on the y-axis in spherical coordinates; rearrange so they are on the z axis
-  const [x, y, z] = position;
-  position[0] = -x;
-  position[1] = -z;
-  position[2] = y;
-  return position;
-});
+const positionSelector: (arg0: CameraState) => Vec3 = createSelector(
+  thetaOffsetSelector,
+  phiSelector,
+  distanceSelector,
+  (thetaOffset, phi, distance) => {
+    const position = fromSpherical([], distance, thetaOffset, phi);
+    // poles are on the y-axis in spherical coordinates; rearrange so they are on the z axis
+    const [x, y, z] = position;
+    position[0] = -x;
+    position[1] = -z;
+    position[2] = y;
+    return position;
+  }
+);
 
 /*
 Get the view matrix, which transforms points from world coordinates to camera coordinates.
@@ -125,51 +128,55 @@ Step 5: rotate the camera to point forward
      |
 
 */
-const viewSelector: (arg0: CameraState) => Mat4 = createSelector(stateSelector, orientationSelector, positionSelector, ({
-  target,
-  targetOffset,
-  targetOrientation,
-  perspective
-}, orientation, position) => {
-  const m = mat4.identity([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-  // apply the steps described above in reverse because we use right-multiplication
-  // 5. rotate camera to point forward
-  mat4.multiply(m, m, mat4.fromQuat(TEMP_MAT, quat.invert(TEMP_QUAT, orientation)));
+const viewSelector: (arg0: CameraState) => Mat4 = createSelector(
+  stateSelector,
+  orientationSelector,
+  positionSelector,
+  ({ target, targetOffset, targetOrientation, perspective }, orientation, position) => {
+    const m = mat4.identity([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    // apply the steps described above in reverse because we use right-multiplication
+    // 5. rotate camera to point forward
+    mat4.multiply(m, m, mat4.fromQuat(TEMP_MAT, quat.invert(TEMP_QUAT, orientation)));
 
-  // 4. move camera to the origin
-  if (perspective) {
-    mat4.translate(m, m, vec3.negate(TEMP_VEC3, position));
+    // 4. move camera to the origin
+    if (perspective) {
+      mat4.translate(m, m, vec3.negate(TEMP_VEC3, position));
+    }
+
+    // 3. move center to the origin
+    mat4.translate(m, m, vec3.negate(TEMP_VEC3, targetOffset));
+    // 2. rotate target to point forward
+    mat4.multiply(m, m, mat4.fromQuat(TEMP_MAT, targetOrientation));
+    // 1. move target to the origin
+    mat4.translate(m, m, vec3.negate(TEMP_VEC3, target));
+
+    // if using orthographic camera ensure the distance from "ground"
+    // stays large so no reasonably tall item goes past the camera
+    if (!perspective) {
+      TEMP_VEC3[0] = 0;
+      TEMP_VEC3[1] = 0;
+      TEMP_VEC3[2] = -2500;
+      vec3.transformMat4(TEMP_VEC3, TEMP_VEC3, mat4.fromQuat(TEMP_MAT, quat.invert(TEMP_QUAT, targetOrientation)));
+      mat4.translate(m, m, TEMP_VEC3);
+    }
+
+    return m;
   }
-
-  // 3. move center to the origin
-  mat4.translate(m, m, vec3.negate(TEMP_VEC3, targetOffset));
-  // 2. rotate target to point forward
-  mat4.multiply(m, m, mat4.fromQuat(TEMP_MAT, targetOrientation));
-  // 1. move target to the origin
-  mat4.translate(m, m, vec3.negate(TEMP_VEC3, target));
-
-  // if using orthographic camera ensure the distance from "ground"
-  // stays large so no reasonably tall item goes past the camera
-  if (!perspective) {
-    TEMP_VEC3[0] = 0;
-    TEMP_VEC3[1] = 0;
-    TEMP_VEC3[2] = -2500;
-    vec3.transformMat4(TEMP_VEC3, TEMP_VEC3, mat4.fromQuat(TEMP_MAT, quat.invert(TEMP_QUAT, targetOrientation)));
-    mat4.translate(m, m, TEMP_VEC3);
+);
+const billboardRotation: (arg0: CameraState) => Mat4 = createSelector(
+  orientationSelector,
+  targetHeadingSelector,
+  (orientation, targetHeading) => {
+    const m = mat4.identity(mat4.create());
+    mat4.rotateZ(m, m, -targetHeading);
+    mat4.multiply(m, m, mat4.fromQuat(TEMP_MAT, orientation));
+    return m;
   }
-
-  return m;
-});
-const billboardRotation: (arg0: CameraState) => Mat4 = createSelector(orientationSelector, targetHeadingSelector, (orientation, targetHeading) => {
-  const m = mat4.identity(mat4.create());
-  mat4.rotateZ(m, m, -targetHeading);
-  mat4.multiply(m, m, mat4.fromQuat(TEMP_MAT, orientation));
-  return m;
-});
+);
 export default {
   orientation: orientationSelector,
   position: positionSelector,
   targetHeading: targetHeadingSelector,
   view: viewSelector,
-  billboardRotation
+  billboardRotation,
 };

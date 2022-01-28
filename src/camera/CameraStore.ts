@@ -35,7 +35,7 @@ export const DEFAULT_CAMERA_STATE: CameraState = {
   thetaOffset: 0,
   fovy: Math.PI / 4,
   near: 0.01,
-  far: 5000
+  far: 5000,
 };
 
 function distanceAfterZoom(startingDistance: number, zoomPercent: number): number {
@@ -47,7 +47,10 @@ export default class CameraStore {
   state: CameraState;
   _onChange: (arg0: CameraState) => void;
 
-  constructor(handler: (arg0: CameraState) => void = () => {}, initialCameraState: $Shape<CameraState> = DEFAULT_CAMERA_STATE) {
+  constructor(
+    handler: (arg0: CameraState) => void = () => {},
+    initialCameraState: $Shape<CameraState> = DEFAULT_CAMERA_STATE
+  ) {
     this._onChange = handler;
     this.setCameraState(initialCameraState);
   }
@@ -65,7 +68,7 @@ export default class CameraStore {
 
     // `state` must be a valid CameraState now, because we filled in
     // missing properties from DEFAULT_CAMERA_STATE.
-    this.state = (state as any);
+    this.state = state as any;
   };
   cameraRotate = ([x, y]: Vec2) => {
     // This can happen in 2D mode, when both e.movementX and e.movementY are evaluated as negative and mouseX move is 0
@@ -73,14 +76,8 @@ export default class CameraStore {
       return;
     }
 
-    const {
-      thetaOffset,
-      phi
-    } = this.state;
-    this.setCameraState({ ...this.state,
-      thetaOffset: thetaOffset - x,
-      phi: Math.max(0, Math.min(phi + y, Math.PI))
-    });
+    const { thetaOffset, phi } = this.state;
+    this.setCameraState({ ...this.state, thetaOffset: thetaOffset - x, phi: Math.max(0, Math.min(phi + y, Math.PI)) });
 
     this._onChange(this.state);
   };
@@ -91,32 +88,23 @@ export default class CameraStore {
       return;
     }
 
-    const {
-      targetOffset,
-      thetaOffset
-    } = this.state;
+    const { targetOffset, thetaOffset } = this.state;
     // rotate around z axis so the offset is in the target's reference frame
     const result = [x, y, 0];
     const offset = vec3.transformQuat(result, result, quat.setAxisAngle(TEMP_QUAT, UNIT_Z_VECTOR, -thetaOffset));
-    this.setCameraState({ ...this.state,
-      targetOffset: vec3.add(offset, targetOffset, offset)
-    });
+    this.setCameraState({ ...this.state, targetOffset: vec3.add(offset, targetOffset, offset) });
 
     this._onChange(this.state);
   };
   cameraZoom = (zoomPercent: number) => {
-    const {
-      distance
-    } = this.state;
+    const { distance } = this.state;
     const newDistance: number = distanceAfterZoom(distance, zoomPercent);
 
     if (distance === newDistance) {
       return;
     }
 
-    this.setCameraState({ ...this.state,
-      distance: newDistance
-    });
+    this.setCameraState({ ...this.state, distance: newDistance });
 
     this._onChange(this.state);
   };

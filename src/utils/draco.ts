@@ -7,9 +7,7 @@
 import draco3d from "draco3d";
 
 const decodeGeometry = (draco, decoder, json, binary, dracoCompression) => {
-  const {
-    bufferView: bufferViewIndex
-  } = dracoCompression;
+  const { bufferView: bufferViewIndex } = dracoCompression;
   const bufferView = json.bufferViews[bufferViewIndex];
   const buffer = new draco.DecoderBuffer();
   const data = new Int8Array(binary.buffer, binary.byteOffset + (bufferView.byteOffset || 0), bufferView.byteLength);
@@ -81,11 +79,7 @@ const decodeIndices = (draco, decoder, dracoGeometry) => {
 };
 
 const decodePrimitive = (draco, decoder, json, binary, primitive) => {
-  const {
-    extensions: {
-      KHR_draco_mesh_compression
-    } = {}
-  } = primitive;
+  const { extensions: { KHR_draco_mesh_compression } = {} } = primitive;
 
   if (!KHR_draco_mesh_compression) {
     return;
@@ -112,14 +106,12 @@ async function createDracoModule(): any {
   return draco3d.createDecoderModule({
     locateFile: () => {
       return draco3dWasm;
-    }
+    },
   });
 }
 
 export default async function decodeCompressedGLB(json: any, binary: DataView) {
-  const {
-    extensionsRequired = []
-  } = json;
+  const { extensionsRequired = [] } = json;
 
   if (!extensionsRequired.includes("KHR_draco_mesh_compression")) {
     // this model does not uses Draco compression
@@ -128,8 +120,8 @@ export default async function decodeCompressedGLB(json: any, binary: DataView) {
 
   const draco = await createDracoModule();
   const decoder = new draco.Decoder();
-  json.meshes.forEach(mesh => {
-    mesh.primitives.forEach(primitive => {
+  json.meshes.forEach((mesh) => {
+    mesh.primitives.forEach((primitive) => {
       decodePrimitive(draco, decoder, json, binary, primitive);
     });
   });

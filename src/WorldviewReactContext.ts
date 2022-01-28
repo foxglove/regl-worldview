@@ -8,4 +8,4 @@ import React from "react";
 import type { WorldviewContextType } from "./WorldviewContext";
 import "./WorldviewContext"; // @ts-expect-error
 
-export default React.createContext((undefined as WorldviewContextType | void));
+export default React.createContext(undefined as WorldviewContextType | void);

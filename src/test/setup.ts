@@ -37,13 +37,13 @@ if (typeof window !== "undefined") {
 // from libraries anyway, since for user-code we should be using `Logger`, which
 // automatically gets silenced on tests.
 // @ts-expect-error - Flow doesn't like that we're overwriting this.
-console.error = function(message) {
+console.error = function (message) {
   // $FlowFixMe
   fail(message); // eslint-disable-line
 };
 
 // @ts-expect-error - Flow doesn't like that we're overwriting this.
-console.warn = function(message) {
+console.warn = function (message) {
   // We'll have to update these methods, but for now we just ignore their
   // warning messages.
   if (message.includes("https://fb.me/react-unsafe-component-lifecycles")) {

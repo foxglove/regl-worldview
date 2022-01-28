@@ -47,13 +47,13 @@ export default class HitmapObjectIdManager {
     this._commandsByObjectMap.set(object, command);
 
     // Return colors from the IDs.
-    const colors = ids.map(id => intToRGB(id));
+    const colors = ids.map((id) => intToRGB(id));
     return colors;
   };
   getObjectByObjectHitmapId = (objectHitmapId: ObjectHitmapId): MouseEventObject => {
     return {
       object: this._objectsByObjectHitmapIdMap[objectHitmapId],
-      instanceIndex: this._instanceIndexByObjectHitmapIdMap[objectHitmapId]
+      instanceIndex: this._instanceIndexByObjectHitmapIdMap[objectHitmapId],
     };
   };
   getCommandForObject = (object: Record<string, any>): CommandType | null | undefined => {

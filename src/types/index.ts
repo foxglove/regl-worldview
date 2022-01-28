@@ -37,7 +37,24 @@ export type Viewport = [number, number, number, number];
 export type Vec2 = [number, number];
 export type Vec3 = [number, number, number];
 export type Vec4 = [number, number, number, number];
-export type Mat4 = [number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
+export type Mat4 = [
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number
+];
 export interface CameraCommand {
   getProjection(): Mat4;
   getView(): Mat4;
@@ -150,18 +167,22 @@ export type DepthState = {
 export type BlendFuncValue = string | number;
 export type BlendState = {
   enable?: boolean;
-  func?: BlendFuncValue | {
-    src?: BlendFuncValue;
-    dst?: BlendFuncValue;
-    srcAlpha?: BlendFuncValue;
-    srcRGB?: BlendFuncValue;
-    dstRGB?: BlendFuncValue;
-    dstAlpha?: BlendFuncValue;
-  };
-  equation?: string | {
-    rgb: string;
-    alpha: string;
-  };
+  func?:
+    | BlendFuncValue
+    | {
+        src?: BlendFuncValue;
+        dst?: BlendFuncValue;
+        srcAlpha?: BlendFuncValue;
+        srcRGB?: BlendFuncValue;
+        dstRGB?: BlendFuncValue;
+        dstAlpha?: BlendFuncValue;
+      };
+  equation?:
+    | string
+    | {
+        rgb: string;
+        alpha: string;
+      };
   color?: Vec4;
 };
 export type ObjectHitmapId = number;
@@ -175,5 +196,15 @@ export type ObjectHitmapId = number;
 export type AssignNextColorsFn = (object: Record<string, any>, count: number) => Vec4[];
 export type GetChildrenForHitmap = <T>(prop: T, arg1: AssignNextColorsFn, arg2: MouseEventObject[]) => T;
 export type MouseEventEnum = "onClick" | "onMouseUp" | "onMouseMove" | "onMouseDown" | "onDoubleClick";
-export type CameraAction = "moveDown" | "moveLeft" | "moveRight" | "moveUp" | "rotateLeft" | "rotateRight" | "tiltDown" | "tiltUp" | "zoomIn" | "zoomOut";
+export type CameraAction =
+  | "moveDown"
+  | "moveLeft"
+  | "moveRight"
+  | "moveUp"
+  | "rotateLeft"
+  | "rotateRight"
+  | "tiltDown"
+  | "tiltUp"
+  | "zoomIn"
+  | "zoomOut";
 export type CameraKeyMap = Record<string, CameraAction | false | null>;

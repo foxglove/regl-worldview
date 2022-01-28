@@ -8,7 +8,15 @@ import memoize from "lodash/memoize";
 import * as React from "react";
 
 import type { Line, Vec4, Color, Pose, DepthState, BlendState } from "../types";
-import { defaultBlend, withPose, toRGBA, shouldConvert, pointToVec3, defaultReglDepth, defaultReglBlend } from "../utils/commandUtils";
+import {
+  defaultBlend,
+  withPose,
+  toRGBA,
+  shouldConvert,
+  pointToVec3,
+  defaultReglDepth,
+  defaultReglBlend,
+} from "../utils/commandUtils";
 import { nonInstancedGetChildrenForHitmap } from "../utils/getChildrenForHitmapDefaults";
 import type { CommonCommandProps } from "./Command";
 import Command from "./Command";
@@ -74,7 +82,7 @@ const POINT_TYPES = {
   BL: 0,
   TR: 1,
   BR: 2,
-  TL: 3
+  TL: 3,
 };
 const VERTICES_PER_INSTANCE = Object.keys(POINT_TYPES).length;
 const vert = `
@@ -103,7 +111,9 @@ uniform bool scaleInvariant;
 
 varying vec4 vColor;
 
-${Object.keys(POINT_TYPES).map(k => `const float POINT_${k} = ${POINT_TYPES[k]}.0;`).join("\n")}
+${Object.keys(POINT_TYPES)
+  .map((k) => `const float POINT_${k} = ${POINT_TYPES[k]}.0;`)
+  .join("\n")}
 
 #WITH_POSE
 
@@ -240,133 +250,116 @@ export const lines = (regl: any) => {
   const pointTypeBuffer = regl.buffer({
     type: "uint16",
     usage: "static",
-    data: [POINT_TYPES.TL, POINT_TYPES.BL, POINT_TYPES.TR, POINT_TYPES.BR]
+    data: [POINT_TYPES.TL, POINT_TYPES.BL, POINT_TYPES.TR, POINT_TYPES.BR],
   });
   const debugColorBuffer = regl.buffer({
     type: "float",
     usage: "static",
-    data: [[0, 1, 1, 1], // cyan
-    [1, 0, 0, 1], // red
-    [0, 1, 0, 1], // green
-    [1, 0, 1, 1] // magenta
-    ]
+    data: [
+      [0, 1, 1, 1], // cyan
+      [1, 0, 0, 1], // red
+      [0, 1, 0, 1], // green
+      [1, 0, 1, 1], // magenta
+    ],
   });
   // The pose position and rotation buffers contain the identity position/rotation, for use when we don't have instanced
   // poses.
   const defaultPosePositionBuffer = regl.buffer({
     type: "float",
     usage: "static",
-    data: flatten(new Array(VERTICES_PER_INSTANCE).fill([0, 0, 0]))
+    data: flatten(new Array(VERTICES_PER_INSTANCE).fill([0, 0, 0])),
   });
   const defaultPoseRotationBuffer = regl.buffer({
     type: "float",
     usage: "static",
     // Rotation array identity is [x: 0, y: 0, z: 0, w: 1]
-    data: flatten(new Array(VERTICES_PER_INSTANCE).fill([0, 0, 0, 1]))
+    data: flatten(new Array(VERTICES_PER_INSTANCE).fill([0, 0, 0, 1])),
   });
   // The buffers used for input position & color data
   const colorBuffer = regl.buffer({
-    type: "float"
+    type: "float",
   });
   // All invocations of the vertex shader share data from the positions buffer, but with different
   // offsets. However, when offset and stride are combined, 3 or 4 attributes reading from the same
   // buffer produces incorrect results on certain Lenovo hardware running Ubuntu. As a workaround,
   // we upload the same data into two buffers and have only two attributes reading from each buffer.
   const positionBuffer1 = regl.buffer({
-    type: "float"
+    type: "float",
   });
   const positionBuffer2 = regl.buffer({
-    type: "float"
+    type: "float",
   });
   const posePositionBuffer = regl.buffer({
-    type: "float"
+    type: "float",
   });
   const poseRotationBuffer = regl.buffer({
-    type: "float"
+    type: "float",
   });
-  const command = regl(withPose({
-    vert,
-    frag,
-    blend: defaultBlend,
-    uniforms: {
-      thickness: regl.prop("scale.x"),
-      viewportWidth: regl.context("viewportWidth"),
-      viewportHeight: regl.context("viewportHeight"),
-      alpha: regl.prop("alpha"),
-      joined: regl.prop("joined"),
-      scaleInvariant: regl.prop("scaleInvariant")
-    },
-    attributes: {
-      pointType: pointTypeBuffer,
-      colorB: (context, {
-        joined,
-        monochrome,
-        debug
-      }) => ({
-        buffer: debug ? debugColorBuffer : colorBuffer,
-        offset: 0,
-        stride: (joined || monochrome || debug ? 1 : 2) * 4 * FLOAT_BYTES,
-        divisor: monochrome || debug ? 0 : 1
-      }),
-      colorC: (context, {
-        joined,
-        monochrome,
-        debug
-      }) => ({
-        buffer: debug ? debugColorBuffer : colorBuffer,
-        offset: monochrome || debug ? 0 : 4 * FLOAT_BYTES,
-        stride: (joined || monochrome || debug ? 1 : 2) * 4 * FLOAT_BYTES,
-        divisor: monochrome || debug ? 0 : 1
-      }),
-      positionA: (context, {
-        joined
-      }) => ({
-        buffer: positionBuffer1,
-        offset: 0,
-        stride: (joined ? 1 : 2) * POINT_BYTES,
-        divisor: 1
-      }),
-      positionB: (context, {
-        joined
-      }) => ({
-        buffer: positionBuffer1,
-        offset: POINT_BYTES,
-        stride: (joined ? 1 : 2) * POINT_BYTES,
-        divisor: 1
-      }),
-      positionC: (context, {
-        joined
-      }) => ({
-        buffer: positionBuffer2,
-        offset: 2 * POINT_BYTES,
-        stride: (joined ? 1 : 2) * POINT_BYTES,
-        divisor: 1
-      }),
-      positionD: (context, {
-        joined
-      }) => ({
-        buffer: positionBuffer2,
-        offset: 3 * POINT_BYTES,
-        stride: (joined ? 1 : 2) * POINT_BYTES,
-        divisor: 1
-      }),
-      posePosition: (context, {
-        hasInstancedPoses
-      }) => ({
-        buffer: hasInstancedPoses ? posePositionBuffer : defaultPosePositionBuffer,
-        divisor: hasInstancedPoses ? 1 : 0
-      }),
-      poseRotation: (context, {
-        hasInstancedPoses
-      }) => ({
-        buffer: hasInstancedPoses ? poseRotationBuffer : defaultPoseRotationBuffer,
-        divisor: hasInstancedPoses ? 1 : 0
-      })
-    },
-    count: VERTICES_PER_INSTANCE,
-    instances: regl.prop("instances"),
-    primitive: regl.prop("primitive")
-  }));
+  const command = regl(
+    withPose({
+      vert,
+      frag,
+      blend: defaultBlend,
+      uniforms: {
+        thickness: regl.prop("scale.x"),
+        viewportWidth: regl.context("viewportWidth"),
+        viewportHeight: regl.context("viewportHeight"),
+        alpha: regl.prop("alpha"),
+        joined: regl.prop("joined"),
+        scaleInvariant: regl.prop("scaleInvariant"),
+      },
+      attributes: {
+        pointType: pointTypeBuffer,
+        colorB: (context, { joined, monochrome, debug }) => ({
+          buffer: debug ? debugColorBuffer : colorBuffer,
+          offset: 0,
+          stride: (joined || monochrome || debug ? 1 : 2) * 4 * FLOAT_BYTES,
+          divisor: monochrome || debug ? 0 : 1,
+        }),
+        colorC: (context, { joined, monochrome, debug }) => ({
+          buffer: debug ? debugColorBuffer : colorBuffer,
+          offset: monochrome || debug ? 0 : 4 * FLOAT_BYTES,
+          stride: (joined || monochrome || debug ? 1 : 2) * 4 * FLOAT_BYTES,
+          divisor: monochrome || debug ? 0 : 1,
+        }),
+        positionA: (context, { joined }) => ({
+          buffer: positionBuffer1,
+          offset: 0,
+          stride: (joined ? 1 : 2) * POINT_BYTES,
+          divisor: 1,
+        }),
+        positionB: (context, { joined }) => ({
+          buffer: positionBuffer1,
+          offset: POINT_BYTES,
+          stride: (joined ? 1 : 2) * POINT_BYTES,
+          divisor: 1,
+        }),
+        positionC: (context, { joined }) => ({
+          buffer: positionBuffer2,
+          offset: 2 * POINT_BYTES,
+          stride: (joined ? 1 : 2) * POINT_BYTES,
+          divisor: 1,
+        }),
+        positionD: (context, { joined }) => ({
+          buffer: positionBuffer2,
+          offset: 3 * POINT_BYTES,
+          stride: (joined ? 1 : 2) * POINT_BYTES,
+          divisor: 1,
+        }),
+        posePosition: (context, { hasInstancedPoses }) => ({
+          buffer: hasInstancedPoses ? posePositionBuffer : defaultPosePositionBuffer,
+          divisor: hasInstancedPoses ? 1 : 0,
+        }),
+        poseRotation: (context, { hasInstancedPoses }) => ({
+          buffer: hasInstancedPoses ? poseRotationBuffer : defaultPoseRotationBuffer,
+          divisor: hasInstancedPoses ? 1 : 0,
+        }),
+      },
+      count: VERTICES_PER_INSTANCE,
+      instances: regl.prop("instances"),
+      primitive: regl.prop("primitive"),
+    })
+  );
   let colorArray = new Float32Array(VERTICES_PER_INSTANCE * 4);
   let pointArray = new Float32Array(0);
   let allocatedPoints = 0;
@@ -411,7 +404,10 @@ export const lines = (regl: any) => {
     return pointArray.subarray(0, n);
   }
 
-  function fillPoseArrays(instances: number, poses: Pose[]): {
+  function fillPoseArrays(
+    instances: number,
+    poses: Pose[]
+  ): {
     positionData: Float32Array;
     rotationData: Float32Array;
   } {
@@ -423,10 +419,7 @@ export const lines = (regl: any) => {
     for (let index = 0; index < poses.length; index++) {
       const positionOffset = index * 3;
       const rotationOffset = index * 4;
-      const {
-        position,
-        orientation: r
-      } = poses[index];
+      const { position, orientation: r } = poses[index];
       const convertedPosition = Array.isArray(position) ? position : pointToVec3(position);
       positionArray[positionOffset + 0] = convertedPosition[0];
       positionArray[positionOffset + 1] = convertedPosition[1];
@@ -440,7 +433,7 @@ export const lines = (regl: any) => {
 
     return {
       positionData: positionArray.subarray(0, instances * 3),
-      rotationData: rotationArray.subarray(0, instances * 4)
+      rotationData: rotationArray.subarray(0, instances * 4),
     };
   }
 
@@ -448,7 +441,12 @@ export const lines = (regl: any) => {
     return shouldConvert(colors) ? colors.map(toRGBA) : colors;
   }
 
-  function fillColorArray(color: (Color | null | undefined) | (Vec4 | null | undefined), colors: (Color | Vec4)[] | null | undefined, monochrome: boolean, shouldClose: boolean): Float32Array {
+  function fillColorArray(
+    color: (Color | null | undefined) | (Vec4 | null | undefined),
+    colors: (Color | Vec4)[] | null | undefined,
+    monochrome: boolean,
+    shouldClose: boolean
+  ): Float32Array {
     if (monochrome) {
       if (colorArray.length < VERTICES_PER_INSTANCE * 4) {
         colorArray = new Float32Array(VERTICES_PER_INSTANCE * 4);
@@ -503,35 +501,33 @@ export const lines = (regl: any) => {
   // Create a new render function based on rendering settings
   // Memoization is required in order to prevent creating too many functions
   // that use the same arguments, potentially leading to memory leaks.
-  const memoizedRender = memoize((props: {
-    depth?: DepthState;
-    blend?: BlendState;
-  }) => {
-    const {
-      depth = defaultReglDepth,
-      blend = defaultReglBlend
-    } = props;
-    return regl({
-      depth,
-      blend
-    });
-  }, (...args) => JSON.stringify(args));
+  const memoizedRender = memoize(
+    (props: { depth?: DepthState; blend?: BlendState }) => {
+      const { depth = defaultReglDepth, blend = defaultReglBlend } = props;
+      return regl({
+        depth,
+        blend,
+      });
+    },
+    (...args) => JSON.stringify(args)
+  );
 
   // Disable depth for debug rendering (so lines stay visible)
-  const render = (props: {
-    debug?: boolean;
-    depth?: DepthState;
-    blend?: BlendState;
-  }, commands: any) => {
-    const {
-      debug
-    } = props;
+  const render = (
+    props: {
+      debug?: boolean;
+      depth?: DepthState;
+      blend?: BlendState;
+    },
+    commands: any
+  ) => {
+    const { debug } = props;
 
     if (debug) {
       memoizedRender({
         depth: {
-          enable: false
-        }
+          enable: false,
+        },
       })(commands);
     } else {
       memoizedRender(props)(commands);
@@ -540,13 +536,7 @@ export const lines = (regl: any) => {
 
   // Render one line list/strip
   function renderLine(props) {
-    const {
-      debug,
-      primitive = "lines",
-      scaleInvariant = false,
-      depth,
-      blend
-    } = props;
+    const { debug, primitive = "lines", scaleInvariant = false, depth, blend } = props;
     const numInputPoints = props.points.length;
 
     if (numInputPoints < 2) {
@@ -559,25 +549,23 @@ export const lines = (regl: any) => {
     const pointData = fillPointArray(props.points, alreadyClosed, shouldClose);
     positionBuffer1({
       data: pointData,
-      usage: "dynamic"
+      usage: "dynamic",
     });
     positionBuffer2({
       data: pointData,
-      usage: "dynamic"
+      usage: "dynamic",
     });
     const monochrome = !(props.colors && props.colors.length);
     const colorData = fillColorArray(props.color, props.colors, monochrome, shouldClose);
     colorBuffer({
       data: colorData,
-      usage: "dynamic"
+      usage: "dynamic",
     });
     const joined = primitive === "line strip";
     const effectiveNumPoints = numInputPoints + (shouldClose ? 1 : 0);
     const instances = joined ? effectiveNumPoints - 1 : Math.floor(effectiveNumPoints / 2);
     // fill instanced pose buffers
-    const {
-      poses
-    } = props;
+    const { poses } = props;
     const hasInstancedPoses = !!poses && poses.length > 0;
 
     if (hasInstancedPoses && poses) {
@@ -586,48 +574,52 @@ export const lines = (regl: any) => {
         return;
       }
 
-      const {
-        positionData,
-        rotationData
-      } = fillPoseArrays(instances, poses);
+      const { positionData, rotationData } = fillPoseArrays(instances, poses);
       posePositionBuffer({
         data: positionData,
-        usage: "dynamic"
+        usage: "dynamic",
       });
       poseRotationBuffer({
         data: rotationData,
-        usage: "dynamic"
+        usage: "dynamic",
       });
     }
 
-    render({
-      debug,
-      depth,
-      blend
-    }, () => {
-      // Use Object.assign because it's actually faster than babel's object spread polyfill.
-      command(Object.assign({}, props, {
-        joined,
-        primitive: "triangle strip",
-        alpha: debug ? 0.2 : 1,
-        monochrome,
-        instances,
-        scaleInvariant,
-        hasInstancedPoses
-      }));
+    render(
+      {
+        debug,
+        depth,
+        blend,
+      },
+      () => {
+        // Use Object.assign because it's actually faster than babel's object spread polyfill.
+        command(
+          Object.assign({}, props, {
+            joined,
+            primitive: "triangle strip",
+            alpha: debug ? 0.2 : 1,
+            monochrome,
+            instances,
+            scaleInvariant,
+            hasInstancedPoses,
+          })
+        );
 
-      if (debug) {
-        command(Object.assign({}, props, {
-          joined,
-          primitive: "line strip",
-          alpha: 1,
-          monochrome,
-          instances,
-          scaleInvariant,
-          hasInstancedPoses
-        }));
+        if (debug) {
+          command(
+            Object.assign({}, props, {
+              joined,
+              primitive: "line strip",
+              alpha: 1,
+              monochrome,
+              instances,
+              scaleInvariant,
+              hasInstancedPoses,
+            })
+          );
+        }
       }
-    });
+    );
   }
 
   return (inProps: any) => {
@@ -638,8 +630,10 @@ export const lines = (regl: any) => {
     }
   };
 };
-export default function Lines(props: CommonCommandProps & {
-  children: Line[];
-}) {
+export default function Lines(
+  props: CommonCommandProps & {
+    children: Line[];
+  }
+) {
   return <Command getChildrenForHitmap={nonInstancedGetChildrenForHitmap} {...props} reglCommand={lines} />;
 }

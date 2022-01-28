@@ -11,26 +11,35 @@ import Lines from "./Lines";
 const pointToVec3 = (p: Vec3): Point => ({
   x: p[0],
   y: p[1],
-  z: p[2]
+  z: p[2],
 });
 
 const scale = 100;
 const x = 1 * scale;
-const xAxisPoints = [[-x, 0, 0], [x, 0, 0]].map(pointToVec3);
-const yAxisPoints = [[0, -100, 0], [0, 100, 0]].map(pointToVec3);
-const zAxisPoints = [[0, 0, -100], [0, 0, 100]].map(pointToVec3);
+const xAxisPoints = [
+  [-x, 0, 0],
+  [x, 0, 0],
+].map(pointToVec3);
+const yAxisPoints = [
+  [0, -100, 0],
+  [0, 100, 0],
+].map(pointToVec3);
+const zAxisPoints = [
+  [0, 0, -100],
+  [0, 0, 100],
+].map(pointToVec3);
 const pose = {
   orientation: {
     x: 0,
     y: 0,
     z: 0,
-    w: 0
+    w: 0,
   },
   position: {
     x: 0,
     y: 0,
-    z: 0
-  }
+    z: 0,
+  },
 };
 const xAxis = {
   pose,
@@ -38,14 +47,14 @@ const xAxis = {
   scale: {
     x: 0.5,
     y: 0.5,
-    z: 0.5
+    z: 0.5,
   },
   color: {
     r: 0.95,
     g: 0.26,
     b: 0.4,
-    a: 1
-  }
+    a: 1,
+  },
 };
 const yAxis = {
   pose,
@@ -53,14 +62,14 @@ const yAxis = {
   scale: {
     x: 0.5,
     y: 0.5,
-    z: 0.5
+    z: 0.5,
   },
   color: {
     r: 0.02,
     g: 0.82,
     b: 0.49,
-    a: 1
-  }
+    a: 1,
+  },
 };
 const zAxis = {
   pose,
@@ -68,14 +77,14 @@ const zAxis = {
   scale: {
     x: 0.5,
     y: 0.5,
-    z: 0.5
+    z: 0.5,
   },
   color: {
     r: 0.11,
     g: 0.51,
     b: 0.92,
-    a: 1
-  }
+    a: 1,
+  },
 };
 type Axis = Line;
 type Props = {
@@ -84,11 +93,10 @@ type Props = {
 
 export default class Axes extends React.Component<Props> {
   static defaultProps: Props = {
-    children: [xAxis, yAxis, zAxis]
+    children: [xAxis, yAxis, zAxis],
   };
 
   render() {
     return <Lines>{this.props.children}</Lines>;
   }
-
 }

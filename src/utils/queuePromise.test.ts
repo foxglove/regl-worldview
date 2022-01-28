@@ -28,10 +28,17 @@ describe("queuePromise", () => {
     expect(queuedFn.currentPromise).not.toBeUndefined();
     await secondPromise.reject(new Error(""));
     expect(calls).toBe(2);
-    expect(callArgs).toEqual([[1, 2], [3, 4]]);
+    expect(callArgs).toEqual([
+      [1, 2],
+      [3, 4],
+    ]);
     await Promise.resolve();
     expect(calls).toBe(3);
-    expect(callArgs).toEqual([[1, 2], [3, 4], [5, 6]]);
+    expect(callArgs).toEqual([
+      [1, 2],
+      [3, 4],
+      [5, 6],
+    ]);
     await Promise.resolve();
     expect(queuedFn.currentPromise).toBeUndefined();
   });

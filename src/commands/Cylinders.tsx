@@ -5,7 +5,7 @@
 //  You may not use this file except in compliance with the License.
 import * as React from "react";
 
-import type { Cylinder } from "../types";
+import type { Cylinder, Vec3 } from "../types";
 import fromGeometry from "../utils/fromGeometry";
 import { createInstancedGetChildrenForHitmap } from "../utils/getChildrenForHitmapDefaults";
 import withRenderStateOverrides from "../utils/withRenderStateOverrides";
@@ -14,16 +14,16 @@ import Command from "./Command";
 
 export function createCylinderGeometry(numSegments: number, cone: boolean) {
   // "poles" are the centers of top/bottom faces
-  const northPole = [0, 0, 0.5];
-  const southPole = [0, 0, -0.5];
-  const points = [northPole, southPole];
+  const northPole: Vec3 = [0, 0, 0.5];
+  const southPole: Vec3 = [0, 0, -0.5];
+  const points: Vec3[] = [northPole, southPole];
   // Keep side faces separate from top/bottom to improve appearance for semi-transparent colors.
   // We don't have a good approach to transparency right now but this is a small improvement over mixing the faces.
-  const sideFaces = [];
-  const endCapFaces = [];
+  const sideFaces: Vec3[] = [];
+  const endCapFaces: Vec3[] = [];
 
   for (let i = 0; i < numSegments; i++) {
-    const theta = 2 * Math.PI * i / numSegments;
+    const theta = (2 * Math.PI * i) / numSegments;
     const x = 0.5 * Math.cos(theta);
     const y = 0.5 * Math.sin(theta);
     points.push([x, y, 0.5], [x, y, -0.5]);
@@ -43,18 +43,16 @@ export function createCylinderGeometry(numSegments: number, cone: boolean) {
   return {
     points,
     sideFaces,
-    endCapFaces
+    endCapFaces,
   };
 }
-const {
-  points,
-  sideFaces,
-  endCapFaces
-} = createCylinderGeometry(30, false);
+const { points, sideFaces, endCapFaces } = createCylinderGeometry(30, false);
 export const cylinders = withRenderStateOverrides(fromGeometry(points, sideFaces.concat(endCapFaces)));
 const getChildrenForHitmap = createInstancedGetChildrenForHitmap(1);
-export default function Cylinders(props: CommonCommandProps & {
-  children: Cylinder[];
-}) {
+export default function Cylinders(
+  props: CommonCommandProps & {
+    children: Cylinder[];
+  }
+) {
   return <Command getChildrenForHitmap={getChildrenForHitmap} {...props} reglCommand={cylinders} />;
 }

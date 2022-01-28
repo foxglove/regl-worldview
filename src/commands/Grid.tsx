@@ -52,30 +52,29 @@ export function grid() {
       color: (context, props) => {
         const color = props.color || DEFAULT_GRID_COLOR;
         return new Array(props.count * 4 * 2).fill(color);
-      }
+      },
     },
     count: (context, props) => {
       // 8 points per count
       const count = props.count * 4 * 2;
       return count;
-    }
+    },
   });
 }
 type Props = CommonCommandProps & {
   count: number;
 }; // useful for rendering a grid for debugging in stories
 
-export default function Grid({
-  count,
-  ...rest
-}: Props) {
+export default function Grid({ count, ...rest }: Props) {
   const children = {
-    count
+    count,
   };
-  return <Command getChildrenForHitmap={nonInstancedGetChildrenForHitmap} {...rest} reglCommand={grid}>
+  return (
+    <Command getChildrenForHitmap={nonInstancedGetChildrenForHitmap} {...rest} reglCommand={grid}>
       {children}
-    </Command>;
+    </Command>
+  );
 }
 Grid.defaultProps = {
-  count: 6
+  count: 6,
 };

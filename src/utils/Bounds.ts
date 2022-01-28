@@ -19,9 +19,7 @@ class Bound {
     this.min = Math.min(this.min, value);
     this.max = Math.max(this.max, value);
   }
-
 } // represents x, y, and z min & max bounds for a 3d scene
-
 
 export default class Bounds {
   x: Bound;
@@ -40,5 +38,4 @@ export default class Bounds {
     this.y.update(point.y);
     this.z.update(point.z);
   }
-
 }

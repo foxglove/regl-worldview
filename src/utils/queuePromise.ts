@@ -25,7 +25,7 @@ export default function queuePromise(fn: (...args: any[]) => Promise<any>): Queu
       const returnPromise = signal();
       nextCalls.push({
         args,
-        promise: returnPromise
+        promise: returnPromise,
       });
       return await returnPromise;
     }
@@ -40,11 +40,10 @@ export default function queuePromise(fn: (...args: any[]) => Promise<any>): Queu
       queuedFn.currentPromise = undefined;
 
       if (nextCalls.length > 0) {
-        const {
-          promise: nextPromise,
-          args: nextArgs
-        } = nextCalls.shift();
-        start(...nextArgs).then(result => nextPromise.resolve(result)).catch(error => nextPromise.reject(error));
+        const { promise: nextPromise, args: nextArgs } = nextCalls.shift();
+        start(...nextArgs)
+          .then((result) => nextPromise.resolve(result))
+          .catch((error) => nextPromise.reject(error));
       }
     });
     queuedFn.currentPromise = promise;

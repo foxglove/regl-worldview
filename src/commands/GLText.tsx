@@ -16,7 +16,7 @@ import { isColorDark } from "./Text";
 if (typeof self !== "undefined" && !self.document) {
   // $FlowFixMe: Flow doesn't know about OffscreenCanvas.
   self.document = {
-    createElement: () => new OffscreenCanvas(0, 0)
+    createElement: () => new OffscreenCanvas(0, 0),
   };
 }
 
@@ -41,11 +41,14 @@ if (typeof self !== "undefined" && !self.document) {
 // - Somehow support kerning and more advanced font metrics. However, the web font APIs may not
 //   provide support for this. Some font info could be generated/stored offline, possibly including the atlas.
 // - Explore multi-channel SDFs.
-type CharacterLocations = Record<string, {
-  x: number;
-  y: number;
-  width: number;
-}>;
+type CharacterLocations = Record<
+  string,
+  {
+    x: number;
+    y: number;
+    width: number;
+  }
+>;
 export type GeneratedAtlas = {
   charInfo: CharacterLocations;
   textureWidth: number;
@@ -64,9 +67,10 @@ type GLTextProps = {
   alphabet?: string[];
   textAtlas?: GeneratedAtlas;
 };
-type Props = CommonCommandProps & GLTextProps & {
-  children: ReadonlyArray<TextMarkerProps>;
-};
+type Props = CommonCommandProps &
+  GLTextProps & {
+    children: ReadonlyArray<TextMarkerProps>;
+  };
 // Font size used in rendering the atlas. This is independent of the `scale` of the rendered text.
 const MIN_RESOLUTION = 40;
 const DEFAULT_RESOLUTION = 160;
@@ -77,15 +81,15 @@ const BG_COLOR_LIGHT = Object.freeze({
   r: 1,
   g: 1,
   b: 1,
-  a: 1
+  a: 1,
 });
 const BG_COLOR_DARK = Object.freeze({
   r: 0,
   g: 0,
   b: 0,
-  a: 1
+  a: 1,
 });
-const memoizedCreateCanvas = memoizeOne(font => {
+const memoizedCreateCanvas = memoizeOne((font) => {
   // $FlowFixMe: Flow doesn't know about OffscreenCanvas.
   const canvas: HTMLCanvasElement = self.OffscreenCanvas ? new OffscreenCanvas(0, 0) : document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -94,11 +98,7 @@ const memoizedCreateCanvas = memoizeOne(font => {
 });
 
 const hashMarkerPosition = (marker: TextMarker): string => {
-  const {
-    x,
-    y,
-    z
-  } = marker.pose.position;
+  const { x, y, z } = marker.pose.position;
   // The hash is a simple string with all three components
   return `x${x}y${y}z${z}`;
 };
@@ -112,75 +112,76 @@ const setMarkerYOffset = (offsets: Map<string, number>, marker: TextMarker, yOff
 };
 
 // Build a single font atlas: a texture containing all characters and position/size data for each character.
-const createMemoizedGenerateAtlas = () => memoizeOne( // We update charSet mutably but monotonically. Pass in the size to invalidate the cache.
-(charSet: Set<string>, _setSize, resolution: number, maxAtlasWidth: number): GeneratedAtlas => {
-  const tinySDF = new TinySDF(resolution, BUFFER, SDF_RADIUS, CUTOFF, "sans-serif", "normal");
-  const ctx = memoizedCreateCanvas(`${resolution}px sans-serif`);
-  let textureWidth = 0;
-  const rowHeight = resolution + 2 * BUFFER;
-  const charInfo = {};
-  // Measure and assign positions to all characters
-  let x = 0;
-  let y = 0;
+const createMemoizedGenerateAtlas = () =>
+  memoizeOne(
+    // We update charSet mutably but monotonically. Pass in the size to invalidate the cache.
+    (charSet: Set<string>, _setSize, resolution: number, maxAtlasWidth: number): GeneratedAtlas => {
+      const tinySDF = new TinySDF(resolution, BUFFER, SDF_RADIUS, CUTOFF, "sans-serif", "normal");
+      const ctx = memoizedCreateCanvas(`${resolution}px sans-serif`);
+      let textureWidth = 0;
+      const rowHeight = resolution + 2 * BUFFER;
+      const charInfo = {};
+      // Measure and assign positions to all characters
+      let x = 0;
+      let y = 0;
 
-  for (const char of charSet) {
-    const width = ctx.measureText(char).width;
-    const dx = Math.ceil(width) + 2 * BUFFER;
+      for (const char of charSet) {
+        const width = ctx.measureText(char).width;
+        const dx = Math.ceil(width) + 2 * BUFFER;
 
-    if (x + dx > maxAtlasWidth) {
-      x = 0;
-      y += rowHeight;
-    }
+        if (x + dx > maxAtlasWidth) {
+          x = 0;
+          y += rowHeight;
+        }
 
-    charInfo[char] = {
-      x,
-      y,
-      width
-    };
-    x += dx;
-    textureWidth = Math.max(textureWidth, x);
-  }
+        charInfo[char] = {
+          x,
+          y,
+          width,
+        };
+        x += dx;
+        textureWidth = Math.max(textureWidth, x);
+      }
 
-  const textureHeight = y + rowHeight;
-  const textureData = new Uint8Array(textureWidth * textureHeight);
+      const textureHeight = y + rowHeight;
+      const textureData = new Uint8Array(textureWidth * textureHeight);
 
-  // Use tiny-sdf to create SDF images for each character and copy them into a single texture
-  for (const char of charSet) {
-    const {
-      x,
-      y
-    } = charInfo[char];
-    const data = tinySDF.draw(char);
+      // Use tiny-sdf to create SDF images for each character and copy them into a single texture
+      for (const char of charSet) {
+        const { x, y } = charInfo[char];
+        const data = tinySDF.draw(char);
 
-    for (let i = 0; i < tinySDF.size; i++) {
-      for (let j = 0; j < tinySDF.size; j++) {
-        // if this character is near the right edge, we don't actually copy the whole square of data
-        if (x + j < textureWidth) {
-          textureData[textureWidth * (y + i) + x + j] = data[i * tinySDF.size + j];
+        for (let i = 0; i < tinySDF.size; i++) {
+          for (let j = 0; j < tinySDF.size; j++) {
+            // if this character is near the right edge, we don't actually copy the whole square of data
+            if (x + j < textureWidth) {
+              textureData[textureWidth * (y + i) + x + j] = data[i * tinySDF.size + j];
+            }
+          }
         }
       }
+
+      return {
+        charInfo,
+        textureWidth,
+        textureHeight,
+        textureData,
+      };
     }
-  }
+  );
 
-  return {
-    charInfo,
-    textureWidth,
-    textureHeight,
-    textureData
-  };
-});
-
-const createMemoizedDrawAtlasTexture = () => memoizeOne((textAtlas: GeneratedAtlas, atlasTexture: any) => {
-  atlasTexture({
-    data: textAtlas.textureData,
-    width: textAtlas.textureWidth,
-    height: textAtlas.textureHeight,
-    format: "alpha",
-    wrap: "clamp",
-    mag: "linear",
-    min: "linear"
+const createMemoizedDrawAtlasTexture = () =>
+  memoizeOne((textAtlas: GeneratedAtlas, atlasTexture: any) => {
+    atlasTexture({
+      data: textAtlas.textureData,
+      width: textAtlas.textureWidth,
+      height: textAtlas.textureHeight,
+      format: "alpha",
+      wrap: "clamp",
+      mag: "linear",
+      min: "linear",
+    });
   });
-});
 
 const vert = `
   precision mediump float;
@@ -362,8 +363,8 @@ function makeTextCommand(alphabet?: string[]) {
       // In addition, make sure the <GLText /> command is the last one
       // being rendered.
       depth: {
-        enable: (ctx, props) => props.scaleInvariant ? false : defaultDepth.enable(ctx, props),
-        mask: (ctx, props) => props.scaleInvariant ? false : defaultDepth.mask(ctx, props)
+        enable: (ctx, props) => (props.scaleInvariant ? false : defaultDepth.enable(ctx, props)),
+        mask: (ctx, props) => (props.scaleInvariant ? false : defaultDepth.mask(ctx, props)),
       },
       blend: defaultBlend,
       primitive: "triangle strip",
@@ -380,74 +381,82 @@ function makeTextCommand(alphabet?: string[]) {
         viewportHeight: regl.context("viewportHeight"),
         viewportWidth: regl.context("viewportWidth"),
         isPerspective: regl.context("isPerspective"),
-        cameraFovY: regl.context("fovy")
+        cameraFovY: regl.context("fovy"),
       },
       instances: regl.prop("instances"),
       count: 4,
       attributes: {
-        position: [[0, 0], [0, -1], [1, 0], [1, -1]],
-        texCoord: [[0, 0], [0, 1], [1, 0], [1, 1]],
+        position: [
+          [0, 0],
+          [0, -1],
+          [1, 0],
+          [1, -1],
+        ],
+        texCoord: [
+          [0, 0],
+          [0, 1],
+          [1, 0],
+          [1, 1],
+        ],
         // flipped
         srcOffset: (ctx, props) => ({
           buffer: props.srcOffsets,
-          divisor: 1
+          divisor: 1,
         }),
         destOffset: (ctx, props) => ({
           buffer: props.destOffsets,
-          divisor: 1
+          divisor: 1,
         }),
         srcWidth: (ctx, props) => ({
           buffer: props.srcWidths,
-          divisor: 1
+          divisor: 1,
         }),
         scale: (ctx, props) => ({
           buffer: props.scale,
-          divisor: 1
+          divisor: 1,
         }),
         alignmentOffset: (ctx, props) => ({
           buffer: props.alignmentOffset,
-          divisor: 1
+          divisor: 1,
         }),
         billboard: (ctx, props) => ({
           buffer: props.billboard,
-          divisor: 1
+          divisor: 1,
         }),
         foregroundColor: (ctx, props) => ({
           buffer: props.foregroundColor,
-          divisor: 1
+          divisor: 1,
         }),
         backgroundColor: (ctx, props) => ({
           buffer: props.backgroundColor,
-          divisor: 1
+          divisor: 1,
         }),
         highlightColor: (ctx, props) => ({
           buffer: props.highlightColor,
-          divisor: 1
+          divisor: 1,
         }),
         enableBackground: (ctx, props) => ({
           buffer: props.enableBackground,
-          divisor: 1
+          divisor: 1,
         }),
         enableHighlight: (ctx, props) => ({
           buffer: props.enableHighlight,
-          divisor: 1
+          divisor: 1,
         }),
         posePosition: (ctx, props) => ({
           buffer: props.posePosition,
-          divisor: 1
+          divisor: 1,
         }),
         poseOrientation: (ctx, props) => ({
           buffer: props.poseOrientation,
-          divisor: 1
-        })
-      }
+          divisor: 1,
+        }),
+      },
     });
     return (props: ReadonlyArray<TextMarkerProps>, isHitmap: boolean) => {
       let estimatedInstances = 0;
 
-      for (const {
-        text
-      } of props) {
+      for (const { text } of props) {
         if (typeof text !== "string") {
           throw new Error(`Expected typeof 'text' to be a string. But got type '${typeof text}' instead.`);
         }
@@ -503,14 +512,18 @@ function makeTextCommand(alphabet?: string[]) {
         // If we need to render text for hitmap framebuffer, we only render the polygons using
         // the foreground color (which needs to be converted to RGBA since it's a vec4).
         // See comment on fragment shader above
-        const fgColor = toColor(isHitmap ? marker.color || [0, 0, 0, 1] : marker.colors?.[0] || marker.color || BG_COLOR_LIGHT);
+        const fgColor = toColor(
+          isHitmap ? marker.color || [0, 0, 0, 1] : marker.colors?.[0] || marker.color || BG_COLOR_LIGHT
+        );
         const outline = marker.colors?.[1] != null || command.autoBackgroundColor;
-        const bgColor = toColor(marker.colors?.[1] || (command.autoBackgroundColor && isColorDark(fgColor) ? BG_COLOR_LIGHT : BG_COLOR_DARK));
+        const bgColor = toColor(
+          marker.colors?.[1] || (command.autoBackgroundColor && isColorDark(fgColor) ? BG_COLOR_LIGHT : BG_COLOR_DARK)
+        );
         const hlColor = marker?.highlightColor || {
           r: 1,
           b: 0,
           g: 1,
-          a: 1
+          a: 1,
         };
 
         for (let i = 0; i < marker.text.length; i++) {
@@ -602,7 +615,7 @@ function makeTextCommand(alphabet?: string[]) {
         highlightColor,
         poseOrientation,
         posePosition,
-        scale
+        scale,
       });
     };
   };

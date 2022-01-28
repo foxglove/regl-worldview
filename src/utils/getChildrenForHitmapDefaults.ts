@@ -5,18 +5,20 @@
 //  You may not use this file except in compliance with the License.
 import type { AssignNextColorsFn, MouseEventObject } from "../types";
 
-function nonInstancedGetChildrenForHitmapFromSingleProp<T>(prop: T, assignNextColors: AssignNextColorsFn, excludedObjects: MouseEventObject[], useOriginalMarkerProp = false): T | null | undefined {
+function nonInstancedGetChildrenForHitmapFromSingleProp<T>(
+  prop: T,
+  assignNextColors: AssignNextColorsFn,
+  excludedObjects: MouseEventObject[],
+  useOriginalMarkerProp = false
+): T | null | undefined {
   // The marker that we send to event callbacks.
   const eventCallbackMarker = useOriginalMarkerProp ? prop.originalMarker : prop;
 
-  if (excludedObjects.some(({
-    object
-  }) => object === eventCallbackMarker)) {
+  if (excludedObjects.some(({ object }) => object === eventCallbackMarker)) {
     return null;
   }
 
-  const hitmapProp = { ...prop
-  };
+  const hitmapProp = { ...prop };
   const [hitmapColor] = assignNextColors(eventCallbackMarker, 1);
   hitmapProp.color = hitmapColor;
 
@@ -27,35 +29,47 @@ function nonInstancedGetChildrenForHitmapFromSingleProp<T>(prop: T, assignNextCo
   return hitmapProp;
 }
 
-export const nonInstancedGetChildrenForHitmap = <T>(props: T, assignNextColors: AssignNextColorsFn, excludedObjects: MouseEventObject[]): T | null | undefined => {
+export const nonInstancedGetChildrenForHitmap = <T>(
+  props: T,
+  assignNextColors: AssignNextColorsFn,
+  excludedObjects: MouseEventObject[]
+): T | null | undefined => {
   if (Array.isArray(props)) {
-    return props.map(prop => nonInstancedGetChildrenForHitmapFromSingleProp(prop, assignNextColors, excludedObjects)).filter(Boolean);
+    return props
+      .map((prop) => nonInstancedGetChildrenForHitmapFromSingleProp(prop, assignNextColors, excludedObjects))
+      .filter(Boolean);
   }
 
   return nonInstancedGetChildrenForHitmapFromSingleProp(props, assignNextColors, excludedObjects);
 };
 // Almost identical to nonInstancedGetChildrenForHitmap, but instead the object passed to event callbacks is the object
 // at `prop.originalMarker`, not just `prop`.
-export const getChildrenForHitmapWithOriginalMarker = <T>(props: T, assignNextColors: AssignNextColorsFn, excludedObjects: MouseEventObject[]) => {
+export const getChildrenForHitmapWithOriginalMarker = <T>(
+  props: T,
+  assignNextColors: AssignNextColorsFn,
+  excludedObjects: MouseEventObject[]
+) => {
   if (Array.isArray(props)) {
-    return props.map(prop => nonInstancedGetChildrenForHitmapFromSingleProp(prop, assignNextColors, excludedObjects, true)).filter(Boolean);
+    return props
+      .map((prop) => nonInstancedGetChildrenForHitmapFromSingleProp(prop, assignNextColors, excludedObjects, true))
+      .filter(Boolean);
   }
 
   return nonInstancedGetChildrenForHitmapFromSingleProp(props, assignNextColors, excludedObjects, true);
 };
 
-function instancedGetChildrenForHitmapFromSingleProp<T>(prop: T, assignNextColors: AssignNextColorsFn, excludedObjects: MouseEventObject[], pointCountPerInstance): T | null | undefined {
-  const matchedExcludedObjects = excludedObjects.filter(({
-    object,
-    instanceIndex
-  }) => object === prop);
-  const filteredIndices = matchedExcludedObjects.map(({
-    object,
-    instanceIndex
-  }) => instanceIndex).filter(instanceIndex => typeof instanceIndex === "number");
-  const hitmapProp = { ...prop
-  };
-  const instanceCount = hitmapProp.points && Math.ceil(hitmapProp.points.length / pointCountPerInstance) || 1;
+function instancedGetChildrenForHitmapFromSingleProp<T>(
+  prop: T,
+  assignNextColors: AssignNextColorsFn,
+  excludedObjects: MouseEventObject[],
+  pointCountPerInstance
+): T | null | undefined {
+  const matchedExcludedObjects = excludedObjects.filter(({ object, instanceIndex }) => object === prop);
+  const filteredIndices = matchedExcludedObjects
+    .map(({ object, instanceIndex }) => instanceIndex)
+    .filter((instanceIndex) => typeof instanceIndex === "number");
+  const hitmapProp = { ...prop };
+  const instanceCount = (hitmapProp.points && Math.ceil(hitmapProp.points.length / pointCountPerInstance)) || 1;
   // This returns 1 color per instance.
   const idColors = assignNextColors(prop, instanceCount);
   const startColor = idColors[0];
@@ -77,8 +91,12 @@ function instancedGetChildrenForHitmapFromSingleProp<T>(prop: T, assignNextColor
     hitmapProp.colors = allColors;
 
     if (filteredIndices.length > 0) {
-      hitmapProp.points = hitmapProp.points.filter((_, index) => !filteredIndices.includes(Math.floor(index / pointCountPerInstance)));
-      hitmapProp.colors = hitmapProp.colors.filter((_, index) => !filteredIndices.includes(Math.floor(index / pointCountPerInstance)));
+      hitmapProp.points = hitmapProp.points.filter(
+        (_, index) => !filteredIndices.includes(Math.floor(index / pointCountPerInstance))
+      );
+      hitmapProp.colors = hitmapProp.colors.filter(
+        (_, index) => !filteredIndices.includes(Math.floor(index / pointCountPerInstance))
+      );
     } else if (matchedExcludedObjects.length > 0) {
       // if we don't have instance indices, just filter out the whole object.
       return null;
@@ -94,10 +112,16 @@ function instancedGetChildrenForHitmapFromSingleProp<T>(prop: T, assignNextColor
   return hitmapProp;
 }
 
-export const createInstancedGetChildrenForHitmap = (pointCountPerInstance: number) => <T>(props: T, assignNextColors: AssignNextColorsFn, excludedObjects: MouseEventObject[]): T | null | undefined => {
-  if (Array.isArray(props)) {
-    return props.map(prop => instancedGetChildrenForHitmapFromSingleProp(prop, assignNextColors, excludedObjects, pointCountPerInstance)).filter(Boolean);
-  }
+export const createInstancedGetChildrenForHitmap =
+  (pointCountPerInstance: number) =>
+  <T>(props: T, assignNextColors: AssignNextColorsFn, excludedObjects: MouseEventObject[]): T | null | undefined => {
+    if (Array.isArray(props)) {
+      return props
+        .map((prop) =>
+          instancedGetChildrenForHitmapFromSingleProp(prop, assignNextColors, excludedObjects, pointCountPerInstance)
+        )
+        .filter(Boolean);
+    }
 
-  return instancedGetChildrenForHitmapFromSingleProp(props, assignNextColors, excludedObjects, pointCountPerInstance);
-};
+    return instancedGetChildrenForHitmapFromSingleProp(props, assignNextColors, excludedObjects, pointCountPerInstance);
+  };

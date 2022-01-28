@@ -72,13 +72,13 @@ const generateArrowPrimitives = (markers: Arrow[]) => {
       scale: {
         x: shaftWidthX,
         y: shaftWidthY,
-        z: shaftLength
+        z: shaftLength,
       },
       color: marker.color,
       pose: {
         position: vec3ToPoint(shaftPosition),
-        orientation: vec4ToOrientation(orientation)
-      }
+        orientation: vec4ToOrientation(orientation),
+      },
     });
     cones.push({
       // Set the original marker so we can use it in mouse events
@@ -86,19 +86,19 @@ const generateArrowPrimitives = (markers: Arrow[]) => {
       scale: {
         x: headWidthX,
         y: headWidthY,
-        z: headLength
+        z: headLength,
       },
       color: marker.color,
       pose: {
         position: vec3ToPoint(headPosition),
-        orientation: vec4ToOrientation(orientation)
-      }
+        orientation: vec4ToOrientation(orientation),
+      },
     });
   }
 
   return {
     cones,
-    cylinders
+    cylinders,
   };
 };
 
@@ -106,10 +106,7 @@ export const makeArrowsCommand = () => (regl: any) => {
   const cylindersCommand = cylinders(regl);
   const conesCommand = cones(regl);
   return (props: any) => {
-    const {
-      cylinders: cylinderPrimitives,
-      cones: conePrimitives
-    } = generateArrowPrimitives(props);
+    const { cylinders: cylinderPrimitives, cones: conePrimitives } = generateArrowPrimitives(props);
     cylindersCommand(cylinderPrimitives);
     conesCommand(conePrimitives);
   };
@@ -117,18 +114,17 @@ export const makeArrowsCommand = () => (regl: any) => {
 
 function Arrows(props: Props) {
   const passedProps = omit(props, "children");
-  const {
-    cylinders,
-    cones
-  } = generateArrowPrimitives(props.children);
-  return <Fragment>
+  const { cylinders, cones } = generateArrowPrimitives(props.children);
+  return (
+    <Fragment>
       <Cylinders getChildrenForHitmap={getChildrenForHitmapWithOriginalMarker} {...passedProps}>
         {cylinders}
       </Cylinders>
       <Cones getChildrenForHitmap={getChildrenForHitmapWithOriginalMarker} {...passedProps}>
         {cones}
       </Cones>
-    </Fragment>;
+    </Fragment>
+  );
 }
 
 export default memo<Props>(Arrows);

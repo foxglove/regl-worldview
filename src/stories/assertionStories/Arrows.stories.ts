@@ -9,59 +9,61 @@ import Arrows from "../../commands/Arrows";
 import type { Arrow } from "../../types";
 import { generateNonInstancedClickAssertions } from "../worldviewAssertionUtils";
 
-const twoArrowsInARow = [{
-  pose: {
-    orientation: {
-      x: 0,
-      y: 0,
-      z: 0,
-      w: 1
+const twoArrowsInARow = [
+  {
+    pose: {
+      orientation: {
+        x: 0,
+        y: 0,
+        z: 0,
+        w: 1,
+      },
+      position: {
+        x: -5,
+        y: 0,
+        z: 0,
+      },
     },
-    position: {
-      x: -5,
-      y: 0,
-      z: 0
-    }
-  },
-  scale: {
-    x: 10,
-    y: 10,
-    z: 10
-  },
-  color: {
-    r: 1,
-    g: 0,
-    b: 1,
-    a: 0.5
-  }
-}, {
-  pose: {
-    orientation: {
-      x: 0,
-      y: 0,
-      z: 0,
-      w: 1
+    scale: {
+      x: 10,
+      y: 10,
+      z: 10,
     },
-    position: {
-      x: -5,
-      y: -20,
-      z: 0
-    }
+    color: {
+      r: 1,
+      g: 0,
+      b: 1,
+      a: 0.5,
+    },
   },
-  scale: {
-    x: 10,
-    y: 10,
-    z: 10
+  {
+    pose: {
+      orientation: {
+        x: 0,
+        y: 0,
+        z: 0,
+        w: 1,
+      },
+      position: {
+        x: -5,
+        y: -20,
+        z: 0,
+      },
+    },
+    scale: {
+      x: 10,
+      y: 10,
+      z: 10,
+    },
+    color: {
+      r: 1,
+      g: 0,
+      b: 1,
+      a: 0.5,
+    },
   },
-  color: {
-    r: 1,
-    g: 0,
-    b: 1,
-    a: 0.5
-  }
-}];
+];
 const stories = storiesOf("Integration/Arrows", module);
-generateNonInstancedClickAssertions<Arrow>("Arrow", Arrows, twoArrowsInARow).forEach(({
-  name,
-  story
-}) => stories.add(name, story));
+generateNonInstancedClickAssertions<Arrow>("Arrow", Arrows, twoArrowsInARow).forEach(({ name, story }) =>
+  stories.add(name, story)
+);

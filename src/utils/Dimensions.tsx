@@ -30,49 +30,50 @@ class ResizeObserverMock {
     const entry: any = {
       contentRect: {
         width: 150,
-        height: 150
-      }
+        height: 150,
+      },
     };
 
     this._callback([entry]);
   }
 
   unobserve() {}
-
 }
 
-const ResizeObserverImpl = process.env.NODE_ENV === "test" || inWebWorker() ? (ResizeObserverMock as any) : ResizeObserver; // Calculates the dimensions of the parent element, and passes those dimensions to the child function.
+const ResizeObserverImpl =
+  process.env.NODE_ENV === "test" || inWebWorker() ? (ResizeObserverMock as any) : ResizeObserver; // Calculates the dimensions of the parent element, and passes those dimensions to the child function.
 // Uses resizeObserver, which is very performant.
 // Works by rendering an empty div, getting the parent element, and then once we know the dimensions of the parent
 // element, rendering the children. After the initial render it just observes the parent element.
 // We expect the parent element to never change.
 
-export default function Dimensions({
-  children
-}: Props) {
+export default function Dimensions({ children }: Props) {
   const [parentElement, setParentElement] = useState(undefined);
   const [dimensions, setDimensions] = useState<DimensionsParams | null | undefined>();
   // This resizeObserver should never change.
-  const [resizeObserver] = useState<ResizeObserver>(() => new ResizeObserverImpl(entries => {
-    if (!entries || !entries.length) {
-      return;
-    }
+  const [resizeObserver] = useState<ResizeObserver>(
+    () =>
+      new ResizeObserverImpl((entries) => {
+        if (!entries || !entries.length) {
+          return;
+        }
 
-    // We only observe a single element, so just use the first entry.
-    // We have to round because these could be sub-pixel values.
-    const newWidth = Math.round(entries[0].contentRect.width);
-    const newHeight = Math.round(entries[0].contentRect.height);
-    const newLeft = Math.round(entries[0].contentRect.left);
-    const newTop = Math.round(entries[0].contentRect.top);
-    setDimensions({
-      width: newWidth,
-      height: newHeight,
-      top: newTop,
-      left: newLeft
-    });
-  }));
+        // We only observe a single element, so just use the first entry.
+        // We have to round because these could be sub-pixel values.
+        const newWidth = Math.round(entries[0].contentRect.width);
+        const newHeight = Math.round(entries[0].contentRect.height);
+        const newLeft = Math.round(entries[0].contentRect.left);
+        const newTop = Math.round(entries[0].contentRect.top);
+        setDimensions({
+          width: newWidth,
+          height: newHeight,
+          top: newTop,
+          left: newLeft,
+        });
+      })
+  );
   // This should only fire once, because `dimensions` should only be undefined at the beginning.
-  const setParentElementRef = useCallback(element => {
+  const setParentElementRef = useCallback((element) => {
     if (element) {
       setParentElement(element.parentElement);
     }

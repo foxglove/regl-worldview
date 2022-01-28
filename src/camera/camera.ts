@@ -14,7 +14,7 @@ import project from "./cameraProject";
 const TEMP_MAT = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // This is the regl command which encapsulates the camera projection and view matrices.
 // It adds the matrices to the regl context so they can be used by other commands.
 
-export default ((regl: any) => {
+export default (regl: any) => {
   if (!regl) {
     throw new Error("Invalid regl instance");
   }
@@ -25,21 +25,11 @@ export default ((regl: any) => {
     cameraState: CameraState = DEFAULT_CAMERA_STATE;
 
     getProjection(): Mat4 {
-      const {
-        near,
-        far,
-        distance,
-        fovy
-      } = this.cameraState;
+      const { near, far, distance, fovy } = this.cameraState;
 
       if (!this.cameraState.perspective) {
         const bounds = getOrthographicBounds(distance, this.viewportWidth, this.viewportHeight);
-        const {
-          left,
-          right,
-          bottom,
-          top
-        } = bounds;
+        const { left, right, bottom, top } = bounds;
         return mat4.ortho([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], left, right, bottom, top, near, far);
       }
 
@@ -76,10 +66,7 @@ export default ((regl: any) => {
         // use functions, not lambdas here to make sure we can access
         // the regl supplied this scope: http://regl.party/api#this
         projection(context, props) {
-          const {
-            viewportWidth,
-            viewportHeight
-          } = context;
+          const { viewportWidth, viewportHeight } = context;
           // save these variables on the camera instance
           // because we need them for raycasting
           this.viewportWidth = viewportWidth;
@@ -103,16 +90,15 @@ export default ((regl: any) => {
 
         fovy(context, props) {
           return this.cameraState.fovy;
-        }
-
+        },
       },
       // adds view and projection as uniforms to every command
       // and makes them available in the shaders
       uniforms: {
         view: regl.context("view"),
         billboardRotation: regl.context("billboardRotation"),
-        projection: regl.context("projection")
-      }
+        projection: regl.context("projection"),
+      },
     });
   };
-});
+};

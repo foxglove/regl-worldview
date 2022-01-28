@@ -42,7 +42,10 @@ storiesOf("Worldview/Lines", module)
           y: 0,
           z: 0,
         },
-        points: [[0, -4, 0], [0, 4, 0]],
+        points: [
+          [0, -4, 0],
+          [0, 4, 0],
+        ],
         color: [1, 1, 1, 1],
       },
     ];
@@ -103,7 +106,10 @@ storiesOf("Worldview/Lines", module)
                 y: 0,
                 z: 0,
               },
-              points: [[0, -4, 0], [0, 4, 0]],
+              points: [
+                [0, -4, 0],
+                [0, 4, 0],
+              ],
               color: [1, 1, 1, 1],
               blend: {
                 enable: true,

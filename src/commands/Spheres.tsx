@@ -22,10 +22,10 @@ const faces = [];
 
 for (let i = 0; i < NUM_PARALLELS; i++) {
   for (let j = 0; j < NUM_MERIDIANS; j++) {
-    const phi = (i + 1) / (NUM_PARALLELS + 1) * Math.PI;
+    const phi = ((i + 1) / (NUM_PARALLELS + 1)) * Math.PI;
     const z = RADIUS * Math.cos(phi);
     const width = RADIUS * Math.sin(phi);
-    const theta = j * 2 * Math.PI / NUM_MERIDIANS;
+    const theta = (j * 2 * Math.PI) / NUM_MERIDIANS;
     const x = width * Math.cos(theta);
     const y = width * Math.sin(theta);
     points.push([x, y, z]);
@@ -59,8 +59,10 @@ for (let j = 0; j < NUM_MERIDIANS; j++) {
 
 export const spheres = withRenderStateOverrides(fromGeometry(points, faces));
 const getChildrenForHitmap = createInstancedGetChildrenForHitmap(1);
-export default function Spheres(props: CommonCommandProps & {
-  children: SphereList[];
-}) {
+export default function Spheres(
+  props: CommonCommandProps & {
+    children: SphereList[];
+  }
+) {
   return <Command getChildrenForHitmap={getChildrenForHitmap} {...props} reglCommand={spheres} />;
 }

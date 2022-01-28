@@ -9,7 +9,17 @@ import shallowequal from "shallowequal";
 
 import { camera, CameraStore } from "./camera/index";
 import Command from "./commands/Command";
-import type { Dimensions, RawCommand, CompiledReglCommand, CameraCommand, Vec4, CameraState, MouseEventObject, GetChildrenForHitmap, AssignNextColorsFn } from "./types";
+import type {
+  Dimensions,
+  RawCommand,
+  CompiledReglCommand,
+  CameraCommand,
+  Vec4,
+  CameraState,
+  MouseEventObject,
+  GetChildrenForHitmap,
+  AssignNextColorsFn,
+} from "./types";
 import HitmapObjectIdManager from "./utils/HitmapObjectIdManager";
 import { getRayFromClick } from "./utils/Raycast";
 import { getIdFromPixel, intToRGB } from "./utils/commandUtils";
@@ -64,14 +74,17 @@ export class WorldviewContext {
   _commands: Set<RawCommand<any>> = new Set();
   _compiled: Map<(...args: Array<any>) => any, CompiledReglCommand<any>> = new Map();
   _drawCalls: Map<React.Component<any>, DrawInput> = new Map();
-  _frame: AnimationFrameID | null | undefined;
+  _frame: number | undefined;
   _needsPaint = false;
   _paintCalls: Map<PaintFn, PaintFn> = new Map();
   _hitmapObjectIdManager: HitmapObjectIdManager = new HitmapObjectIdManager();
-  _cachedReadHitmapCall: {
-    arguments: any[];
-    result: Array<[MouseEventObject, Command<any>]>;
-  } | null | undefined = undefined;
+  _cachedReadHitmapCall:
+    | {
+        arguments: any[];
+        result: Array<[MouseEventObject, Command<any>]>;
+      }
+    | null
+    | undefined = undefined;
   // store every compiled command object compiled for debugging purposes
   reglCommandObjects: {
     stats: {
@@ -83,7 +96,6 @@ export class WorldviewContext {
     render?: number;
   } = {};
   dimension: Dimensions;
-  onDirty: () => void;
   cameraStore: CameraStore;
   canvasBackgroundColor: Vec4 = [0, 0, 0, 1];
   // group all initialized data together so it can be checked for existence to verify initialization is complete
@@ -95,7 +107,7 @@ export class WorldviewContext {
     canvasBackgroundColor,
     cameraState,
     onCameraStateChange,
-    contextAttributes
+    contextAttributes,
   }: ConstructorArgs) {
     // used for children to call paint() directly
     this.dimension = dimension;
@@ -116,35 +128,42 @@ export class WorldviewContext {
       throw new Error("can not initialize regl twice");
     }
 
-    const regl = this._instrumentCommands(createREGL({
-      canvas,
-      attributes: this.contextAttributes || {},
-      extensions: ["angle_instanced_arrays", "oes_texture_float", "oes_element_index_uint", "oes_standard_derivatives"],
-      profile: getNodeEnv() !== "production"
-    }));
+    const regl = this._instrumentCommands(
+      createREGL({
+        canvas,
+        attributes: this.contextAttributes || {},
+        extensions: [
+          "angle_instanced_arrays",
+          "oes_texture_float",
+          "oes_element_index_uint",
+          "oes_standard_derivatives",
+        ],
+        profile: getNodeEnv() !== "production",
+      })
+    );
 
     if (!regl) {
       throw new Error("Cannot initialize regl");
     }
 
     // compile any components which mounted before regl is initialized
-    this._commands.forEach(uncompiledCommand => {
+    this._commands.forEach((uncompiledCommand) => {
       const compiledCommand = compile(regl, uncompiledCommand);
 
       this._compiled.set(uncompiledCommand, compiledCommand);
     });
 
     const Camera = compile(regl, camera);
-    const compiledCameraCommand = new Camera();
+    const compiledCameraCommand = new (Camera as unknown as new () => CameraCommand)();
     // framebuffer object from regl context
     const fbo = regl.framebuffer({
       width: Math.round(this.dimension.width),
-      height: Math.round(this.dimension.height)
+      height: Math.round(this.dimension.height),
     });
     this.initializedData = {
       _fbo: fbo,
       camera: compiledCameraCommand,
-      regl
+      regl,
     };
   }
 
@@ -160,9 +179,7 @@ export class WorldviewContext {
 
   // compile a command when it is first mounted, and try to register in _commands and _compiled maps
   onMount(instance: React.Component<any>, command: RawCommand<any>) {
-    const {
-      initializedData
-    } = this;
+    const { initializedData } = this;
 
     // do nothing if regl hasn't been initialized yet
     if (!initializedData || this._commands.has(command)) {
@@ -201,15 +218,12 @@ export class WorldviewContext {
       return undefined;
     }
 
-    const {
-      width,
-      height
-    } = this.dimension;
+    const { width, height } = this.dimension;
     return getRayFromClick(this.initializedData.camera, {
       clientX: canvasX,
       clientY: canvasY,
       width,
-      height
+      height,
     });
   };
 
@@ -230,7 +244,7 @@ export class WorldviewContext {
   _paint() {
     this._needsPaint = false;
     const start = Date.now();
-    this.reglCommandObjects.forEach(cmd => cmd.stats.count = 0);
+    this.reglCommandObjects.forEach((cmd) => (cmd.stats.count = 0));
 
     if (!this.initializedData) {
       return;
@@ -238,10 +252,7 @@ export class WorldviewContext {
 
     this._cachedReadHitmapCall = null; // clear the cache every time we paint
 
-    const {
-      regl,
-      camera
-    } = this.initializedData;
+    const { regl, camera } = this.initializedData;
 
     this._clearCanvas(regl);
 
@@ -253,7 +264,7 @@ export class WorldviewContext {
       this.counters.paint = Date.now() - x;
     });
 
-    this._paintCalls.forEach(paintCall => {
+    this._paintCalls.forEach((paintCall) => {
       paintCall();
     });
 
@@ -275,135 +286,144 @@ export class WorldviewContext {
       this._needsPaint = true;
     }
   };
-  readHitmap = queuePromise(async (canvasX: number, canvasY: number, enableStackedObjectEvents: boolean, maxStackedObjectCount: number): Promise<Array<[MouseEventObject, Command<any>]>> => {
-    if (!this.initializedData) {
-      throw new Error("regl data not initialized yet");
-    }
-
-    const args = [canvasX, canvasY, enableStackedObjectEvents, maxStackedObjectCount];
-    const cachedReadHitmapCall = this._cachedReadHitmapCall;
-
-    if (cachedReadHitmapCall) {
-      if (shallowequal(cachedReadHitmapCall.arguments, args)) {
-        // Make sure that we aren't returning the exact object identity of the mouseEventObject - we don't know what
-        // callers have done with it.
-        const result = cachedReadHitmapCall.result.map(([mouseEventObject, command]) => [{ ...mouseEventObject
-        }, command]);
-        return await Promise.resolve(result);
+  readHitmap = queuePromise(
+    async (
+      canvasX: number,
+      canvasY: number,
+      enableStackedObjectEvents: boolean,
+      maxStackedObjectCount: number
+    ): Promise<Array<[MouseEventObject, Command<any>]>> => {
+      if (!this.initializedData) {
+        throw new Error("regl data not initialized yet");
       }
 
-      this._cachedReadHitmapCall = undefined;
-    }
+      const args = [canvasX, canvasY, enableStackedObjectEvents, maxStackedObjectCount];
+      const cachedReadHitmapCall = this._cachedReadHitmapCall;
 
-    const {
-      regl,
-      camera,
-      _fbo
-    } = this.initializedData;
-    const {
-      width,
-      height
-    } = this.dimension;
-    const x = canvasX;
-    // 0,0 corresponds to the bottom left in the webgl context, but the top left in window coordinates
-    const y = height - canvasY;
+      if (cachedReadHitmapCall) {
+        if (shallowequal(cachedReadHitmapCall.arguments, args)) {
+          // Make sure that we aren't returning the exact object identity of the mouseEventObject - we don't know what
+          // callers have done with it.
+          const result = cachedReadHitmapCall.result.map(
+            ([mouseEventObject, command]): [MouseEventObject, Command<any>] => [{ ...mouseEventObject }, command]
+          );
+          return await Promise.resolve(result);
+        }
 
-    // regl will only resize the framebuffer if the size changed
-    // it uses floored whole pixel values
-    _fbo.resize(Math.floor(width), Math.floor(height));
+        this._cachedReadHitmapCall = undefined;
+      }
 
-    return await new Promise(resolve => {
-      // tell regl to use a framebuffer for this render
-      regl({
-        framebuffer: _fbo
-      })(() => {
-        // clear the framebuffer
-        regl.clear({
-          color: intToRGB(0),
-          depth: 1
-        });
-        let currentObjectId = 0;
-        const excludedObjects = [];
-        const mouseEventsWithCommands = [];
-        let counter = 0;
-        camera.draw(this.cameraStore.state, () => {
-          // Every iteration in this loop clears the framebuffer, draws the hitmap objects that have NOT already been
-          // seen to the framebuffer, and then reads the pixel under the cursor to find the object on top.
-          // If `enableStackedObjectEvents` is false, we only do this iteration once - we only resolve with 0 or 1
-          // objects.
-          do {
-            if (counter >= maxStackedObjectCount) {
-              // Provide a max number of layers so this while loop doesn't crash the page.
-              console.error(`Hit ${maxStackedObjectCount} iterations. There is either a bug or that number of rendered hitmap layers under the mouse cursor.`);
-              break;
-            }
+      const { regl, camera, _fbo } = this.initializedData;
+      const { width, height } = this.dimension;
+      const x = canvasX;
+      // 0,0 corresponds to the bottom left in the webgl context, but the top left in window coordinates
+      const y = height - canvasY;
 
-            counter++;
-            regl.clear({
-              color: intToRGB(0),
-              depth: 1
-            });
+      // regl will only resize the framebuffer if the size changed
+      // it uses floored whole pixel values
+      _fbo.resize(Math.floor(width), Math.floor(height));
 
-            this._drawInput(true, excludedObjects);
-
-            // it's possible to get x/y values outside the framebuffer size
-            // if the mouse quickly leaves the draw area during a read operation
-            // reading outside the bounds of the framebuffer causes errors
-            // and puts regl into a bad internal state.
-            // https://github.com/regl-project/regl/blob/28fbf71c871498c608d9ec741d47e34d44af0eb5/lib/read.js#L57
-            if (x < Math.floor(width) && y < Math.floor(height) && x >= 0 && y >= 0) {
-              const pixel = new Uint8Array(4);
-              // read pixel value from the frame buffer
-              regl.read({
-                x,
-                y,
-                width: 1,
-                height: 1,
-                data: pixel
-              });
-              currentObjectId = getIdFromPixel(pixel);
-
-              const mouseEventObject = this._hitmapObjectIdManager.getObjectByObjectHitmapId(currentObjectId);
-
-              // Check an error case: if we see an ID/color that we don't know about, it means that some command is
-              // drawing a color into the hitmap that it shouldn't be.
-              if (currentObjectId > 0 && !mouseEventObject) {
-                console.error(`Clicked on an unknown object with id ${currentObjectId}. This likely means that a command is painting an incorrect color into the hitmap.`);
-              }
-
-              // Check an error case: if we've already seen this object, then the getHitmapFromChildren function
-              // is not respecting the excludedObjects correctly and we should notify the user of a bug.
-              if (excludedObjects.some(({
-                object,
-                instanceIndex
-              }) => object === mouseEventObject.object && instanceIndex === mouseEventObject.instanceIndex)) {
-                console.error(`Saw object twice when reading from hitmap. There is likely an error in getHitmapFromChildren`, mouseEventObject);
+      return await new Promise((resolve) => {
+        // tell regl to use a framebuffer for this render
+        regl({
+          framebuffer: _fbo,
+        })(() => {
+          // clear the framebuffer
+          regl.clear({
+            color: intToRGB(0),
+            depth: 1,
+          });
+          let currentObjectId = 0;
+          const excludedObjects: MouseEventObject[] = [];
+          const mouseEventsWithCommands: [MouseEventObject, Command<any>][] = [];
+          let counter = 0;
+          camera.draw(this.cameraStore.state, () => {
+            // Every iteration in this loop clears the framebuffer, draws the hitmap objects that have NOT already been
+            // seen to the framebuffer, and then reads the pixel under the cursor to find the object on top.
+            // If `enableStackedObjectEvents` is false, we only do this iteration once - we only resolve with 0 or 1
+            // objects.
+            do {
+              if (counter >= maxStackedObjectCount) {
+                // Provide a max number of layers so this while loop doesn't crash the page.
+                console.error(
+                  `Hit ${maxStackedObjectCount} iterations. There is either a bug or that number of rendered hitmap layers under the mouse cursor.`
+                );
                 break;
               }
 
-              if (currentObjectId > 0 && mouseEventObject.object) {
-                const command = this._hitmapObjectIdManager.getCommandForObject(mouseEventObject.object);
+              counter++;
+              regl.clear({
+                color: intToRGB(0),
+                depth: 1,
+              });
 
-                excludedObjects.push(mouseEventObject);
+              this._drawInput(true, excludedObjects);
 
-                if (command) {
-                  mouseEventsWithCommands.push([mouseEventObject, command]);
+              // it's possible to get x/y values outside the framebuffer size
+              // if the mouse quickly leaves the draw area during a read operation
+              // reading outside the bounds of the framebuffer causes errors
+              // and puts regl into a bad internal state.
+              // https://github.com/regl-project/regl/blob/28fbf71c871498c608d9ec741d47e34d44af0eb5/lib/read.js#L57
+              if (x < Math.floor(width) && y < Math.floor(height) && x >= 0 && y >= 0) {
+                const pixel = new Uint8Array(4);
+                // read pixel value from the frame buffer
+                regl.read({
+                  x,
+                  y,
+                  width: 1,
+                  height: 1,
+                  data: pixel,
+                });
+                currentObjectId = getIdFromPixel(pixel);
+
+                const mouseEventObject = this._hitmapObjectIdManager.getObjectByObjectHitmapId(currentObjectId);
+
+                // Check an error case: if we see an ID/color that we don't know about, it means that some command is
+                // drawing a color into the hitmap that it shouldn't be.
+                if (currentObjectId > 0 && !mouseEventObject) {
+                  console.error(
+                    `Clicked on an unknown object with id ${currentObjectId}. This likely means that a command is painting an incorrect color into the hitmap.`
+                  );
                 }
-              }
-            } // If we haven't enabled stacked object events, break out of the loop immediately.
-            // eslint-disable-next-line no-unmodified-loop-condition
 
-          } while (currentObjectId !== 0 && enableStackedObjectEvents);
+                // Check an error case: if we've already seen this object, then the getHitmapFromChildren function
+                // is not respecting the excludedObjects correctly and we should notify the user of a bug.
+                if (
+                  excludedObjects.some(
+                    ({ object, instanceIndex }) =>
+                      object === mouseEventObject.object && instanceIndex === mouseEventObject.instanceIndex
+                  )
+                ) {
+                  console.error(
+                    `Saw object twice when reading from hitmap. There is likely an error in getHitmapFromChildren`,
+                    mouseEventObject
+                  );
+                  break;
+                }
 
-          this._cachedReadHitmapCall = {
-            arguments: args,
-            result: mouseEventsWithCommands
-          };
-          resolve(mouseEventsWithCommands);
+                if (currentObjectId > 0 && mouseEventObject.object) {
+                  const command = this._hitmapObjectIdManager.getCommandForObject(mouseEventObject.object);
+
+                  excludedObjects.push(mouseEventObject);
+
+                  if (command) {
+                    mouseEventsWithCommands.push([mouseEventObject, command]);
+                  }
+                }
+              } // If we haven't enabled stacked object events, break out of the loop immediately.
+              // eslint-disable-next-line no-unmodified-loop-condition
+            } while (currentObjectId !== 0 && enableStackedObjectEvents);
+
+            this._cachedReadHitmapCall = {
+              arguments: args,
+              result: mouseEventsWithCommands,
+            };
+            resolve(mouseEventsWithCommands);
+          });
         });
       });
-    });
-  });
+    }
+  );
   _drawInput = (isHitmap?: boolean, excludedObjects?: MouseEventObject[]) => {
     if (isHitmap) {
       this._hitmapObjectIdManager = new HitmapObjectIdManager();
@@ -411,12 +431,7 @@ export class WorldviewContext {
 
     const drawCalls = Array.from(this._drawCalls.values()).sort((a, b) => (a.layerIndex || 0) - (b.layerIndex || 0));
     drawCalls.forEach((drawInput: DrawInput) => {
-      const {
-        reglCommand,
-        children,
-        instance,
-        getChildrenForHitmap
-      } = drawInput;
+      const { reglCommand, children, instance, getChildrenForHitmap } = drawInput;
 
       if (!children) {
         return console.debug(`${isHitmap ? "hitmap" : ""} draw skipped, props was falsy`, drawInput);
@@ -425,7 +440,10 @@ export class WorldviewContext {
       const cmd = this._compiled.get(reglCommand);
 
       if (!cmd) {
-        return console.warn("could not find draw command for", instance ? instance.constructor.displayName : "Unknown");
+        return console.warn(
+          "could not find draw command for",
+          instance ? (instance.constructor as { displayName?: string }).displayName : "Unknown"
+        );
       }
 
       // draw hitmap
@@ -450,7 +468,7 @@ export class WorldviewContext {
     regl.poll();
     regl.clear({
       color: this.canvasBackgroundColor,
-      depth: 1
+      depth: 1,
     });
   };
 
@@ -468,8 +486,7 @@ export class WorldviewContext {
         }
 
         return command;
-      }
+      },
     });
   }
-
 }

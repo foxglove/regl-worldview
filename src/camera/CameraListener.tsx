@@ -25,7 +25,7 @@ const DEFAULT_KEYMAP: CameraKeyMap = {
   KeyS: "moveDown",
   KeyW: "moveUp",
   KeyX: "zoomOut",
-  KeyZ: "zoomIn"
+  KeyZ: "zoomIn",
 };
 type KeyMotion = {
   x?: number;
@@ -54,9 +54,7 @@ export default class CameraListener extends React.Component<Props> {
   _initialMouse: Vec2;
 
   componentDidMount() {
-    const {
-      _el
-    } = this;
+    const { _el } = this;
 
     if (!_el) {
       return;
@@ -70,7 +68,7 @@ export default class CameraListener extends React.Component<Props> {
       this._listeners.push({
         target,
         name,
-        fn
+        fn,
       });
     };
 
@@ -78,27 +76,25 @@ export default class CameraListener extends React.Component<Props> {
     listen(window, "mouseup", this._onWindowMouseUp);
 
     _el.addEventListener("wheel", this._onWheel, {
-      passive: false
+      passive: false,
     });
   }
 
   componentWillUnmount() {
-    this._listeners.forEach(listener => {
+    this._listeners.forEach((listener) => {
       listener.target.removeEventListener(listener.name, listener.fn);
     });
 
     this._endDragging();
 
-    const {
-      _el
-    } = this;
+    const { _el } = this;
 
     if (!_el) {
       return;
     }
 
     _el.removeEventListener("wheel", this._onWheel, {
-      passive: false
+      passive: false,
     });
   }
 
@@ -109,24 +105,14 @@ export default class CameraListener extends React.Component<Props> {
   }
 
   _getMouseOnScreen = (mouse: MouseEvent) => {
-    const {
-      clientX,
-      clientY
-    } = mouse;
-    const {
-      top,
-      left,
-      width,
-      height
-    } = this._rect;
+    const { clientX, clientY } = mouse;
+    const { top, left, width, height } = this._rect;
     const x = (clientX - left) / width;
     const y = (clientY - top) / height;
     return [x, y];
   };
   _onMouseDown = (e: MouseEvent) => {
-    const {
-      _el
-    } = this;
+    const { _el } = this;
 
     if (!_el) {
       return;
@@ -160,17 +146,14 @@ export default class CameraListener extends React.Component<Props> {
     if (this._ctrlKey) {
       return {
         x: 0,
-        y: 0
+        y: 0,
       };
     }
 
     const {
       cameraStore: {
-        state: {
-          distance,
-          perspective
-        }
-      }
+        state: { distance, perspective },
+      },
     } = this.props;
 
     if (perspective) {
@@ -178,20 +161,17 @@ export default class CameraListener extends React.Component<Props> {
       // we use the camera distance as a heuristic
       return {
         x: distance,
-        y: distance
+        y: distance,
       };
     }
 
     // in orthographic mode we know the exact viewable area
     // which is a square so we can move exactly percentage within it
-    const {
-      width,
-      height
-    } = this._rect;
+    const { width, height } = this._rect;
     const bounds = getOrthographicBounds(distance, width, height);
     return {
       x: bounds.width,
-      y: bounds.height
+      y: bounds.height,
     };
   }
 
@@ -205,10 +185,8 @@ export default class CameraListener extends React.Component<Props> {
       cameraStore: {
         cameraMove,
         cameraRotate,
-        state: {
-          perspective
-        }
-      }
+        state: { perspective },
+      },
     } = this.props;
     // compute the amount the mouse has moved
     let moveX, moveY;
@@ -239,10 +217,7 @@ export default class CameraListener extends React.Component<Props> {
     }
 
     if (this._isLeftMouseDown()) {
-      const {
-        x,
-        y
-      } = this._getMoveMagnitude();
+      const { x, y } = this._getMoveMagnitude();
 
       cameraMove([this._getMagnitude(moveX * x), this._getMagnitude(-moveY * y)]);
     }
@@ -253,16 +228,14 @@ export default class CameraListener extends React.Component<Props> {
     this._endDragging();
   };
   _onWindowMouseUp = (e: MouseEvent) => {
-    const {
-      _el
-    } = this;
+    const { _el } = this;
 
     if (!_el) {
       return;
     }
 
     // do nothing if this container had a mouseup, because we catch it in the onMouseUp handler
-    if (_el.contains((e.target as any)) || e.target === _el) {
+    if (_el.contains(e.target as any) || e.target === _el) {
       return;
     }
 
@@ -297,11 +270,8 @@ export default class CameraListener extends React.Component<Props> {
 
     const spinSpeed = this._getMagnitude(KEYBOARD_SPIN_SPEED);
 
-    const {
-      keyMap,
-      shiftKeys
-    } = this.props;
-    const action: CameraAction | false = keyMap && keyMap[code] || DEFAULT_KEYMAP[code] || false;
+    const { keyMap, shiftKeys } = this.props;
+    const action: CameraAction | false = (keyMap && keyMap[code]) || DEFAULT_KEYMAP[code] || false;
 
     if (this._shiftKey && !shiftKeys) {
       return null;
@@ -310,59 +280,59 @@ export default class CameraListener extends React.Component<Props> {
     switch (action) {
       case "moveRight":
         return {
-          x: moveSpeed
+          x: moveSpeed,
         };
 
       case "moveLeft":
         return {
-          x: -moveSpeed
+          x: -moveSpeed,
         };
 
       case "moveUp":
         return {
-          y: moveSpeed
+          y: moveSpeed,
         };
 
       case "moveDown":
         return {
-          y: -moveSpeed
+          y: -moveSpeed,
         };
 
       case "zoomIn":
         return {
-          zoom: zoomSpeed
+          zoom: zoomSpeed,
         };
 
       case "zoomOut":
         return {
-          zoom: -zoomSpeed
+          zoom: -zoomSpeed,
         };
 
       case "rotateLeft":
         return {
-          yaw: -spinSpeed
+          yaw: -spinSpeed,
         };
 
       case "rotateRight":
         return {
-          yaw: spinSpeed
+          yaw: spinSpeed,
         };
 
       case "tiltUp":
         return {
-          tilt: -spinSpeed
+          tilt: -spinSpeed,
         };
 
       case "tiltDown":
         return {
-          tilt: spinSpeed
+          tilt: spinSpeed,
         };
 
       case false:
         return null;
 
       default:
-        (action );
+        action;
         console.warn("Unrecognized key action:", action);
         return null;
     }
@@ -374,17 +344,11 @@ export default class CameraListener extends React.Component<Props> {
       y: 0,
       zoom: 0,
       yaw: 0,
-      tilt: 0
+      tilt: 0,
     };
 
-    this._keys.forEach(code => {
-      const {
-        x = 0,
-        y = 0,
-        zoom = 0,
-        yaw = 0,
-        tilt = 0
-      } = this._getKeyMotion(code) || {};
+    this._keys.forEach((code) => {
+      const { x = 0, y = 0, zoom = 0, yaw = 0, tilt = 0 } = this._getKeyMotion(code) || {};
       motion.x += x;
       motion.y += y;
       motion.zoom += zoom;
@@ -397,22 +361,17 @@ export default class CameraListener extends React.Component<Props> {
         cameraMove,
         cameraRotate,
         cameraZoom,
-        state: {
-          perspective
-        }
-      }
+        state: { perspective },
+      },
     } = this.props;
 
     if (motion.x || motion.y) {
-      const {
-        x,
-        y
-      } = this._getMoveMagnitude();
+      const { x, y } = this._getMoveMagnitude();
 
       cameraMove([motion.x * x * dt, motion.y * y * dt]);
     }
 
-    if (motion.yaw || perspective && motion.tilt) {
+    if (motion.yaw || (perspective && motion.tilt)) {
       cameraRotate([motion.yaw * dt, perspective ? motion.tilt * dt : 0]);
     }
 
@@ -426,7 +385,7 @@ export default class CameraListener extends React.Component<Props> {
       return;
     }
 
-    this._keyTimer = requestAnimationFrame(stamp => {
+    this._keyTimer = requestAnimationFrame((stamp) => {
       this._moveKeyboard((lastStamp ? stamp - lastStamp : 0) / 1000);
 
       this._keyTimer = undefined;
@@ -451,13 +410,11 @@ export default class CameraListener extends React.Component<Props> {
   }
 
   _onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const {
-      keyMap
-    } = this.props;
+    const { keyMap } = this.props;
     this._shiftKey = e.shiftKey;
     this._metaKey = e.metaKey;
     this._ctrlKey = e.ctrlKey;
-    const code = ((e.nativeEvent as any) as KeyboardEvent).code;
+    const code = (e.nativeEvent as any as KeyboardEvent).code;
 
     // ignore repeated keydown events
     if (e.repeat || this._keys.has(code)) {
@@ -491,7 +448,7 @@ export default class CameraListener extends React.Component<Props> {
     this._metaKey = e.metaKey;
     this._ctrlKey = e.ctrlKey;
 
-    this._keys.delete(((e.nativeEvent as any) as KeyboardEvent).code);
+    this._keys.delete((e.nativeEvent as any as KeyboardEvent).code);
   };
   _onWheel = (e: WheelEvent) => {
     // stop the wheel event here, as wheel propagation through the entire dom
@@ -501,10 +458,7 @@ export default class CameraListener extends React.Component<Props> {
     this._shiftKey = e.shiftKey;
     // with osx trackpad scrolling, slow to medium pixelY is around +/- 1 to 10
     // external mouse wheels generally come in higher values around +/- 30 to 50
-    const {
-      pixelX,
-      pixelY
-    } = normalizeWheel(e);
+    const { pixelX, pixelY } = normalizeWheel(e);
     // shift+scroll on an external mouse may scroll in the X direction instead of Y
     const wheelAmount = pixelY || pixelX;
     // we use positive value to indicate zooming in
@@ -536,14 +490,23 @@ export default class CameraListener extends React.Component<Props> {
   };
 
   render() {
-    const {
-      children
-    } = this.props;
-    return <div tabIndex={0} style={{
-      outline: "none"
-    }} draggable ref={el => this._el = el} onMouseDown={this._onMouseDown} onMouseUp={this._onMouseUp} onBlur={this._onBlur} onContextMenu={this._onContextMenu} onKeyDown={this._onKeyDown} onKeyUp={this._onKeyUp}>
+    const { children } = this.props;
+    return (
+      <div
+        tabIndex={0}
+        style={{
+          outline: "none",
+        }}
+        draggable
+        ref={(el) => (this._el = el)}
+        onMouseDown={this._onMouseDown}
+        onMouseUp={this._onMouseUp}
+        onBlur={this._onBlur}
+        onContextMenu={this._onContextMenu}
+        onKeyDown={this._onKeyDown}
+        onKeyUp={this._onKeyUp}>
         {children}
-      </div>;
+      </div>
+    );
   }
-
 }

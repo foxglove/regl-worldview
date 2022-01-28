@@ -32,5 +32,5 @@ export default function eulerFromQuaternion(out: number[], q: Vec4): Vec3 {
     out[2] = 0;
   }
 
-  return (out as any);
+  return out as any;
 }

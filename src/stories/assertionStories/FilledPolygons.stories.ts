@@ -11,89 +11,88 @@ import type { PolygonType } from "../../types";
 import { generateNonInstancedClickAssertions } from "../worldviewAssertionUtils";
 
 const polygon = polygonGenerator.coordinates(5, 10, 30);
-const twoFilledPolygonsInARow = [{
-  scale: {
-    x: 1,
-    y: 1,
-    z: 1
-  },
-  pose: {
-    position: {
-      x: -10,
-      y: -10,
-      z: 10
+const twoFilledPolygonsInARow = [
+  {
+    scale: {
+      x: 1,
+      y: 1,
+      z: 1,
     },
-    orientation: {
-      x: -0.5,
-      y: 0,
-      z: 0,
-      w: 1
-    }
-  },
-  points: polygon.map(({
-    x,
-    y
-  }) => ({
-    x,
-    y,
-    z: 0
-  })),
-  color: {
-    r: 1,
-    g: 1,
-    b: 0,
-    a: 1
-  }
-}, {
-  scale: {
-    x: 1,
-    y: 1,
-    z: 1
-  },
-  pose: {
-    position: {
-      x: -10,
-      y: 10,
-      z: -10
+    pose: {
+      position: {
+        x: -10,
+        y: -10,
+        z: 10,
+      },
+      orientation: {
+        x: -0.5,
+        y: 0,
+        z: 0,
+        w: 1,
+      },
     },
-    orientation: {
-      x: 0.5,
-      y: 0,
+    points: polygon.map(({ x, y }) => ({
+      x,
+      y,
       z: 0,
-      w: 1
-    }
+    })),
+    color: {
+      r: 1,
+      g: 1,
+      b: 0,
+      a: 1,
+    },
   },
-  points: polygon.map(({
-    x,
-    y
-  }) => ({
-    x,
-    y,
-    z: 0
-  })),
-  color: {
-    r: 1,
-    g: 0,
-    b: 1,
-    a: 1
-  }
-}];
+  {
+    scale: {
+      x: 1,
+      y: 1,
+      z: 1,
+    },
+    pose: {
+      position: {
+        x: -10,
+        y: 10,
+        z: -10,
+      },
+      orientation: {
+        x: 0.5,
+        y: 0,
+        z: 0,
+        w: 1,
+      },
+    },
+    points: polygon.map(({ x, y }) => ({
+      x,
+      y,
+      z: 0,
+    })),
+    color: {
+      r: 1,
+      g: 0,
+      b: 1,
+      a: 1,
+    },
+  },
+];
 const stories = storiesOf("Integration/FilledPolygons", module);
 generateNonInstancedClickAssertions<PolygonType>("FilledPolygon", FilledPolygons, twoFilledPolygonsInARow, {
   // Because filled polygons have some weird rendering, the second always shows up on top. They can't really be
   // stacked correctly anyways so this rendering artifact isn't important, just that we test the hitmap code.
-  overrideExpectedSingleObjects: [{
-    object: twoFilledPolygonsInARow[1],
-    instanceIndex: undefined
-  }],
-  overrideExpectedMultipleObjects: [{
-    object: twoFilledPolygonsInARow[1],
-    instanceIndex: undefined
-  }, {
-    object: twoFilledPolygonsInARow[0],
-    instanceIndex: undefined
-  }]
-}).forEach(({
-  name,
-  story
-}) => stories.add(name, story));
+  overrideExpectedSingleObjects: [
+    {
+      object: twoFilledPolygonsInARow[1],
+      instanceIndex: undefined,
+    },
+  ],
+  overrideExpectedMultipleObjects: [
+    {
+      object: twoFilledPolygonsInARow[1],
+      instanceIndex: undefined,
+    },
+    {
+      object: twoFilledPolygonsInARow[0],
+      instanceIndex: undefined,
+    },
+  ],
+}).forEach(({ name, story }) => stories.add(name, story));

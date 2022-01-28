@@ -25,9 +25,7 @@ function areEqual(point1: PolygonPoint, point2: PolygonPoint) {
 }
 
 function isClosed(polygon: Polygon): boolean {
-  const {
-    points
-  } = polygon;
+  const { points } = polygon;
 
   for (let i = 0; i < points.length - 1; i++) {
     if (areEqual(points[i], points[i + 1])) {
@@ -43,7 +41,6 @@ function isClosed(polygon: Polygon): boolean {
 // based on mouse & keyboard interactions. For now we use mututation internally
 // instead of immutability to keep the number of allocations lower and make
 // the implementation a bit more straightforward
-
 
 export default class PolygonBuilder {
   mouseDown = false;
@@ -63,10 +60,7 @@ export default class PolygonBuilder {
 
   // adds a polygon to the builder, transforming it into the internal representation
   addPolygon(cmd: PolygonAddCommand): void {
-    const {
-      points,
-      name
-    } = cmd;
+    const { points, name } = cmd;
 
     if (points.length < 3) {
       return;
@@ -75,7 +69,7 @@ export default class PolygonBuilder {
     // clear any selections
     this.selectObject();
     const polygon = new Polygon(name);
-    polygon.points = points.map(p => new PolygonPoint([p.x, p.y, p.z || 0]));
+    polygon.points = points.map((p) => new PolygonPoint([p.x, p.y, p.z || 0]));
 
     if (!isClosed(polygon)) {
       polygon.points.push(polygon.points[0]);
@@ -87,9 +81,7 @@ export default class PolygonBuilder {
   // push a new point - either adds to the active polygon
   // or creates a new polygon at this point
   pushPoint(point: Vec3): void {
-    const {
-      activePolygon
-    } = this;
+    const { activePolygon } = this;
 
     if (activePolygon) {
       // do not push a point on a closed polygon
@@ -165,9 +157,7 @@ export default class PolygonBuilder {
       return;
     }
 
-    const {
-      ray
-    } = args;
+    const { ray } = args;
     const point = ray.planeIntersection([0, 0, 0], [0, 0, 1]);
 
     // satisfy flow
@@ -176,9 +166,7 @@ export default class PolygonBuilder {
     }
 
     // satisfy flow
-    const {
-      activePolygon
-    } = this;
+    const { activePolygon } = this;
 
     if (this.activePoint) {
       this.updateActivePoint(point);
@@ -202,9 +190,7 @@ export default class PolygonBuilder {
 
       // adjust each point's location
       for (const polygonPoint of uniquePoints) {
-        const {
-          point
-        } = polygonPoint;
+        const { point } = polygonPoint;
         point[0] = point[0] + dX;
         point[1] = point[1] + dY;
       }
@@ -215,7 +201,7 @@ export default class PolygonBuilder {
 
   // deletes a polygon
   deletePolygon(polygon: Polygon): void {
-    this.polygons = this.polygons.filter(poly => poly !== polygon);
+    this.polygons = this.polygons.filter((poly) => poly !== polygon);
     this.activePolygon = null;
   }
 
@@ -223,15 +209,13 @@ export default class PolygonBuilder {
   // if the point is the 'overlap point' create a new one
   // also deletes the entire polygon if the polygon becomes a 1-sided polygon
   deletePoint(point: PolygonPoint): void {
-    const {
-      activePolygon
-    } = this;
+    const { activePolygon } = this;
 
     if (!activePolygon) {
       return;
     }
 
-    const newPoints = activePolygon.points.filter(p => p.id !== point.id);
+    const newPoints = activePolygon.points.filter((p) => p.id !== point.id);
 
     // if the 'overlap' point is deleted, create a new start/end overlap point
     if (newPoints.length === activePolygon.points.length - 2) {
@@ -251,9 +235,7 @@ export default class PolygonBuilder {
   // key down handler - to be passed to Worldview as a prop
   onKeyDown = (e: KeyboardEvent): void => {
     // only respond to key events if we have a selected polygon
-    const {
-      activePolygon
-    } = this;
+    const { activePolygon } = this;
 
     if (!activePolygon) {
       return;
@@ -337,9 +319,7 @@ export default class PolygonBuilder {
     }
 
     // otherwise insert a new point into the nearest line of the active polygon
-    const {
-      activePolygon
-    } = this;
+    const { activePolygon } = this;
 
     // if no polygon is active, don't do anything w/ the double-click
     if (!activePolygon) {
@@ -348,9 +328,7 @@ export default class PolygonBuilder {
 
     let shortestDistance = Number.MAX_SAFE_INTEGER;
     let shortestIndex = -1;
-    const {
-      ray
-    } = args;
+    const { ray } = args;
     const point = ray.planeIntersection([0, 0, 0], [0, 0, 1]);
 
     if (!point) {
@@ -359,9 +337,7 @@ export default class PolygonBuilder {
 
     const [px, py] = point;
     // find the closest line segment of the active polygon
-    const {
-      points
-    } = activePolygon;
+    const { points } = activePolygon;
 
     for (let i = 0; i < points.length - 1; i++) {
       const point1 = points[i];
@@ -393,9 +369,7 @@ export default class PolygonBuilder {
       return;
     }
 
-    const {
-      ray
-    } = args;
+    const { ray } = args;
     const point = ray.planeIntersection([0, 0, 0], [0, 0, 1]);
 
     // satisfy flow but raycasting should always work

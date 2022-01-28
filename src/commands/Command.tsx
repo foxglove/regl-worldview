@@ -6,7 +6,15 @@
 import * as React from "react";
 
 import type { WorldviewContextType } from "../WorldviewContext";
-import type { ComponentMouseHandler, GetChildrenForHitmap, MouseEventEnum, RawCommand, Color, Point, MouseEventObject } from "../types";
+import type {
+  ComponentMouseHandler,
+  GetChildrenForHitmap,
+  MouseEventEnum,
+  RawCommand,
+  Color,
+  Point,
+  MouseEventObject,
+} from "../types";
 import { Ray } from "../utils/Raycast";
 import { getNodeEnv } from "../utils/common";
 import "../WorldviewContext";
@@ -85,11 +93,7 @@ export default class Command<T> extends React.Component<Props<T>> {
       return;
     }
 
-    const {
-      reglCommand,
-      layerIndex,
-      getChildrenForHitmap
-    } = this.props;
+    const { reglCommand, layerIndex, getChildrenForHitmap } = this.props;
     const children = this.props.children || this.props.drawProps;
 
     if (children == null) {
@@ -101,33 +105,39 @@ export default class Command<T> extends React.Component<Props<T>> {
       reglCommand,
       children,
       layerIndex,
-      getChildrenForHitmap
+      getChildrenForHitmap,
     });
   }
 
-  handleMouseEvent(objects: MouseEventObject[], ray: Ray, e: React.MouseEvent<HTMLCanvasElement>, mouseEventName: MouseEventEnum) {
+  handleMouseEvent(
+    objects: MouseEventObject[],
+    ray: Ray,
+    e: React.MouseEvent<HTMLCanvasElement>,
+    mouseEventName: MouseEventEnum
+  ) {
     const mouseHandler = this.props[mouseEventName];
 
-    if (!mouseHandler || (objects.length === 0)) {
+    if (!mouseHandler || objects.length === 0) {
       return;
     }
 
     mouseHandler(e, {
       ray,
-      objects
+      objects,
     });
   }
 
   render() {
-    return <WorldviewReactContext.Consumer>
+    return (
+      <WorldviewReactContext.Consumer>
         {(ctx: WorldviewContextType | null | undefined) => {
-        if (ctx) {
-          this.context = ctx;
-        }
+          if (ctx) {
+            this.context = ctx;
+          }
 
-        return null;
-      }}
-      </WorldviewReactContext.Consumer>;
+          return null;
+        }}
+      </WorldviewReactContext.Consumer>
+    );
   }
-
 }

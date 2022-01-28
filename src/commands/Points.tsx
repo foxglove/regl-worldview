@@ -14,12 +14,11 @@ import Command from "./Command";
 type PointsProps = {
   useWorldSpaceSize?: boolean;
 };
-type Props = CommonCommandProps & PointsProps & {
-  children: ReadonlyArray<PointType>;
-};
-export const makePointsCommand = ({
-  useWorldSpaceSize
-}: PointsProps) => {
+type Props = CommonCommandProps &
+  PointsProps & {
+    children: ReadonlyArray<PointType>;
+  };
+export const makePointsCommand = ({ useWorldSpaceSize }: PointsProps) => {
   return (regl: Regl) => {
     if (!regl) {
       throw new Error("Invalid regl instance");
@@ -84,12 +83,12 @@ export const makePointsCommand = ({
     `,
       attributes: {
         point: (context, props) => {
-          return props.points.map(point => Array.isArray(point) ? point : pointToVec3(point));
+          return props.points.map((point) => (Array.isArray(point) ? point : pointToVec3(point)));
         },
         color: (context, props) => {
           const colors = getVertexColors(props);
           return colors;
-        }
+        },
       },
       uniforms: {
         pointSize: (context, props) => {
@@ -99,9 +98,9 @@ export const makePointsCommand = ({
         viewportWidth: regl.context("viewportWidth"),
         viewportHeight: regl.context("viewportHeight"),
         minPointSize: minLimitPointSize,
-        maxPointSize: maxLimitPointSize
+        maxPointSize: maxLimitPointSize,
       },
-      count: regl.prop("points.length")
+      count: regl.prop("points.length"),
     });
   };
 };

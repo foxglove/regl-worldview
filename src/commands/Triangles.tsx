@@ -6,7 +6,14 @@
 import * as React from "react";
 
 import type { Regl, TriangleList } from "../types";
-import { defaultBlend, getVertexColors, pointToVec3Array, shouldConvert, toRGBA, withPose } from "../utils/commandUtils";
+import {
+  defaultBlend,
+  getVertexColors,
+  pointToVec3Array,
+  shouldConvert,
+  toRGBA,
+  withPose,
+} from "../utils/commandUtils";
 import { createInstancedGetChildrenForHitmap } from "../utils/getChildrenForHitmapDefaults";
 import withRenderStateOverrides from "../utils/withRenderStateOverrides";
 import type { CommonCommandProps } from "./Command";
@@ -14,17 +21,18 @@ import Command from "./Command";
 // TODO(Audrey): default to the actual regl defaults before 1.x release
 const defaultSingleColorDepth = {
   enable: true,
-  mask: false
+  mask: false,
 };
 const defaultVetexColorDepth = {
   enable: true,
   mask: true,
-  func: "<="
+  func: "<=",
 };
 
-const singleColor = regl => withPose({
-  primitive: "triangles",
-  vert: `
+const singleColor = (regl) =>
+  withPose({
+    primitive: "triangles",
+    vert: `
   precision mediump float;
 
   attribute vec3 point;
@@ -38,48 +46,49 @@ const singleColor = regl => withPose({
     gl_Position = projection * view * vec4(pos, 1);
   }
   `,
-  frag: `
+    frag: `
   precision mediump float;
   uniform vec4 color;
   void main () {
     gl_FragColor = color;
   }
   `,
-  attributes: {
-    point: (context, props) => {
-      if (shouldConvert(props.points)) {
-        return pointToVec3Array(props.points);
-      }
+    attributes: {
+      point: (context, props) => {
+        if (shouldConvert(props.points)) {
+          return pointToVec3Array(props.points);
+        }
 
-      return props.points;
-    }
-  },
-  uniforms: {
-    color: (context, props) => {
-      if (shouldConvert(props.color)) {
-        return toRGBA(props.color);
-      }
-
-      return props.color;
-    }
-  },
-  // can pass in { enable: true, depth: false } to turn off depth to prevent flicker
-  // because multiple items are rendered to the same z plane
-  depth: {
-    enable: (context, props) => {
-      return props.depth && props.depth.enable || defaultSingleColorDepth.enable;
+        return props.points;
+      },
     },
-    mask: (context, props) => {
-      return props.depth && props.depth.mask || defaultSingleColorDepth.mask;
-    }
-  },
-  blend: defaultBlend,
-  count: (context, props) => props.points.length
-});
+    uniforms: {
+      color: (context, props) => {
+        if (shouldConvert(props.color)) {
+          return toRGBA(props.color);
+        }
 
-const vertexColors = regl => withPose({
-  primitive: "triangles",
-  vert: `
+        return props.color;
+      },
+    },
+    // can pass in { enable: true, depth: false } to turn off depth to prevent flicker
+    // because multiple items are rendered to the same z plane
+    depth: {
+      enable: (context, props) => {
+        return (props.depth && props.depth.enable) || defaultSingleColorDepth.enable;
+      },
+      mask: (context, props) => {
+        return (props.depth && props.depth.mask) || defaultSingleColorDepth.mask;
+      },
+    },
+    blend: defaultBlend,
+    count: (context, props) => props.points.length,
+  });
+
+const vertexColors = (regl) =>
+  withPose({
+    primitive: "triangles",
+    vert: `
   precision mediump float;
 
   attribute vec3 point;
@@ -97,44 +106,44 @@ const vertexColors = regl => withPose({
     gl_Position = projection * view * vec4(pos, 1);
   }
   `,
-  frag: `
+    frag: `
   precision mediump float;
   varying vec4 vColor;
   void main () {
     gl_FragColor = vColor;
   }
   `,
-  attributes: {
-    point: (context, props) => {
-      if (shouldConvert(props.points)) {
-        return pointToVec3Array(props.points);
-      }
+    attributes: {
+      point: (context, props) => {
+        if (shouldConvert(props.points)) {
+          return pointToVec3Array(props.points);
+        }
 
-      return props.points;
+        return props.points;
+      },
+      color: (context, props) => {
+        if (!props.colors || !props.colors.length) {
+          throw new Error(`Invalid empty or null prop "colors" when rendering triangles using vertex colors`);
+        }
+
+        if (shouldConvert(props.colors)) {
+          return getVertexColors(props);
+        }
+
+        return props.colors;
+      },
     },
-    color: (context, props) => {
-      if (!props.colors || !props.colors.length) {
-        throw new Error(`Invalid empty or null prop "colors" when rendering triangles using vertex colors`);
-      }
-
-      if (shouldConvert(props.colors)) {
-        return getVertexColors(props);
-      }
-
-      return props.colors;
-    }
-  },
-  depth: {
-    enable: (context, props) => {
-      return props.depth && props.depth.enable || defaultVetexColorDepth.enable;
+    depth: {
+      enable: (context, props) => {
+        return (props.depth && props.depth.enable) || defaultVetexColorDepth.enable;
+      },
+      mask: (context, props) => {
+        return (props.depth && props.depth.mask) || defaultVetexColorDepth.mask;
+      },
     },
-    mask: (context, props) => {
-      return props.depth && props.depth.mask || defaultVetexColorDepth.mask;
-    }
-  },
-  blend: defaultBlend,
-  count: (context, props) => props.points.length
-});
+    blend: defaultBlend,
+    count: (context, props) => props.points.length,
+  });
 
 // command to render triangle lists optionally supporting vertex colors for each triangle
 const triangles = (regl: Regl) => {
@@ -144,10 +153,10 @@ const triangles = (regl: Regl) => {
     const items: TriangleList[] = Array.isArray(props) ? props : [props];
     const singleColorItems = [];
     const vertexColorItems = [];
-    items.forEach(item => {
+    items.forEach((item) => {
       // If the item has onlyRenderInHitmap set, only render it in the hitmap.
       if (isHitmap || !item.onlyRenderInHitmap) {
-        if (item.colors && (item.colors.length > 0)) {
+        if (item.colors && item.colors.length > 0) {
           vertexColorItems.push(item);
         } else {
           singleColorItems.push(item);
@@ -163,8 +172,10 @@ export const makeTrianglesCommand = () => {
   return triangles;
 };
 const getChildrenForHitmap = createInstancedGetChildrenForHitmap(3);
-export default function Triangles(props: CommonCommandProps & {
-  children: TriangleList[];
-}) {
+export default function Triangles(
+  props: CommonCommandProps & {
+    children: TriangleList[];
+  }
+) {
   return <Command getChildrenForHitmap={getChildrenForHitmap} {...props} reglCommand={triangles} />;
 }

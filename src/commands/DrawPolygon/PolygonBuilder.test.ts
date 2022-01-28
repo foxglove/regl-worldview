@@ -11,8 +11,13 @@ const mag = 10;
 
 const buildPolygon = () => {
   const poly = new Polygon();
-  const p = [[mag, mag, 0], [mag, -mag, 0], [-mag, -mag, 0], [-mag, mag, 0]];
-  poly.points = p.map(x => new PolygonPoint(x));
+  const p = [
+    [mag, mag, 0],
+    [mag, -mag, 0],
+    [-mag, -mag, 0],
+    [-mag, mag, 0],
+  ];
+  poly.points = p.map((x) => new PolygonPoint(x));
   poly.points.push(poly.points[0]);
   return poly;
 };
@@ -27,22 +32,23 @@ class FakeRay {
   planeIntersection() {
     return this.point;
   }
-
 }
 
 const getArgs: (arg0: number[], arg1: Record<string, any> | null | undefined) => ReglClickInfo = (point, object) => {
   return {
-    ray: (new FakeRay(point) as any),
-    objects: [{
-      object
-    }]
+    ray: new FakeRay(point) as any,
+    objects: [
+      {
+        object,
+      },
+    ],
   };
 };
 
 const event: (arg0: boolean | null | undefined) => React.MouseEvent<HTMLCanvasElement> = (ctrlKey): any => ({
   ctrlKey,
   stopPropagation: () => {},
-  preventDefault: () => {}
+  preventDefault: () => {},
 });
 
 describe("PolygonBuilder", () => {
@@ -53,7 +59,12 @@ describe("PolygonBuilder", () => {
       builder.selectObject(polygon);
       expect(builder.activePolygon).toBe(polygon);
       builder.deletePoint(polygon.points[1]);
-      expect(polygon.points.map(point => point.point)).toEqual([[mag, mag, 0], [-mag, -mag, 0], [-mag, mag, 0], [mag, mag, 0]]);
+      expect(polygon.points.map((point) => point.point)).toEqual([
+        [mag, mag, 0],
+        [-mag, -mag, 0],
+        [-mag, mag, 0],
+        [mag, mag, 0],
+      ]);
     });
     it('can remove "overlap" point', () => {
       const polygon = buildPolygon();
@@ -61,7 +72,12 @@ describe("PolygonBuilder", () => {
       builder.selectObject(polygon);
       expect(builder.activePolygon).toBe(polygon);
       builder.deletePoint(polygon.points[0]);
-      expect(polygon.points.map(point => point.point)).toEqual([[mag, -mag, 0], [-mag, -mag, 0], [-mag, mag, 0], [mag, -mag, 0]]);
+      expect(polygon.points.map((point) => point.point)).toEqual([
+        [mag, -mag, 0],
+        [-mag, -mag, 0],
+        [-mag, mag, 0],
+        [mag, -mag, 0],
+      ]);
     });
     it("removes polygon entirely if it is only 2 points long", () => {
       const polygon = buildPolygon();
@@ -98,79 +114,113 @@ describe("PolygonBuilder", () => {
       builder.onMouseUp(event(true), getArgs([]));
       expect(builder.polygons).toHaveLength(1);
       const [polygon] = builder.polygons;
-      expect(polygon.points.map(p => p.point)).toEqual([[1, 1, 0], [1, -1, 0], [-1, -1, 0], [1, 1, 0]]);
+      expect(polygon.points.map((p) => p.point)).toEqual([
+        [1, 1, 0],
+        [1, -1, 0],
+        [-1, -1, 0],
+        [1, 1, 0],
+      ]);
     });
   });
   describe("add polygon", () => {
     it("can add unclosed polygon from external set of points", () => {
       const builder = new PolygonBuilder();
-      const points = [{
-        x: 0,
-        y: 0
-      }, {
-        x: 1,
-        y: 1
-      }, {
-        x: -1,
-        y: -1
-      }];
+      const points = [
+        {
+          x: 0,
+          y: 0,
+        },
+        {
+          x: 1,
+          y: 1,
+        },
+        {
+          x: -1,
+          y: -1,
+        },
+      ];
       builder.addPolygon({
-        points
+        points,
       });
       expect(builder.polygons).toHaveLength(1);
       const [polygon] = builder.polygons;
-      expect(polygon.points.map(p => p.point)).toEqual([[0, 0, 0], [1, 1, 0], [-1, -1, 0], [0, 0, 0]]);
+      expect(polygon.points.map((p) => p.point)).toEqual([
+        [0, 0, 0],
+        [1, 1, 0],
+        [-1, -1, 0],
+        [0, 0, 0],
+      ]);
     });
     it("can add closed polygon from external set of points", () => {
       const builder = new PolygonBuilder();
-      const points = [{
-        x: 0,
-        y: 0
-      }, {
-        x: 1,
-        y: 1
-      }, {
-        x: -1,
-        y: -1
-      }, {
-        x: 0,
-        y: 0
-      }];
+      const points = [
+        {
+          x: 0,
+          y: 0,
+        },
+        {
+          x: 1,
+          y: 1,
+        },
+        {
+          x: -1,
+          y: -1,
+        },
+        {
+          x: 0,
+          y: 0,
+        },
+      ];
       builder.addPolygon({
-        points
+        points,
       });
       expect(builder.polygons).toHaveLength(1);
       const [polygon] = builder.polygons;
-      expect(polygon.points.map(p => p.point)).toEqual([[0, 0, 0], [1, 1, 0], [-1, -1, 0], [0, 0, 0]]);
+      expect(polygon.points.map((p) => p.point)).toEqual([
+        [0, 0, 0],
+        [1, 1, 0],
+        [-1, -1, 0],
+        [0, 0, 0],
+      ]);
     });
     it("can add polygon with name and z-values", () => {
       const builder = new PolygonBuilder();
       const z = 1;
-      const points = [{
-        x: 0,
-        y: 0,
-        z
-      }, {
-        x: 1,
-        y: 1,
-        z
-      }, {
-        x: -1,
-        y: -1,
-        z
-      }, {
-        x: 0,
-        y: 0,
-        z
-      }];
+      const points = [
+        {
+          x: 0,
+          y: 0,
+          z,
+        },
+        {
+          x: 1,
+          y: 1,
+          z,
+        },
+        {
+          x: -1,
+          y: -1,
+          z,
+        },
+        {
+          x: 0,
+          y: 0,
+          z,
+        },
+      ];
       builder.addPolygon({
         name: "foo",
-        points
+        points,
       });
       expect(builder.polygons).toHaveLength(1);
       const [polygon] = builder.polygons;
       expect(polygon.name).toBe("foo");
-      expect(polygon.points.map(p => p.point)).toEqual([[0, 0, z], [1, 1, z], [-1, -1, z], [0, 0, z]]);
+      expect(polygon.points.map((p) => p.point)).toEqual([
+        [0, 0, z],
+        [1, 1, z],
+        [-1, -1, z],
+        [0, 0, z],
+      ]);
     });
   });
 });

@@ -24,43 +24,30 @@ const DEFAULT_TEXT_COLOR = {
   r: 1,
   g: 1,
   b: 1,
-  a: 1
+  a: 1,
 };
-export const pointToVec3 = ({
-  x,
-  y,
-  z
-}: Point): Vec3 => {
+export const pointToVec3 = ({ x, y, z }: Point): Vec3 => {
   return [x, y, z];
 };
-export const orientationToVec4 = ({
-  x,
-  y,
-  z,
-  w
-}: Orientation): Vec4 => {
+export const orientationToVec4 = ({ x, y, z, w }: Orientation): Vec4 => {
   return [x, y, z, w];
 };
 export const vec3ToPoint = ([x, y, z]: Vec3): Point => ({
   x,
   y,
-  z
+  z,
 });
 export const vec4ToOrientation = ([x, y, z, w]: Vec4): Orientation => ({
   x,
   y,
   z,
-  w
+  w,
 });
 export const pointToVec3Array = (points: Point[]) => {
   const result = new Float32Array(points.length * 3);
   let i = 0;
 
-  for (const {
-    x,
-    y,
-    z
-  } of points) {
+  for (const { x, y, z } of points) {
     result[i++] = x;
     result[i++] = y;
     result[i++] = z;
@@ -75,16 +62,11 @@ export const vec4ToRGBA = (color: Vec4): Color => ({
   r: color[0],
   g: color[1],
   b: color[2],
-  a: color[3]
+  a: color[3],
 });
-export const toColor = (val: Color | Vec4): Color => Array.isArray(val) ? vec4ToRGBA(val) : val;
+export const toColor = (val: Color | Vec4): Color => (Array.isArray(val) ? vec4ToRGBA(val) : val);
 export function getCSSColor(color: Color = DEFAULT_TEXT_COLOR) {
-  const {
-    r,
-    g,
-    b,
-    a
-  } = color;
+  const { r, g, b, a } = color;
   return `rgba(${(r * 255).toFixed()}, ${(g * 255).toFixed()}, ${(b * 255).toFixed()}, ${a.toFixed(3)})`;
 }
 
@@ -92,12 +74,7 @@ const toRGBAArray = (colors: ReadonlyArray<Color>): Float32Array => {
   const result = new Float32Array(colors.length * 4);
   let i = 0;
 
-  for (const {
-    r,
-    g,
-    b,
-    a
-  } of colors) {
+  for (const { r, g, b, a } of colors) {
     result[i++] = r;
     result[i++] = g;
     result[i++] = b;
@@ -107,12 +84,7 @@ const toRGBAArray = (colors: ReadonlyArray<Color>): Float32Array => {
   return result;
 };
 
-const constantRGBAArray = (count: number, {
-  r,
-  g,
-  b,
-  a
-}: Color): Float32Array => {
+const constantRGBAArray = (count: number, { r, g, b, a }: Color): Float32Array => {
   const result = new Float32Array(count * 4);
 
   for (let i = 0; i < count; i++) {
@@ -133,24 +105,25 @@ export const defaultReglBlend = {
     src: "src alpha",
     dst: "one minus src alpha",
     srcAlpha: 1,
-    dstAlpha: "one minus src alpha"
+    dstAlpha: "one minus src alpha",
   },
   equation: {
     rgb: "add",
-    alpha: "add"
-  }
+    alpha: "add",
+  },
 };
 export const defaultReglDepth = {
   enable: true,
-  mask: true
+  mask: true,
 };
 export const defaultDepth = {
-  enable: (context: any, props: any) => props.depth && props.depth.enable || defaultReglDepth.enable,
-  mask: (context: any, props: any) => props.depth && props.depth.mask || defaultReglDepth.mask
+  enable: (context: any, props: any) => (props.depth && props.depth.enable) || defaultReglDepth.enable,
+  mask: (context: any, props: any) => (props.depth && props.depth.mask) || defaultReglDepth.mask,
 };
-export const defaultBlend = { ...defaultReglBlend,
-  enable: (context: any, props: any) => props.blend && props.blend.enable || defaultReglBlend.enable,
-  func: (context: any, props: any) => props.blend && props.blend.func || defaultReglBlend.func
+export const defaultBlend = {
+  ...defaultReglBlend,
+  enable: (context: any, props: any) => (props.blend && props.blend.enable) || defaultReglBlend.enable,
+  func: (context: any, props: any) => (props.blend && props.blend.func) || defaultReglBlend.func,
 };
 // TODO: deprecating, remove before 1.x release
 export const blend = defaultBlend;
@@ -158,40 +131,34 @@ export const blend = defaultBlend;
 // position and rotation from the object pose and also
 // inserts some glsl helpers to apply the pose to points in a fragment shader
 export function withPose(command: ReglCommand): ReglCommand {
-  const {
-    vert,
-    uniforms
-  } = command;
-  const newVert = typeof vert === "function" ? (context, props) => vert(context, props).replace("#WITH_POSE", rotateGLSL) : vert.replace("#WITH_POSE", rotateGLSL);
-  const newUniforms = { ...uniforms,
+  const { vert, uniforms } = command;
+  const newVert =
+    typeof vert === "function"
+      ? (context, props) => vert(context, props).replace("#WITH_POSE", rotateGLSL)
+      : vert.replace("#WITH_POSE", rotateGLSL);
+  const newUniforms = {
+    ...uniforms,
     _position: (context, props) => {
-      const {
-        position
-      } = props.pose;
+      const { position } = props.pose;
       return Array.isArray(position) ? position : pointToVec3(position);
     },
     _rotation: (context, props) => {
-      const {
-        orientation: r
-      } = props.pose;
+      const { orientation: r } = props.pose;
       return Array.isArray(r) ? r : [r.x, r.y, r.z, r.w];
-    }
+    },
   };
-  return { ...command,
-    vert: newVert,
-    uniforms: newUniforms
-  };
+  return { ...command, vert: newVert, uniforms: newUniforms };
 }
 export function getVertexColors({
   colors,
   color,
-  points
+  points,
 }: {
   colors?: ReadonlyArray<Color> | ReadonlyArray<Vec4>;
   color: Color;
   points: ReadonlyArray<Point>;
 }): Float32Array | ReadonlyArray<Vec4> {
-  if ((!colors || (colors.length === 0)) && color) {
+  if ((!colors || colors.length === 0) && color) {
     return constantRGBAArray(points.length, color);
   }
 
@@ -204,7 +171,7 @@ export function getVertexColors({
 }
 
 function hasNestedArrays(arr: any[]) {
-  return (arr.length > 0) && Array.isArray(arr[0]);
+  return arr.length > 0 && Array.isArray(arr[0]);
 }
 
 // Returns a function which accepts a single color, an array of colors, and the number of instances,
@@ -214,7 +181,7 @@ function hasNestedArrays(arr: any[]) {
 export function colorBuffer(regl: any) {
   const buffer = regl.buffer({
     usage: "dynamic",
-    data: []
+    data: [],
   });
   return function (color: any, colors: any, length: number) {
     let data, divisor;
@@ -230,9 +197,9 @@ export function colorBuffer(regl: any) {
     return {
       buffer: buffer({
         usage: "dynamic",
-        data
+        data,
       }),
-      divisor
+      divisor,
     };
   };
 }
@@ -245,8 +212,8 @@ export function shouldConvert(props: any) {
   return true;
 }
 export function intToRGB(i = 0): Vec4 {
-  const r = (i >> 16 & 255) / 255;
-  const g = (i >> 8 & 255) / 255;
+  const r = ((i >> 16) & 255) / 255;
+  const g = ((i >> 8) & 255) / 255;
   const b = (i & 255) / 255;
   return [r, g, b, 1];
 }
@@ -254,13 +221,13 @@ export function getIdFromColor(rgb: Vec4): number {
   const r = rgb[0] * 255;
   const g = rgb[1] * 255;
   const b = rgb[2] * 255;
-  return b | g << 8 | r << 16;
+  return b | (g << 8) | (r << 16);
 }
 export function getIdFromPixel(rgb: Uint8Array): number {
   const r = rgb[0];
   const g = rgb[1];
   const b = rgb[2];
-  return b | g << 8 | r << 16;
+  return b | (g << 8) | (r << 16);
 }
 // gl-matrix clone of three.js Vector3.setFromSpherical
 // phi: polar angle (between poles, 0 - pi)
@@ -270,5 +237,5 @@ export function fromSpherical(out: number[], r: number, theta: number, phi: numb
   out[0] = rSinPhi * Math.sin(theta);
   out[1] = r * Math.cos(phi);
   out[2] = rSinPhi * Math.cos(theta);
-  return (out as any);
+  return out as any;
 }

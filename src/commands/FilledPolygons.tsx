@@ -15,19 +15,19 @@ const NO_POSE = {
   position: {
     x: 0,
     y: 0,
-    z: 0
+    z: 0,
   },
   orientation: {
     x: 0,
     y: 0,
     z: 0,
-    w: 0
-  }
+    w: 0,
+  },
 };
 const DEFAULT_SCALE = {
   x: 1,
   y: 1,
-  z: 1
+  z: 1,
 };
 
 function flatten3D(points: Vec3[]): Float32Array {
@@ -61,17 +61,12 @@ type Props = {
 };
 
 const generateTriangles = (polygons: PolygonType[]) => {
-  return polygons.map(poly => {
+  return polygons.map((poly) => {
     // $FlowFixMe flow doesn't know how shouldConvert works
     const points: Vec3[] = shouldConvert(poly.points) ? poly.points.map(pointToVec3) : poly.points;
     const pose = poly.pose ? poly.pose : NO_POSE;
     const earcutPoints = getEarcutPoints(points);
-    return { ...poly,
-      points: earcutPoints,
-      pose,
-      scale: DEFAULT_SCALE,
-      originalMarker: poly
-    };
+    return { ...poly, points: earcutPoints, pose, scale: DEFAULT_SCALE, originalMarker: poly };
   });
 };
 
@@ -83,16 +78,15 @@ export const makeFilledPolygonsCommand = () => (regl: any) => {
 };
 
 // command to draw a filled polygon
-function FilledPolygons({
-  children: polygons = [],
-  ...rest
-}: Props) {
+function FilledPolygons({ children: polygons = [], ...rest }: Props) {
   const triangles = generateTriangles(polygons);
   // Overwrite the triangle's default getChildrenForHitmap because we want to event as if each triangle is a single
   // polygon.
-  return <Triangles getChildrenForHitmap={getChildrenForHitmapWithOriginalMarker} {...rest}>
+  return (
+    <Triangles getChildrenForHitmap={getChildrenForHitmapWithOriginalMarker} {...rest}>
       {triangles}
-    </Triangles>;
+    </Triangles>
+  );
 }
 
 export default FilledPolygons;

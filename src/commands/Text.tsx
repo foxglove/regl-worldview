@@ -18,13 +18,13 @@ const DEFAULT_TEXT_COLOR = {
   r: 1,
   g: 1,
   b: 1,
-  a: 1
+  a: 1,
 };
 const DEFAULT_BG_COLOR = {
   r: 0,
   g: 0,
   b: 0,
-  a: 0.8
+  a: 0.8,
 };
 export type TextMarker = {
   name?: string;
@@ -67,11 +67,7 @@ function insertGlobalCss() {
   cssHasBeenInserted = true;
 }
 
-export function isColorDark({
-  r,
-  g,
-  b
-}: Color): boolean {
+export function isColorDark({ r, g, b }: Color): boolean {
   // ITU-R BT.709 https://en.wikipedia.org/wiki/Rec._709
   // 0.2126 * 255 * r + 0.7152 * 255 * g + 0.0722 * 255 * b
   const luma = 54.213 * r + 182.376 * g + 18.411 * b;
@@ -104,10 +100,7 @@ class TextElement {
 
   update(marker: TextMarker, left: number, top: number, autoBackgroundColor?: boolean) {
     this.wrapper.style.transform = `translate(${left.toFixed()}px,${top.toFixed()}px)`;
-    const {
-      color,
-      colors = []
-    } = marker;
+    const { color, colors = [] } = marker;
     const hasBgColor = colors.length >= 2;
     const textColor = toColor(hasBgColor ? colors[0] : color || [0, 0, 0, 1]);
 
@@ -124,7 +117,10 @@ class TextElement {
         this._inner.style.background = "transparent";
         this._prevBgColor = null;
       } else {
-        if (autoBackgroundColor && (!this._prevBgColor || this._prevBgColor && !isColorEqual(textColor, this._prevBgColor))) {
+        if (
+          autoBackgroundColor &&
+          (!this._prevBgColor || (this._prevBgColor && !isColorEqual(textColor, this._prevBgColor)))
+        ) {
           // update background color with automatic dark/light color
           this._prevBgColor = textColor;
           const isTextColorDark = isColorDark(textColor);
@@ -144,7 +140,6 @@ class TextElement {
       this._text.textContent = marker.text || "";
     }
   }
-
 }
 
 type Props = {
@@ -160,7 +155,7 @@ export default class Text extends React.Component<Props> {
     current: HTMLDivElement | null;
   } = React.createRef();
   static defaultProps = {
-    children: []
+    children: [],
   };
 
   componentDidMount() {
@@ -177,13 +172,8 @@ export default class Text extends React.Component<Props> {
   paint = () => {
     const context = this._context;
     const textComponents = this._textComponents;
-    const {
-      children: markers,
-      autoBackgroundColor
-    } = this.props;
-    const {
-      current: textContainer
-    } = this._textContainerRef;
+    const { children: markers, autoBackgroundColor } = this.props;
+    const { current: textContainer } = this._textContainerRef;
     const initializedData = context && context.initializedData;
 
     if (!textContainer || !context || !initializedData) {
@@ -192,24 +182,14 @@ export default class Text extends React.Component<Props> {
 
     const {
       dimension,
-      dimension: {
-        width,
-        height
-      }
+      dimension: { width, height },
     } = context;
-    const {
-      camera
-    } = initializedData;
+    const { camera } = initializedData;
     const componentsToRemove = new Set(textComponents.keys());
 
     for (const marker of markers) {
-      const {
-        pose,
-        name
-      } = marker;
-      const {
-        position
-      } = pose;
+      const { pose, name } = marker;
+      const { position } = pose;
       const coord = this.project(position, camera, dimension);
 
       if (!coord) {
@@ -248,29 +228,25 @@ export default class Text extends React.Component<Props> {
   };
   project = (point: Point, camera: CameraCommand, dimension: Dimensions) => {
     const vec = [point.x, point.y, point.z];
-    const {
-      left,
-      top,
-      width,
-      height
-    } = dimension;
+    const { left, top, width, height } = dimension;
     const viewport = [left, top, width, height];
     return camera.toScreenCoord(viewport, vec);
   };
 
   render() {
-    return <React.Fragment>
+    return (
+      <React.Fragment>
         <div ref={this._textContainerRef} />
         <WorldviewReactContext.Consumer>
           {(ctx: WorldviewContextType | null | undefined) => {
-          if (ctx) {
-            this._context = ctx;
-          }
+            if (ctx) {
+              this._context = ctx;
+            }
 
-          return null;
-        }}
+            return null;
+          }}
         </WorldviewReactContext.Consumer>
-      </React.Fragment>;
+      </React.Fragment>
+    );
   }
-
 }

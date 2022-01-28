@@ -63,8 +63,9 @@ export default async function parseGLB(arrayBuffer: ArrayBuffer): Promise<GLBMod
   }
 
   const jsonData = findNextChunkOfType(
-  /* JSON */
-  0x4e4f534a);
+    /* JSON */
+    0x4e4f534a
+  );
 
   if (!jsonData) {
     throw new Error("no JSON chunk found");
@@ -72,12 +73,13 @@ export default async function parseGLB(arrayBuffer: ArrayBuffer): Promise<GLBMod
 
   const json = JSON.parse(new TextDecoder().decode(jsonData));
   const binary = findNextChunkOfType(
-  /* BIN */
-  0x004e4942);
+    /* BIN */
+    0x004e4942
+  );
 
   if (!binary) {
     return {
-      json
+      json,
     };
   }
 
@@ -92,7 +94,7 @@ export default async function parseGLB(arrayBuffer: ArrayBuffer): Promise<GLBMod
   }
 
   // create a TypedArray for each accessor
-  const accessors = json.accessors.map(accessorInfo => {
+  const accessors = json.accessors.map((accessorInfo) => {
     if (accessorInfo.bufferView == null) {
       // This accessor has no associated bufferView, which happens when the mesh
       // contains compressed data. This is not an error, though. So, we return
@@ -182,20 +184,34 @@ export default async function parseGLB(arrayBuffer: ArrayBuffer): Promise<GLBMod
       throw new Error("bufferView.byteLength mismatch");
     }
 
-    return new arrayType(binary.buffer, binary.byteOffset + (bufferView.byteOffset || 0) + (accessorInfo.byteOffset || 0), accessorInfo.count * numComponents);
+    return new arrayType(
+      binary.buffer,
+      binary.byteOffset + (bufferView.byteOffset || 0) + (accessorInfo.byteOffset || 0),
+      accessorInfo.count * numComponents
+    );
   });
   await decodeCompressedGLB(json, binary);
   // load embedded images
-  const images = json.images && (await Promise.all(json.images.map(async imgInfo => {
-    const bufferView = json.bufferViews[imgInfo.bufferView];
-    const data = new DataView(binary.buffer, binary.byteOffset + (bufferView.byteOffset || 0), bufferView.byteLength);
-    return await self.createImageBitmap(new Blob([data], {
-      type: imgInfo.mimeType
-    }));
-  })));
+  const images =
+    json.images &&
+    (await Promise.all(
+      json.images.map(async (imgInfo) => {
+        const bufferView = json.bufferViews[imgInfo.bufferView];
+        const data = new DataView(
+          binary.buffer,
+          binary.byteOffset + (bufferView.byteOffset || 0),
+          bufferView.byteLength
+        );
+        return await self.createImageBitmap(
+          new Blob([data], {
+            type: imgInfo.mimeType,
+          })
+        );
+      })
+    ));
   return {
     json,
     accessors,
-    images
+    images,
   };
 }

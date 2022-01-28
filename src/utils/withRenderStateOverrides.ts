@@ -13,21 +13,15 @@ const withRenderStateOverrides = (command: any) => (regl: any) => {
   const reglCommand = command(regl);
   // Use memoization to avoid generating multiple render commands for the same render states
   // for the same render states
-  const memoizedRender = memoize((props: {
-    depth: DepthState;
-    blend: BlendState;
-  }) => {
-    const {
-      depth,
-      blend
-    } = props;
-    return regl({ ...reglCommand,
-      depth,
-      blend
-    });
-  }, (...args) => JSON.stringify(args));
+  const memoizedRender = memoize(
+    (props: { depth: DepthState; blend: BlendState }) => {
+      const { depth, blend } = props;
+      return regl({ ...reglCommand, depth, blend });
+    },
+    (...args) => JSON.stringify(args)
+  );
 
-  const renderElement = props => {
+  const renderElement = (props) => {
     // Get curstom render states from the given marker. Some commands, like <Arrows />
     // will use the originalMarker property instead. If no custom render states
     // are present, use either the ones provided in the command or the default ones. We do
@@ -36,7 +30,7 @@ const withRenderStateOverrides = (command: any) => (regl: any) => {
     const blend = props.blend || props.originalMarker?.blend || reglCommand.blend || defaultReglBlend;
     memoizedRender({
       depth,
-      blend
+      blend,
     })(props);
   };
 

@@ -61,12 +61,10 @@ const getDefaultSampler = () => ({
   minFilter: WebGLRenderingContext.NEAREST_MIPMAP_LINEAR,
   magFilter: WebGLRenderingContext.LINEAR,
   wrapS: WebGLRenderingContext.REPEAT,
-  wrapT: WebGLRenderingContext.REPEAT
+  wrapT: WebGLRenderingContext.REPEAT,
 });
 
-const getSceneToDraw = ({
-  json
-}) => {
+const getSceneToDraw = ({ json }) => {
   if (json.scene != null) {
     return json.scene;
   }
@@ -81,7 +79,7 @@ const getSceneToDraw = ({
   return keys[0];
 };
 
-const drawModel = regl => {
+const drawModel = (regl) => {
   if (!regl) {
     throw new Error("Invalid regl instance");
   }
@@ -102,12 +100,12 @@ const drawModel = regl => {
       isHitmap: regl.context("isHitmap"),
       unlit: regl.prop("unlit"),
       overrideColor: regl.context("overrideColor"),
-      useOverrideColor: regl.context("useOverrideColor")
+      useOverrideColor: regl.context("useOverrideColor"),
     },
     attributes: {
       position: regl.prop("positions"),
       normal: regl.prop("normals"),
-      texCoord: regl.prop("texCoords")
+      texCoord: regl.prop("texCoords"),
     },
     elements: regl.prop("indices"),
     vert: `
@@ -160,33 +158,33 @@ const drawModel = regl => {
       gl_FragColor = vec4((light.ambientIntensity + diffuse) * baseColor.rgb, baseColor.a * globalAlpha);
     }
   }
-  `
+  `,
   });
   // default values for when baseColorTexture is not specified
   const singleTexCoord = regl.buffer([0, 0]);
   const whiteTexture = regl.texture({
     data: [255, 255, 255, 255],
     width: 1,
-    height: 1
+    height: 1,
   });
   // build the draw calls needed to draw the model. This will happen whenever the model changes.
   const getDrawCalls = memoizeWeak((model: GLBModel) => {
     // upload textures to the GPU
-    const {
-      accessors
-    } = model;
-    const textures = model.json.textures && model.json.textures.map(textureInfo => {
-      const sampler = textureInfo.sampler ? model.json.samplers[textureInfo.sampler] : getDefaultSampler();
-      const bitmap = model.images && model.images[textureInfo.source];
-      const texture = regl.texture({
-        data: bitmap,
-        min: glConstantToRegl(sampler.minFilter),
-        mag: glConstantToRegl(sampler.magFilter),
-        wrapS: sampler.wrapS ? glConstantToRegl(sampler.wrapS) : "repeat",
-        wrapT: sampler.wrapT ? glConstantToRegl(sampler.wrapT) : "repeat"
+    const { accessors } = model;
+    const textures =
+      model.json.textures &&
+      model.json.textures.map((textureInfo) => {
+        const sampler = textureInfo.sampler ? model.json.samplers[textureInfo.sampler] : getDefaultSampler();
+        const bitmap = model.images && model.images[textureInfo.source];
+        const texture = regl.texture({
+          data: bitmap,
+          min: glConstantToRegl(sampler.minFilter),
+          mag: glConstantToRegl(sampler.magFilter),
+          wrapS: sampler.wrapS ? glConstantToRegl(sampler.wrapS) : "repeat",
+          wrapT: sampler.wrapT ? glConstantToRegl(sampler.wrapT) : "repeat",
+        });
+        return texture;
       });
-      return texture;
-    });
 
     if (model.images) {
       model.images.forEach((bitmap: ImageBitmap) => bitmap.close());
@@ -198,7 +196,9 @@ const drawModel = regl => {
     function drawMesh(mesh, nodeMatrix) {
       for (const primitive of mesh.primitives) {
         if ((primitive.mode ?? 4) !== 4) {
-          console.warn(`GLTFScene: ignoring glTF primitive with mode ${primitive.mode}, only TRIANGLES are currently supported`);
+          console.warn(
+            `GLTFScene: ignoring glTF primitive with mode ${primitive.mode}, only TRIANGLES are currently supported`
+          );
           continue;
         }
 
@@ -206,9 +206,7 @@ const drawModel = regl => {
         const texInfo = material.pbrMetallicRoughness.baseColorTexture;
         let primitiveAccessors = accessors;
         let primitiveAttributes = primitive.attributes;
-        const {
-          extensions = {}
-        } = primitive;
+        const { extensions = {} } = primitive;
         const dracoCompressionEXT = extensions.KHR_draco_mesh_compression;
 
         if (dracoCompressionEXT) {
@@ -226,24 +224,35 @@ const drawModel = regl => {
         drawCalls.push({
           indices: primitiveAccessors[primitive.indices],
           positions: primitiveAccessors[primitiveAttributes.POSITION],
-          normals: unlit ? {
-            constant: 0
-          } : primitiveAccessors[primitiveAttributes.NORMAL],
+          normals: unlit
+            ? {
+                constant: 0,
+              }
+            : primitiveAccessors[primitiveAttributes.NORMAL],
           unlit,
-          texCoords: texInfo ? primitiveAccessors[primitiveAttributes[`TEXCOORD_${texInfo.texCoord || 0}`]] : {
-            divisor: 1,
-            buffer: singleTexCoord
-          },
+          texCoords: texInfo
+            ? primitiveAccessors[primitiveAttributes[`TEXCOORD_${texInfo.texCoord || 0}`]]
+            : {
+                divisor: 1,
+                buffer: singleTexCoord,
+              },
           baseColorTexture: texInfo ? textures[texInfo.index] : whiteTexture,
           baseColorFactor: material.pbrMetallicRoughness.baseColorFactor || [1, 1, 1, 1],
-          nodeMatrix
+          nodeMatrix,
         });
       }
     }
 
     // helper to draw all the meshes contained in a node and its child nodes
     function drawNode(node, parentMatrix) {
-      const nodeMatrix = node.matrix ? mat4.clone(node.matrix) : mat4.fromRotationTranslationScale(mat4.create(), node.rotation || [0, 0, 0, 1], node.translation || [0, 0, 0], node.scale || [1, 1, 1]);
+      const nodeMatrix = node.matrix
+        ? mat4.clone(node.matrix)
+        : mat4.fromRotationTranslationScale(
+            mat4.create(),
+            node.rotation || [0, 0, 0, 1],
+            node.translation || [0, 0, 0],
+            node.scale || [1, 1, 1]
+          );
       mat4.mul(nodeMatrix, parentMatrix, nodeMatrix);
 
       if (node.mesh != null) {
@@ -271,19 +280,23 @@ const drawModel = regl => {
   // create a regl command to set the context for each draw call
   const withContext = regl({
     context: {
-      poseMatrix: (context, props) => mat4.fromRotationTranslationScale(mat4.create(), orientationToVec4(props.pose.orientation), pointToVec3(props.pose.position), props.scale ? pointToVec3(props.scale) : [1, 1, 1]),
-      globalAlpha: (context, props) => props.alpha == null ? 1 : props.alpha,
+      poseMatrix: (context, props) =>
+        mat4.fromRotationTranslationScale(
+          mat4.create(),
+          orientationToVec4(props.pose.orientation),
+          pointToVec3(props.pose.position),
+          props.scale ? pointToVec3(props.scale) : [1, 1, 1]
+        ),
+      globalAlpha: (context, props) => (props.alpha == null ? 1 : props.alpha),
       hitmapColor: (context, props) => props.color || [0, 0, 0, 1],
       isHitmap: (context, props) => !!props.isHitmap,
       useOverrideColor: (context, props) => !!props.overrideColor,
-      overrideColor: (context, props) => props.overrideColor ? toRGBA(props.overrideColor) : [0, 0, 0, 1]
-    }
+      overrideColor: (context, props) => (props.overrideColor ? toRGBA(props.overrideColor) : [0, 0, 0, 1]),
+    },
   });
   return (props, isHitmap) => {
     const drawCalls = getDrawCalls(props.model);
-    withContext(isHitmap ? { ...props,
-      isHitmap
-    } : props, () => {
+    withContext(isHitmap ? { ...props, isHitmap } : props, () => {
       command(drawCalls);
     });
   };
@@ -306,18 +319,21 @@ type Props = {
 
 function useAsyncValue<T>(fn: () => Promise<T>, deps: any[] | null | undefined): T | null | undefined {
   const [value, setValue] = useState<T | null | undefined>();
-  useEffect(useCallback(() => {
-    let unloaded = false;
-    fn().then(result => {
-      if (!unloaded) {
-        setValue(result);
-      }
-    });
-    return () => {
-      unloaded = true;
-      setValue(undefined);
-    };
-  }, deps || [fn]), deps || [fn]);
+  useEffect(
+    useCallback(() => {
+      let unloaded = false;
+      fn().then((result) => {
+        if (!unloaded) {
+          setValue(result);
+        }
+      });
+      return () => {
+        unloaded = true;
+        setValue(undefined);
+      };
+    }, deps || [fn]),
+    deps || [fn]
+  );
   return value;
 }
 
@@ -344,11 +360,7 @@ function useModel(model: string | (() => Promise<GLBModel>)): GLBModel | null | 
 }
 
 export default function GLTFScene(props: Props) {
-  const {
-    children,
-    model,
-    ...rest
-  } = props;
+  const { children, model, ...rest } = props;
   const context = useContext(WorldviewReactContext);
   const loadedModel = useModel(model);
   useEffect(() => {
@@ -361,10 +373,9 @@ export default function GLTFScene(props: Props) {
     return null;
   }
 
-  return <Command {...rest} reglCommand={drawModel} getChildrenForHitmap={getChildrenForHitmapWithOriginalMarker}>
-      {{ ...children,
-      model: loadedModel,
-      originalMarker: children
-    }}
-    </Command>;
+  return (
+    <Command {...rest} reglCommand={drawModel} getChildrenForHitmap={getChildrenForHitmapWithOriginalMarker}>
+      {{ ...children, model: loadedModel, originalMarker: children }}
+    </Command>
+  );
 }

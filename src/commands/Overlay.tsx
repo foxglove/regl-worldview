@@ -31,7 +31,7 @@ type State = {
 export default class Overlay<T extends PoseObj> extends React.Component<Props<T>, State> {
   _context: WorldviewContextType | null | undefined;
   state = {
-    items: []
+    items: [],
   };
 
   componentDidMount() {
@@ -48,10 +48,7 @@ export default class Overlay<T extends PoseObj> extends React.Component<Props<T>
   paint = () => {
     const context = this._context;
     const dimension = context && context.dimension;
-    const {
-      renderItem,
-      children
-    } = this.props;
+    const { renderItem, children } = this.props;
 
     if (!context || !dimension) {
       return;
@@ -63,11 +60,11 @@ export default class Overlay<T extends PoseObj> extends React.Component<Props<T>
         item,
         index,
         coordinates,
-        dimension
+        dimension,
       });
     });
     this.setState({
-      items
+      items,
     });
   };
   project = (point: Point, context: WorldviewContextType | null | undefined): Vec3 | null | undefined => {
@@ -75,35 +72,27 @@ export default class Overlay<T extends PoseObj> extends React.Component<Props<T>
       return;
     }
 
-    const {
-      dimension
-    } = context;
-    const {
-      camera
-    } = context.initializedData;
+    const { dimension } = context;
+    const { camera } = context.initializedData;
     const vec = [point.x, point.y, point.z];
-    const {
-      left,
-      top,
-      width,
-      height
-    } = dimension;
+    const { left, top, width, height } = dimension;
     const viewport = [left, top, width, height];
     return camera.toScreenCoord(viewport, vec);
   };
 
   render() {
-    return <React.Fragment>
+    return (
+      <React.Fragment>
         <WorldviewReactContext.Consumer>
           {(ctx: WorldviewContextType | null | undefined) => {
-          if (ctx) {
-            this._context = ctx;
-          }
+            if (ctx) {
+              this._context = ctx;
+            }
 
-          return this.state.items;
-        }}
+            return this.state.items;
+          }}
         </WorldviewReactContext.Consumer>
-      </React.Fragment>;
+      </React.Fragment>
+    );
   }
-
 }

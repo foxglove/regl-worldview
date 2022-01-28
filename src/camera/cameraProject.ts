@@ -14,11 +14,11 @@ const FAR_RANGE = 1;
 const tmp4 = [0, 0, 0, 0];
 export default function cameraProject(out: any, vec: Vec3, viewport: Vec4, combinedProjView: Mat4): Vec4 {
   const vX = viewport[0],
-        vY = viewport[1],
-        vWidth = viewport[2],
-        vHeight = viewport[3],
-        n = NEAR_RANGE,
-        f = FAR_RANGE;
+    vY = viewport[1],
+    vWidth = viewport[2],
+    vHeight = viewport[3],
+    n = NEAR_RANGE,
+    f = FAR_RANGE;
   // convert: clip space -> NDC -> window coords
   // implicit 1.0 for w component
   vec4.set(tmp4, vec[0], vec[1], vec[2], 1.0);
@@ -37,9 +37,9 @@ export default function cameraProject(out: any, vec: Vec3, viewport: Vec4, combi
   // and finally into window coordinates
   // the foruth component is (1/clip.w)
   // which is the same as gl_FragCoord.w
-  out[0] = vX + vWidth / 2 * tmp4[0] + (0 + vWidth / 2);
-  out[1] = vY + vHeight / 2 * tmp4[1] + (0 + vHeight / 2);
-  out[2] = (f - n) / 2 * tmp4[2] + (f + n) / 2;
+  out[0] = vX + (vWidth / 2) * tmp4[0] + (0 + vWidth / 2);
+  out[1] = vY + (vHeight / 2) * tmp4[1] + (0 + vHeight / 2);
+  out[2] = ((f - n) / 2) * tmp4[2] + (f + n) / 2;
   out[3] = w === 0 ? 0 : 1 / w;
   return out;
 }
