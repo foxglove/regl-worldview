@@ -102,6 +102,29 @@ storiesOf("Worldview/GLTFScene", module)
       </Worldview>
     );
   })
+  .add("Color override", () => {
+    const model = require("~/common/fixtures/Duck.glb");
+    return (
+      <Worldview
+        defaultCameraState={{
+          distance: 25,
+          thetaOffset: (-3 * Math.PI) / 4,
+        }}>
+        <Axes />
+        <Grid />
+        <GLTFScene model={model}>
+          {{
+            pose: {
+              position: { x: 0, y: 3, z: 0 },
+              orientation: { x: 0, y: 0, z: 1, w: 0 },
+            },
+            scale: { x: 1, y: 1, z: 1 },
+            overrideColor: { r: 0.5, g: 0.5, b: 0.5, a: 1 },
+          }}
+        </GLTFScene>
+      </Worldview>
+    );
+  })
   .add("UnlitTest", () => {
     const model = require("~/common/fixtures/UnlitTest.glb");
     return (

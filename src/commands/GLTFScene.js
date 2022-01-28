@@ -10,8 +10,8 @@ import { mat4 } from "gl-matrix";
 import memoizeWeak from "memoize-weak";
 import React, { useContext, useState, useEffect, useCallback, useDebugValue } from "react";
 
-import type { Pose, Scale, MouseHandler } from "../types";
-import { defaultBlend, pointToVec3, orientationToVec4 } from "../utils/commandUtils";
+import type { Color, Pose, Scale, MouseHandler } from "../types";
+import { defaultBlend, pointToVec3, orientationToVec4, toRGBA } from "../utils/commandUtils";
 import { getChildrenForHitmapWithOriginalMarker } from "../utils/getChildrenForHitmapDefaults";
 import parseGLB, { type GLBModel } from "../utils/parseGLB";
 import WorldviewReactContext from "../WorldviewReactContext";
@@ -80,6 +80,8 @@ const drawModel = (regl) => {
       hitmapColor: regl.context("hitmapColor"),
       isHitmap: regl.context("isHitmap"),
       unlit: regl.prop("unlit"),
+      overrideColor: regl.context("overrideColor"),
+      useOverrideColor: regl.context("useOverrideColor"),
     },
     attributes: {
       position: regl.prop("positions"),
@@ -109,6 +111,8 @@ const drawModel = (regl) => {
   uniform bool isHitmap;
   uniform bool unlit;
   uniform vec4 hitmapColor;
+  uniform bool useOverrideColor;
+  uniform vec4 overrideColor;
   uniform float globalAlpha;
   uniform sampler2D baseColorTexture;
   uniform vec4 baseColorFactor;
@@ -125,7 +129,7 @@ const drawModel = (regl) => {
   uniform DirectionalLight light;
 
   void main() {
-    vec4 baseColor = texture2D(baseColorTexture, vTexCoord) * baseColorFactor;
+    vec4 baseColor = useOverrideColor ? overrideColor : texture2D(baseColorTexture, vTexCoord) * baseColorFactor;
     float diffuse = light.diffuseIntensity * max(0.0, dot(vNormal, -light.direction));
     if (isHitmap) {
       gl_FragColor = hitmapColor;
@@ -257,6 +261,8 @@ const drawModel = (regl) => {
       globalAlpha: (context, props) => (props.alpha == null ? 1 : props.alpha),
       hitmapColor: (context, props) => props.color || [0, 0, 0, 1],
       isHitmap: (context, props) => !!props.isHitmap,
+      useOverrideColor: (context, props) => !!props.overrideColor,
+      overrideColor: (context, props) => (props.overrideColor ? toRGBA(props.overrideColor) : [0, 0, 0, 1]),
     },
   });
 
@@ -279,6 +285,7 @@ type Props = {|
     pose: Pose,
     scale: Scale,
     alpha?: ?number,
+    overrideColor?: Color,
   },
 |};
 
