@@ -145,9 +145,10 @@ class TextElement {
 type Props = {
   children: TextMarker[];
   autoBackgroundColor?: boolean;
-}; // Render text on a scene using DOM nodes, similar to the Overlay command.
-// Implementation uses manual DOM manipulation to avoid the performance hit from React tree reconciliation.
+};
 
+// Render text on a scene using DOM nodes, similar to the Overlay command.
+// Implementation uses manual DOM manipulation to avoid the performance hit from React tree reconciliation.
 export default class Text extends React.Component<Props> {
   _context: WorldviewContextType | null | undefined;
   _textComponents: Map<string | TextMarker, TextElement> = new Map();

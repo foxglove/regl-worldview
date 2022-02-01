@@ -168,6 +168,7 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
         },
         canvasBackgroundColor: backgroundColor || DEFAULT_BACKGROUND_COLOR,
         // DEFAULT_CAMERA_STATE is applied if both `cameraState` and `defaultCameraState` are not present
+        // @ts-expect-error should use Object.assign or merge instead
         cameraState: props.cameraState || props.defaultCameraState || DEFAULT_CAMERA_STATE,
         onCameraStateChange: props.onCameraStateChange || undefined,
         contextAttributes: props.contextAttributes || {},
@@ -209,9 +210,9 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
       cancelAnimationFrame(this._tick);
     }
 
-    this._canvas.current.removeEventListener("webglcontextlost", this._handleContextLost);
+    this._canvas.current!.removeEventListener("webglcontextlost", this._handleContextLost);
 
-    this._canvas.current.removeEventListener("webglcontextrestored", this._handleContextRestored);
+    this._canvas.current!.removeEventListener("webglcontextrestored", this._handleContextRestored);
 
     this.state.worldviewContext.destroy();
   }
@@ -274,6 +275,7 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
         },
         canvasBackgroundColor: backgroundColor || DEFAULT_BACKGROUND_COLOR,
         // DEFAULT_CAMERA_STATE is applied if both `cameraState` and `defaultCameraState` are not present
+        // @ts-expect-error should use Object.assign or merge instead
         cameraState: cameraState || defaultCameraState || DEFAULT_CAMERA_STATE,
         onCameraStateChange: onCameraStateChange || undefined,
         contextAttributes: contextAttributes || {},
@@ -282,7 +284,7 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     ev.preventDefault();
   };
   _handleContextRestored = () => {
-    this.state.worldviewContext.initialize(this._canvas.current);
+    this.state.worldviewContext.initialize(this._canvas.current!);
     // update internal dimensions
     this.state.worldviewContext.paint();
     // trigger rendering since our worldviewContext is initialized
@@ -324,7 +326,7 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     }
   };
   _onMouseInteraction = (
-    e: React.MouseEvent<HTMLCanvasElement>,
+    event: React.MouseEvent<HTMLCanvasElement>,
     mouseEventName: MouseEventEnum,
     // eslint-disable-next-line @foxglove/no-boolean-parameters
     fromOffscreenTarget?: boolean
@@ -335,13 +337,13 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     // When working with offscreen canvases, window is not defined and the target
     // might not be a valid HTMLElement. If so, we can asume any event coming
     // from an offscreen canvas already has a relevant target.
-    if (!fromOffscreenTarget && (!(e.target instanceof window.HTMLElement) || e.button !== 0)) {
+    if (!fromOffscreenTarget && (!(event.target instanceof window.HTMLElement) || event.button !== 0)) {
       return;
     }
 
     // $FlowFixMe: Because of `fromOffscreenTarget`, target might not be an actual HTMLElement instance but still needs to implement `getBoundingClientRect`
-    const { top: clientTop, left: clientLeft } = (e.target as HTMLElement).getBoundingClientRect();
-    const { clientX, clientY } = e;
+    const { top: clientTop, left: clientLeft } = (event.target as HTMLElement).getBoundingClientRect();
+    const { clientX, clientY } = event;
     const canvasX = clientX - clientLeft;
     const canvasY = clientY - clientTop;
     const ray = worldviewContext.raycast(canvasX, canvasY);
@@ -357,34 +359,34 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
 
     if (disableHitmapForEvents.includes(mouseEventName)) {
       if (worldviewHandler) {
-        return handleWorldviewMouseInteraction([], ray, e, worldviewHandler);
+        return handleWorldviewMouseInteraction([], ray, event, worldviewHandler);
       }
 
       return;
     }
 
     // reading hitmap is async so we need to persist the event to use later in the event handler
-    (e as any).persist();
+    event.persist();
     worldviewContext
       .readHitmap(canvasX, canvasY, !!this.props.enableStackedObjectEvents, this.props.maxStackedObjectCount)
       .then((mouseEventsWithCommands) => {
         const mouseEventsByCommand: Map<Command<any>, Array<MouseEventObject>> = aggregate(mouseEventsWithCommands);
 
         for (const [command, mouseEvents] of mouseEventsByCommand.entries()) {
-          command.handleMouseEvent(mouseEvents, ray, e, mouseEventName);
+          command.handleMouseEvent(mouseEvents, ray, event, mouseEventName);
 
-          if (e.isPropagationStopped()) {
+          if (event.isPropagationStopped()) {
             break;
           }
         }
 
-        if (worldviewHandler && !e.isPropagationStopped()) {
+        if (worldviewHandler && !event.isPropagationStopped()) {
           const mouseEvents = mouseEventsWithCommands.map(([mouseEventObject]) => mouseEventObject);
-          handleWorldviewMouseInteraction(mouseEvents, ray, e, worldviewHandler);
+          handleWorldviewMouseInteraction(mouseEvents, ray, event, worldviewHandler);
         }
       })
-      .catch((e) => {
-        console.error(e);
+      .catch((err) => {
+        console.error(err);
       });
   };
 
@@ -407,9 +409,9 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
       color: "white",
       fontFamily: "monospace",
       fontSize: 10,
-    };
+    } as const;
     const { counters, reglCommandObjects } = worldviewContext;
-    const data: { [key: string]: string } = mapValues(counters, (val) => `${val} ms`);
+    const data: { [key: string]: string | number } = mapValues(counters, (val) => `${val ?? 0} ms`);
     data["draw calls"] = reglCommandObjects.reduce((total, cmd) => total + cmd.stats.count, 0);
 
     if (mem) {

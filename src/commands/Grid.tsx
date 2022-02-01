@@ -63,8 +63,9 @@ export function grid() {
 }
 type Props = CommonCommandProps & {
   count: number;
-}; // useful for rendering a grid for debugging in stories
+};
 
+// useful for rendering a grid for debugging in stories
 export default function Grid({ count, ...rest }: Props) {
   const children = {
     count,

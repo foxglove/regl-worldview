@@ -1,5 +1,5 @@
 module.exports = {
-  env: { es6: true, browser: true, node: true, jest: true },
+  env: { es6: true, browser: true, node: true },
   extends: ["plugin:@foxglove/base", "plugin:@foxglove/react", "plugin:@foxglove/jest"],
   settings: {
     "import/resolver": { webpack: { config: `${__dirname}/webpack.config.js` } },
@@ -16,7 +16,6 @@ module.exports = {
     "no-console": ["error", { allow: ["warn", "error", "debug"] }],
     "no-unused-vars": ["error", { args: "none", varsIgnorePattern: "^_" }],
     "no-underscore-dangle": ["error", { allowAfterThis: true }],
-    "no-useless-computed-key": "off", // https://github.com/facebook/flow/issues/380#issuecomment-224380551
     yoda: "off", // https://github.com/RyanZim/eslint-config-problems/pull/1 and https://github.com/eslint/eslint/issues/10591
     // Some good ones that people really should be adding to import/recommended:
     "import/first": "error",
@@ -50,6 +49,7 @@ module.exports = {
         "@typescript-eslint/restrict-plus-operands": "off",
         "@typescript-eslint/no-unsafe-member-access": "off",
         "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/no-empty-function": "off",
       },
     },
 

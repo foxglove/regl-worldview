@@ -7,47 +7,53 @@
 import type { Signal } from "./signal";
 import { signal } from "./signal";
 
-type QueuedFn = ((...args: any[]) => Promise<any>) & {
-  currentPromise: Promise<any> | null | undefined;
-}; // Wait for the previous promise to resolve before starting the next call to the function.
+type QueuedFn<Args extends unknown[], Ret> = ((...args: Args) => Promise<Ret>) & {
+  currentPromise: Promise<Ret> | undefined;
+};
 
-export default function queuePromise(fn: (...args: any[]) => Promise<any>): QueuedFn {
+// Wait for the previous promise to resolve before starting the next call to the function.
+export default function queuePromise<Args extends unknown[], Ret>(
+  fn: (...args: Args) => Promise<Ret>
+): QueuedFn<Args, Ret> {
   // Whether we are currently waiting for a promise returned by `fn` to resolve.
   let calling = false;
   // The list of calls made to the function was made while a call was in progress.
   const nextCalls: {
-    args: any[];
-    promise: Signal<any>;
+    args: Args;
+    promise: Signal<Ret>;
   }[] = [];
 
-  async function queuedFn(...args) {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  const queuedFn: QueuedFn<Args, Ret> = (...args: Args) => {
     if (calling) {
-      const returnPromise = signal();
+      const returnPromise = signal<Ret>();
       nextCalls.push({
         args,
         promise: returnPromise,
       });
-      return await returnPromise;
+      return returnPromise;
     }
 
-    return await start(...args);
-  }
+    return start(...args);
+  };
+  queuedFn.currentPromise = undefined;
 
-  async function start(...args) {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  function start(...args: Args) {
     calling = true;
     const promise = fn(...args).finally(() => {
       calling = false;
       queuedFn.currentPromise = undefined;
 
       if (nextCalls.length > 0) {
-        const { promise: nextPromise, args: nextArgs } = nextCalls.shift();
+        const { promise: nextPromise, args: nextArgs } = nextCalls.shift()!;
         start(...nextArgs)
           .then((result) => nextPromise.resolve(result))
-          .catch((error) => nextPromise.reject(error));
+          .catch((error: Error) => nextPromise.reject(error));
       }
     });
     queuedFn.currentPromise = promise;
-    return await promise;
+    return promise;
   }
 
   return queuedFn;

@@ -4,7 +4,6 @@
 //  This source code is licensed under the Apache License, Version 2.0,
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
-import type { Node } from "react";
 import React, { useEffect, useState, useCallback } from "react";
 
 import { inWebWorker } from "./common";
@@ -16,13 +15,14 @@ type DimensionsParams = {
   top: number;
 };
 type Props = {
-  children: (arg0: DimensionsParams) => Node;
-}; // Jest does not include ResizeObserver.
+  children: (arg0: DimensionsParams) => React.ReactNode;
+};
 
+// Jest does not include ResizeObserver.
 class ResizeObserverMock {
   _callback: (arg0: ResizeObserverEntry[]) => void;
 
-  constructor(callback) {
+  constructor(callback: (arg0: ResizeObserverEntry[]) => void) {
     this._callback = callback;
   }
 
@@ -34,13 +34,13 @@ class ResizeObserverMock {
       },
     };
 
-    this._callback([entry]);
+    this._callback([entry] as ResizeObserverEntry[]);
   }
 
   unobserve() {}
 }
 
-const ResizeObserverImpl =
+const ResizeObserverImpl: typeof ResizeObserver =
   process.env.NODE_ENV === "test" || inWebWorker() ? (ResizeObserverMock as any) : ResizeObserver; // Calculates the dimensions of the parent element, and passes those dimensions to the child function.
 // Uses resizeObserver, which is very performant.
 // Works by rendering an empty div, getting the parent element, and then once we know the dimensions of the parent
@@ -48,7 +48,7 @@ const ResizeObserverImpl =
 // We expect the parent element to never change.
 
 export default function Dimensions({ children }: Props) {
-  const [parentElement, setParentElement] = useState(undefined);
+  const [parentElement, setParentElement] = useState<HTMLElement | null>(null);
   const [dimensions, setDimensions] = useState<DimensionsParams | null | undefined>();
   // This resizeObserver should never change.
   const [resizeObserver] = useState<ResizeObserver>(
@@ -60,10 +60,10 @@ export default function Dimensions({ children }: Props) {
 
         // We only observe a single element, so just use the first entry.
         // We have to round because these could be sub-pixel values.
-        const newWidth = Math.round(entries[0].contentRect.width);
-        const newHeight = Math.round(entries[0].contentRect.height);
-        const newLeft = Math.round(entries[0].contentRect.left);
-        const newTop = Math.round(entries[0].contentRect.top);
+        const newWidth = Math.round(entries[0]!.contentRect.width);
+        const newHeight = Math.round(entries[0]!.contentRect.height);
+        const newLeft = Math.round(entries[0]!.contentRect.left);
+        const newTop = Math.round(entries[0]!.contentRect.top);
         setDimensions({
           width: newWidth,
           height: newHeight,
@@ -73,7 +73,7 @@ export default function Dimensions({ children }: Props) {
       })
   );
   // This should only fire once, because `dimensions` should only be undefined at the beginning.
-  const setParentElementRef = useCallback((element) => {
+  const setParentElementRef = useCallback((element: HTMLDivElement) => {
     if (element) {
       setParentElement(element.parentElement);
     }

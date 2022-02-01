@@ -5,9 +5,10 @@
 //  You may not use this file except in compliance with the License.
 import * as React from "react";
 import createREGL from "regl";
+import * as REGL from "regl";
 import shallowequal from "shallowequal";
 
-import { camera, CameraStore } from "./camera/index";
+import { camera as cameraCommand, CameraStore } from "./camera/index";
 import Command from "./commands/Command";
 import type {
   Dimensions,
@@ -36,8 +37,8 @@ type ConstructorArgs = {
   contextAttributes?: Record<string, any> | null | undefined;
 };
 type InitializedData = {
-  _fbo: any;
-  regl: any;
+  _fbo: REGL.Framebuffer;
+  regl: REGL.Regl;
   camera: CameraCommand;
 };
 export type DrawInput = {
@@ -62,8 +63,9 @@ export type WorldviewContextType = {
 // Compile instructions with an initialized regl context into a regl command.
 // If the instructions are a function, pass the context to the instructions and compile the result
 // of the function; otherwise, compile the instructions directly
-function compile<T>(regl: any, cmd: RawCommand<T>): CompiledReglCommand<T> {
+function compile<T>(regl: REGL.Regl, cmd: RawCommand<T>): CompiledReglCommand<T> {
   const src = cmd(regl);
+  // @ts-expect-error needs better typing for regl commands
   return typeof src === "function" ? src : regl(src);
 }
 
@@ -113,9 +115,9 @@ export class WorldviewContext {
     this.dimension = dimension;
     this.canvasBackgroundColor = canvasBackgroundColor;
     this.contextAttributes = contextAttributes;
-    this.cameraStore = new CameraStore((cameraState: CameraState) => {
+    this.cameraStore = new CameraStore((newCameraState: CameraState) => {
       if (onCameraStateChange) {
-        onCameraStateChange(cameraState);
+        onCameraStateChange(newCameraState);
       } else {
         // this must be called for Worldview with defaultCameraState prop
         this.paint();
@@ -153,7 +155,7 @@ export class WorldviewContext {
       this._compiled.set(uncompiledCommand, compiledCommand);
     });
 
-    const Camera = compile(regl, camera);
+    const Camera = compile(regl, cameraCommand);
     const compiledCameraCommand = new (Camera as unknown as new () => CameraCommand)();
     // framebuffer object from regl context
     const fbo = regl.framebuffer({
@@ -280,7 +282,7 @@ export class WorldviewContext {
   }
 
   onDirty = () => {
-    if (undefined === this._frame) {
+    if (this._frame == undefined) {
       this._frame = requestAnimationFrame(() => this.paint());
     } else {
       this._needsPaint = true;
@@ -290,6 +292,7 @@ export class WorldviewContext {
     async (
       canvasX: number,
       canvasY: number,
+      // eslint-disable-next-line @foxglove/no-boolean-parameters
       enableStackedObjectEvents: boolean,
       maxStackedObjectCount: number
     ): Promise<Array<[MouseEventObject, Command<any>]>> => {
@@ -411,7 +414,6 @@ export class WorldviewContext {
                   }
                 }
               } // If we haven't enabled stacked object events, break out of the loop immediately.
-              // eslint-disable-next-line no-unmodified-loop-condition
             } while (currentObjectId !== 0 && enableStackedObjectEvents);
 
             this._cachedReadHitmapCall = {
@@ -424,6 +426,7 @@ export class WorldviewContext {
       });
     }
   );
+  // eslint-disable-next-line @foxglove/no-boolean-parameters
   _drawInput = (isHitmap?: boolean, excludedObjects?: MouseEventObject[]) => {
     if (isHitmap) {
       this._hitmapObjectIdManager = new HitmapObjectIdManager();
@@ -462,7 +465,7 @@ export class WorldviewContext {
       }
     });
   };
-  _clearCanvas = (regl: any) => {
+  _clearCanvas = (regl: REGL.Regl) => {
     // Since we aren't using regl.frame and only rendering when we need to,
     // we need to tell regl to update its internal state.
     regl.poll();
@@ -472,13 +475,13 @@ export class WorldviewContext {
     });
   };
 
-  _instrumentCommands(regl: any) {
+  _instrumentCommands(regl: REGL.Regl): REGL.Regl {
     if (getNodeEnv() === "production") {
       return regl;
     }
 
     return new Proxy(regl, {
-      apply: (target, thisArg, args) => {
+      apply: (target, thisArg, args: Parameters<REGL.Regl>) => {
         const command = target(...args);
 
         if (typeof command.stats === "object") {

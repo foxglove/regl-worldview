@@ -87,6 +87,7 @@ export default [
     plugins: [
       babel(getBabelOptions({ useESModules: false })),
       copy({
+        //FIXME
         "flow/index.js.flow": "dist/index.js.flow",
       }),
     ],

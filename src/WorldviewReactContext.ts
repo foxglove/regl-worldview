@@ -6,6 +6,6 @@
 import React from "react";
 
 import type { WorldviewContextType } from "./WorldviewContext";
-import "./WorldviewContext"; // @ts-expect-error
+import "./WorldviewContext";
 
 export default React.createContext(undefined as WorldviewContextType | void);

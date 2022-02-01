@@ -5,6 +5,7 @@
 //  You may not use this file except in compliance with the License.
 import { vec3, quat } from "gl-matrix";
 
+import { CameraState, Vec4 } from "..";
 import CameraStore, { selectors, DEFAULT_CAMERA_STATE } from "./CameraStore";
 
 class NearlyEqual {
@@ -98,7 +99,7 @@ describe("camera store", () => {
     });
   });
   describe("cameraState", () => {
-    const cameraState = {
+    const cameraState: CameraState = {
       thetaOffset: 0.32,
       phi: 0.8,
       distance: 56,
@@ -134,21 +135,21 @@ describe("camera store", () => {
       // Null properties are not allowed according to the Flow types,
       // but CameraStore should handle them anyway.
       store = new CameraStore(undefined, {
-        near: null,
+        near: null as unknown as undefined,
         far: undefined,
         fovy: 0,
-      } as any);
+      });
       expect(store.state).toEqual({ ...DEFAULT_CAMERA_STATE, fovy: 0 });
       store.setCameraState({
         near: 0,
-        far: null,
+        far: null as unknown as undefined,
         fovy: undefined,
-      } as any);
+      });
       expect(store.state).toEqual({ ...DEFAULT_CAMERA_STATE, near: 0 });
     });
   });
   describe("selectors", () => {
-    const camState = {
+    const camState: CameraState = {
       thetaOffset: Math.PI / 2,
       phi: 0,
       distance: 56,
@@ -206,7 +207,7 @@ describe("camera store", () => {
         distance: 3,
         target: [2, 0, 0],
         targetOffset: [25, 0, 0],
-        targetOrientation: quat.rotateZ([0, 0, 0, 1], [0, 0, 0, 1], Math.PI / 2),
+        targetOrientation: quat.rotateZ([0, 0, 0, 1], [0, 0, 0, 1], Math.PI / 2) as Vec4,
         perspective: true,
         fovy: Math.PI / 2,
         near: 0.01,

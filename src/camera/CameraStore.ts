@@ -1,11 +1,11 @@
-import { vec3, quat } from "gl-matrix";
-import { $Shape } from "utility-types";
-
 //  Copyright (c) 2018-present, GM Cruise LLC
 //
 //  This source code is licensed under the Apache License, Version 2.0,
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
+import { vec3, quat } from "gl-matrix";
+import { $Shape } from "utility-types";
+
 import type { Vec2, Vec3, Vec4 } from "../types";
 import selectors from "./cameraStateSelectors";
 
@@ -22,9 +22,9 @@ export type CameraState = {
   far: number;
 };
 //  we use up on the +z axis
-const UNIT_Z_VECTOR = Object.freeze([0, 0, 1]);
+const UNIT_Z_VECTOR = Object.freeze([0, 0, 1]) as readonly [number, number, number];
 // reusable array for intermediate calculations
-const TEMP_QUAT = [0, 0, 0, 0];
+const TEMP_QUAT: Vec4 = [0, 0, 0, 0];
 export const DEFAULT_CAMERA_STATE: CameraState = {
   distance: 75,
   perspective: true,
@@ -44,7 +44,7 @@ function distanceAfterZoom(startingDistance: number, zoomPercent: number): numbe
 }
 
 export default class CameraStore {
-  state: CameraState;
+  state!: CameraState;
   _onChange: (arg0: CameraState) => void;
 
   constructor(
@@ -61,14 +61,14 @@ export default class CameraStore {
     // matches the previous behavior of this method, which didn't
     // fill in missing properties but also didn't copy `state`.
     for (const [key, value] of Object.entries(DEFAULT_CAMERA_STATE)) {
-      if (state[key] == null) {
-        state[key] = value;
+      if (state[key as keyof CameraState] == null) {
+        (state as Record<string, unknown>)[key] = value;
       }
     }
 
     // `state` must be a valid CameraState now, because we filled in
     // missing properties from DEFAULT_CAMERA_STATE.
-    this.state = state as any;
+    this.state = state as CameraState;
   };
   cameraRotate = ([x, y]: Vec2) => {
     // This can happen in 2D mode, when both e.movementX and e.movementY are evaluated as negative and mouseX move is 0
@@ -90,9 +90,9 @@ export default class CameraStore {
 
     const { targetOffset, thetaOffset } = this.state;
     // rotate around z axis so the offset is in the target's reference frame
-    const result = [x, y, 0];
+    const result: Vec3 = [x, y, 0];
     const offset = vec3.transformQuat(result, result, quat.setAxisAngle(TEMP_QUAT, UNIT_Z_VECTOR, -thetaOffset));
-    this.setCameraState({ ...this.state, targetOffset: vec3.add(offset, targetOffset, offset) });
+    this.setCameraState({ ...this.state, targetOffset: vec3.add(offset, targetOffset, offset) as typeof result });
 
     this._onChange(this.state);
   };

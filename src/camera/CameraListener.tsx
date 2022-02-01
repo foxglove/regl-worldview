@@ -7,6 +7,7 @@ import normalizeWheel from "normalize-wheel";
 import * as React from "react";
 
 import type { CameraKeyMap, CameraAction, Vec2 } from "../types";
+import assertNever from "../utils/assertNever";
 import getOrthographicBounds from "../utils/getOrthographicBounds";
 import CameraStore from "./CameraStore";
 
@@ -38,22 +39,23 @@ type Props = {
   cameraStore: CameraStore;
   keyMap?: CameraKeyMap;
   shiftKeys: boolean;
-  children?: React.ChildrenArray<React.ReactElement<any> | null>;
-}; // attaches mouse and keyboard listeners to allow for moving the camera on user input
+  children?: React.ReactChildren;
+};
 
+// attaches mouse and keyboard listeners to allow for moving the camera on user input
 export default class CameraListener extends React.Component<Props> {
-  _keyTimer: AnimationFrameID | null | undefined;
+  _keyTimer: number | null | undefined;
   _keys: Set<string> = new Set();
   _buttons: Set<number> = new Set();
-  _listeners = [];
+  _listeners: Array<{ target: EventTarget; name: string; fn: EventListener }> = [];
   _shiftKey = false;
   _metaKey = false;
   _ctrlKey = false;
   _el: HTMLDivElement | null | undefined;
-  _rect: ClientRect | DOMRect;
-  _initialMouse: Vec2;
+  _rect: DOMRect = new DOMRect(NaN, NaN, NaN, NaN);
+  _initialMouse: Vec2 = [NaN, NaN];
 
-  componentDidMount() {
+  override componentDidMount() {
     const { _el } = this;
 
     if (!_el) {
@@ -62,25 +64,21 @@ export default class CameraListener extends React.Component<Props> {
 
     this._rect = _el.getBoundingClientRect();
 
-    const listen = (target: any, name: string, fn) => {
+    const listen = (target: EventTarget, name: string, fn: EventListener) => {
       target.addEventListener(name, fn);
 
-      this._listeners.push({
-        target,
-        name,
-        fn,
-      });
+      this._listeners.push({ target, name, fn });
     };
 
-    listen(document, "blur", this._onBlur);
-    listen(window, "mouseup", this._onWindowMouseUp);
+    listen(document, "blur", this._onBlur as EventListener);
+    listen(window, "mouseup", this._onWindowMouseUp as EventListener);
 
     _el.addEventListener("wheel", this._onWheel, {
       passive: false,
     });
   }
 
-  componentWillUnmount() {
+  override componentWillUnmount() {
     this._listeners.forEach((listener) => {
       listener.target.removeEventListener(listener.name, listener.fn);
     });
@@ -93,9 +91,7 @@ export default class CameraListener extends React.Component<Props> {
       return;
     }
 
-    _el.removeEventListener("wheel", this._onWheel, {
-      passive: false,
-    });
+    _el.removeEventListener("wheel", this._onWheel, { passive: false } as EventListenerOptions);
   }
 
   focus() {
@@ -104,14 +100,14 @@ export default class CameraListener extends React.Component<Props> {
     }
   }
 
-  _getMouseOnScreen = (mouse: MouseEvent) => {
+  _getMouseOnScreen = (mouse: React.MouseEvent | MouseEvent): Vec2 => {
     const { clientX, clientY } = mouse;
     const { top, left, width, height } = this._rect;
     const x = (clientX - left) / width;
     const y = (clientY - top) / height;
     return [x, y];
   };
-  _onMouseDown = (e: MouseEvent) => {
+  _onMouseDown = (e: React.MouseEvent) => {
     const { _el } = this;
 
     if (!_el) {
@@ -222,7 +218,7 @@ export default class CameraListener extends React.Component<Props> {
       cameraMove([this._getMagnitude(moveX * x), this._getMagnitude(-moveY * y)]);
     }
   };
-  _onMouseUp = (e: MouseEvent) => {
+  _onMouseUp = (e: React.MouseEvent) => {
     this._buttons.delete(e.button);
 
     this._endDragging();
@@ -235,7 +231,7 @@ export default class CameraListener extends React.Component<Props> {
     }
 
     // do nothing if this container had a mouseup, because we catch it in the onMouseUp handler
-    if (_el.contains(e.target as any) || e.target === _el) {
+    if (_el.contains(e.target as Node) || e.target === _el) {
       return;
     }
 
@@ -247,7 +243,7 @@ export default class CameraListener extends React.Component<Props> {
     this._endDragging();
   };
 
-  startDragging(e: MouseEvent) {
+  startDragging(e: React.MouseEvent) {
     if (e.button !== 0 && this._el && typeof this._el.requestPointerLock === "function") {
       this._el.requestPointerLock();
     }
@@ -259,7 +255,7 @@ export default class CameraListener extends React.Component<Props> {
     window.removeEventListener("mousemove", this._onWindowMouseMove);
 
     if (typeof (document as any).exitPointerLock === "function") {
-      (document as any).exitPointerLock();
+      document.exitPointerLock();
     }
   }
 
@@ -271,7 +267,7 @@ export default class CameraListener extends React.Component<Props> {
     const spinSpeed = this._getMagnitude(KEYBOARD_SPIN_SPEED);
 
     const { keyMap, shiftKeys } = this.props;
-    const action: CameraAction | false = (keyMap && keyMap[code]) || DEFAULT_KEYMAP[code] || false;
+    const action: CameraAction | false = keyMap?.[code] || DEFAULT_KEYMAP[code] || false;
 
     if (this._shiftKey && !shiftKeys) {
       return null;
@@ -332,9 +328,7 @@ export default class CameraListener extends React.Component<Props> {
         return null;
 
       default:
-        action;
-        console.warn("Unrecognized key action:", action);
-        return null;
+        assertNever(action, `Unrecognized key action: ${action as string}`);
     }
   };
 
@@ -380,7 +374,7 @@ export default class CameraListener extends React.Component<Props> {
     }
   }
 
-  _startKeyTimer(lastStamp: number | null | undefined) {
+  _startKeyTimer(lastStamp?: number) {
     if (this._keyTimer) {
       return;
     }
@@ -450,7 +444,7 @@ export default class CameraListener extends React.Component<Props> {
 
     this._keys.delete((e.nativeEvent as any as KeyboardEvent).code);
   };
-  _onWheel = (e: WheelEvent) => {
+  _onWheel = (e: MouseEvent) => {
     // stop the wheel event here, as wheel propagation through the entire dom
     // can cause the browser to slow down & thrash
     e.preventDefault();
@@ -476,7 +470,7 @@ export default class CameraListener extends React.Component<Props> {
   // make sure all movements stop if the document loses focus by resetting modifier keys
   // to their 'off' position
   // (e.g. ctrl+tab leaving the page should not leave the ctrl key in the 'on' position)
-  _onBlur = (e: MouseEvent) => {
+  _onBlur = () => {
     this._keys = new Set();
     this._ctrlKey = false;
     this._shiftKey = false;
@@ -484,12 +478,12 @@ export default class CameraListener extends React.Component<Props> {
 
     this._stopKeyTimer();
   };
-  _onContextMenu = (e: MouseEvent) => {
+  _onContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
   };
 
-  render() {
+  override render() {
     const { children } = this.props;
     return (
       <div
