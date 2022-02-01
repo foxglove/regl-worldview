@@ -136,12 +136,14 @@ class CameraStateStory extends React.Component<Props, State> {
           flexDirection: "row",
           width: "100%",
           height: "100%",
-        }}>
+        }}
+      >
         <div
           style={{
             flex: "1 1 0",
             overflow: "hidden",
-          }}>
+          }}
+        >
           <Container axes grid cameraState={cameraState} onCameraStateChange={this._onCameraStateChange}>
             <Arrows>{[poseArrowMarker]}</Arrows>
             <Spheres>{[sphereMarker]}</Spheres>
@@ -153,7 +155,8 @@ class CameraStateStory extends React.Component<Props, State> {
           style={{
             flex: "1 1 0",
             overflow: "hidden",
-          }}>
+          }}
+        >
           <Container
             hideState
             defaultCameraState={{
@@ -164,7 +167,8 @@ class CameraStateStory extends React.Component<Props, State> {
               target: [0, 0, 0],
               targetOffset: [0, 0, 0],
               targetOrientation: [0, 0, 0, 1],
-            }}>
+            }}
+          >
             <Arrows>{[poseArrowMarker, cameraArrowMarker]}</Arrows>
             <Spheres>{[sphereMarker]}</Spheres>
             <Axes />

@@ -34,7 +34,8 @@ export function WorldviewWrapper(props: Props) {
       style={{
         width: WORLDVIEW_SIZE,
         height: WORLDVIEW_SIZE,
-      }}>
+      }}
+    >
       <Worldview defaultCameraState={defaultCameraState} {...props} />
     </div>
   );

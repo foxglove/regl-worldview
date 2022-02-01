@@ -144,7 +144,8 @@ const Example = ({ triangles }) => (
       perspective: true,
       phi: 1.83,
       thetaOffset: -1.1,
-    }}>
+    }}
+  >
     <Triangles>{triangles}</Triangles>
   </Container>
 );

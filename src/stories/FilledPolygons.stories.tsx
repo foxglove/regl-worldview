@@ -20,7 +20,8 @@ storiesOf("Worldview/FilledPolygons", module)
           perspective: true,
           phi: 1.83,
           thetaOffset: -1.1,
-        }}>
+        }}
+      >
         <FilledPolygons>
           {[
             {
@@ -65,7 +66,8 @@ storiesOf("Worldview/FilledPolygons", module)
           perspective: true,
           phi: 1.83,
           thetaOffset: -1.1,
-        }}>
+        }}
+      >
         <FilledPolygons>
           {withCustomRenderStates(
             [

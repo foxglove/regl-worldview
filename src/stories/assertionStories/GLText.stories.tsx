@@ -119,7 +119,8 @@ function createAssertionTest({
             distance: 10,
           }}
           onClick={(_, { objects }) => setTestData(objects)}
-          enableStackedObjectEvents={enableStackedObjectEvents}>
+          enableStackedObjectEvents={enableStackedObjectEvents}
+        >
           <GLText scaleInvariantFontSize={enableScaleInvariant ? 40 : undefined}>{markers}</GLText>
           <Cubes>{includeBackgroundObjects ? backgroundObjects : []}</Cubes>
         </WorldviewWrapper>

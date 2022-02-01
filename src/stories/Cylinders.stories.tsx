@@ -20,7 +20,8 @@ storiesOf("Worldview/Cylinders", module)
           perspective: true,
           phi: 1.83,
           thetaOffset: -1.1,
-        }}>
+        }}
+      >
         <Cylinders>
           {withCustomRenderStates(
             [

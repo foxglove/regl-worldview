@@ -99,7 +99,8 @@ stories
                 testData = testData.concat(objects);
                 setTestData(testData);
               }}
-              model={duckModel}>
+              model={duckModel}
+            >
               {firstModelPosition}
             </GLTFScene>
             <GLTFScene
@@ -107,7 +108,8 @@ stories
                 testData = testData.concat(objects);
                 setTestData(testData);
               }}
-              model={duckModel}>
+              model={duckModel}
+            >
               {secondModelPosition}
             </GLTFScene>
           </WorldviewWrapper>

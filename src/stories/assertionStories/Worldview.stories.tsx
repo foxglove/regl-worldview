@@ -191,7 +191,8 @@ stories
       story: (setTestData) => (
         <WorldviewWrapper
           onMouseMove={(_, { objects }) => setTestData(objects)}
-          disableHitmapForEvents={["onMouseMove"]}>
+          disableHitmapForEvents={["onMouseMove"]}
+        >
           <Cubes>{[cube]}</Cubes>
         </WorldviewWrapper>
       ),
@@ -255,7 +256,8 @@ stories
       story: (setTestData) => (
         <WorldviewWrapper
           onMouseDown={(_, { objects }) => setTestData(objects)}
-          disableHitmapForEvents={["onMouseDown"]}>
+          disableHitmapForEvents={["onMouseDown"]}
+        >
           <Cubes>{[cube]}</Cubes>
         </WorldviewWrapper>
       ),
@@ -291,7 +293,8 @@ stories
             onMouseDown={(e, { objects }) => {
               e.stopPropagation();
               setTestData(objects);
-            }}>
+            }}
+          >
             {[cube]}
           </Cubes>
         </WorldviewWrapper>
@@ -313,13 +316,15 @@ stories
             onMouseDown={(e, { objects }) => {
               e.stopPropagation();
               setTestData(objects);
-            }}>
+            }}
+          >
             {[cube]}
           </Cubes>
           <Cubes
             onMouseDown={() => {
               setTestData([]);
-            }}>
+            }}
+          >
             {[underCube]}
           </Cubes>
         </WorldviewWrapper>
@@ -372,7 +377,8 @@ stories
       story: (setTestData, state) => (
         <WorldviewWrapper
           cameraState={state || defaultCameraState}
-          onMouseDown={(_, clickInfo) => setTestData(clickInfo)}>
+          onMouseDown={(_, clickInfo) => setTestData(clickInfo)}
+        >
           <Cubes>{[cube]}</Cubes>
         </WorldviewWrapper>
       ),

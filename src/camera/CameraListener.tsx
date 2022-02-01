@@ -504,7 +504,8 @@ export default class CameraListener extends React.Component<Props> {
         onBlur={this._onBlur}
         onContextMenu={this._onContextMenu}
         onKeyDown={this._onKeyDown}
-        onKeyUp={this._onKeyUp}>
+        onKeyUp={this._onKeyUp}
+      >
         {children}
       </div>
     );

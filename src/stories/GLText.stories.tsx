@@ -154,7 +154,8 @@ storiesOf("Worldview/GLText", module)
           target: [target.x, target.y, target.z],
           perspective: true,
           distance: 3,
-        }}>
+        }}
+      >
         <GLText>{markers}</GLText>
         <Axes />
       </Container>
@@ -172,7 +173,8 @@ storiesOf("Worldview/GLText", module)
           target: [target.x, target.y, target.z],
           perspective: true,
           distance: 3,
-        }}>
+        }}
+      >
         <GLText resolution={80}>{markers}</GLText>
         <Axes />
       </Container>
@@ -190,7 +192,8 @@ storiesOf("Worldview/GLText", module)
           target: [target.x, target.y, target.z],
           perspective: true,
           distance: 3,
-        }}>
+        }}
+      >
         <GLText resolution={40}>{markers}</GLText>
         <Axes />
       </Container>
@@ -208,7 +211,8 @@ storiesOf("Worldview/GLText", module)
           target: [target.x, target.y + 2, target.z],
           perspective: true,
           distance: 8,
-        }}>
+        }}
+      >
         <GLText>{markers}</GLText>
         <Axes />
       </Container>
@@ -225,7 +229,8 @@ storiesOf("Worldview/GLText", module)
         cameraState={{
           perspective: true,
           distance: 25,
-        }}>
+        }}
+      >
         <GLText resolution={40}>{markers}</GLText>
         <Axes />
       </Container>
@@ -241,7 +246,8 @@ storiesOf("Worldview/GLText", module)
         cameraState={{
           perspective: true,
           distance: 25,
-        }}>
+        }}
+      >
         <GLText scaleInvariantFontSize={10}>{markers}</GLText>
         <Axes />
       </Container>
@@ -257,7 +263,8 @@ storiesOf("Worldview/GLText", module)
         cameraState={{
           perspective: true,
           distance: 25,
-        }}>
+        }}
+      >
         <GLText scaleInvariantFontSize={20}>{markers}</GLText>
         <Axes />
       </Container>
@@ -274,7 +281,8 @@ storiesOf("Worldview/GLText", module)
           perspective: true,
           distance: 25,
         }}
-        backgroundColor={[0.2, 0.2, 0.4, 1]}>
+        backgroundColor={[0.2, 0.2, 0.4, 1]}
+      >
         <GLText scaleInvariantFontSize={40}>{markers}</GLText>
         <Axes />
       </Container>
@@ -291,7 +299,8 @@ storiesOf("Worldview/GLText", module)
           perspective: false,
           distance: 25,
         }}
-        backgroundColor={[0.4, 0.2, 0.2, 1]}>
+        backgroundColor={[0.4, 0.2, 0.2, 1]}
+      >
         <GLText scaleInvariantFontSize={40}>{markers}</GLText>
         <Axes />
       </Container>
@@ -316,12 +325,14 @@ storiesOf("Worldview/GLText", module)
             height: hasRenderedOnce ? 500 : 250,
             background: "black",
           }}
-          ref={refFn}>
+          ref={refFn}
+        >
           <Container
             cameraState={{
               perspective: true,
               distance: 40,
-            }}>
+            }}
+          >
             <GLText scaleInvariantFontSize={20}>{markers}</GLText>
             <Axes />
           </Container>
@@ -342,7 +353,8 @@ storiesOf("Worldview/GLText", module)
         cameraState={{
           perspective: true,
           distance: 25,
-        }}>
+        }}
+      >
         <GLText scaleInvariantFontSize={30}>{markers}</GLText>
         <Axes />
       </Container>
@@ -359,7 +371,8 @@ storiesOf("Worldview/GLText", module)
         cameraState={{
           perspective: true,
           distance: 25,
-        }}>
+        }}
+      >
         <GLText alphabet={alphabet}>{markers}</GLText>
         <Axes />
       </Container>
@@ -383,7 +396,8 @@ storiesOf("Worldview/GLText", module)
           cameraState={{
             perspective: true,
             distance: 25,
-          }}>
+          }}
+        >
           {textAtlas && <GLText textAtlas={textAtlas}>{markers}</GLText>}
           <Axes />
         </Container>
@@ -402,7 +416,8 @@ storiesOf("Worldview/GLText", module)
         cameraState={{
           perspective: true,
           distance: 25,
-        }}>
+        }}
+      >
         <GLText>{markers}</GLText>
         <Axes />
       </Container>
@@ -418,7 +433,8 @@ storiesOf("Worldview/GLText", module)
         cameraState={{
           perspective: true,
           distance: 25,
-        }}>
+        }}
+      >
         <GLText scaleInvariantFontSize={30}>{markers}</GLText>
         <Axes />
       </Container>
@@ -434,7 +450,8 @@ storiesOf("Worldview/GLText", module)
         cameraState={{
           perspective: true,
           distance: 25,
-        }}>
+        }}
+      >
         <GLText>{markers}</GLText>
         <Axes />
       </Container>
@@ -455,7 +472,8 @@ storiesOf("Worldview/GLText", module)
         cameraState={{
           perspective: true,
           distance: 25,
-        }}>
+        }}
+      >
         <GLText>{markers}</GLText>
         <Axes />
       </Container>
@@ -466,7 +484,8 @@ storiesOf("Worldview/GLText", module)
       cameraState={{
         perspective: true,
         distance: 40,
-      }}>
+      }}
+    >
       <GLText>
         {textMarkers({
           text: "Hello\nWorldview",
@@ -481,7 +500,8 @@ storiesOf("Worldview/GLText", module)
       cameraState={{
         perspective: true,
         distance: 40,
-      }}>
+      }}
+    >
       <GLText>
         {textMarkers({
           text: "Hello\nWorldview",
@@ -496,7 +516,8 @@ storiesOf("Worldview/GLText", module)
       cameraState={{
         perspective: true,
         distance: 40,
-      }}>
+      }}
+    >
       <GLText>
         {textMarkers({
           text: "Hello\nWorldview",
@@ -513,7 +534,8 @@ storiesOf("Worldview/GLText", module)
         perspective: true,
         distance: 40,
       }}
-      backgroundColor={[0.2, 0.2, 0.4, 1]}>
+      backgroundColor={[0.2, 0.2, 0.4, 1]}
+    >
       <GLText autoBackgroundColor>
         {textMarkers({
           text: "Hello\nWorldview",
@@ -528,7 +550,8 @@ storiesOf("Worldview/GLText", module)
         perspective: true,
         distance: 40,
       }}
-      backgroundColor={[0.2, 0.2, 0.4, 1]}>
+      backgroundColor={[0.2, 0.2, 0.4, 1]}
+    >
       <GLText autoBackgroundColor scaleInvariantFontSize={10}>
         {textMarkers({
           text: "Hello\nWorldview",
@@ -550,13 +573,15 @@ storiesOf("Worldview/GLText", module)
             perspective: true,
             distance: 40,
           }}
-          backgroundColor={[0.2, 0.2, 0.4, 1]}>
+          backgroundColor={[0.2, 0.2, 0.4, 1]}
+        >
           <div
             style={{
               position: "absolute",
               top: 30,
               right: 30,
-            }}>
+            }}
+          >
             <button onClick={() => setText(`Value: ${Math.floor(100 * Math.random())}`)}>Change Text</button>
           </div>
           <GLText autoBackgroundColor>
@@ -606,18 +631,21 @@ storiesOf("Worldview/GLText", module)
           style={{
             width: "100%",
             height: "100%",
-          }}>
+          }}
+        >
           <div
             style={{
               width: "100%",
               height: "100%",
-            }}>
+            }}
+          >
             <Container
               cameraState={{
                 perspective: true,
                 distance: 40,
               }}
-              backgroundColor={[0.2, 0.2, 0.4, 1]}>
+              backgroundColor={[0.2, 0.2, 0.4, 1]}
+            >
               <GLText autoBackgroundColor>{markers}</GLText>
               <Axes />
             </Container>
@@ -627,7 +655,8 @@ storiesOf("Worldview/GLText", module)
               position: "absolute",
               top: "10px",
               right: "10px",
-            }}>
+            }}
+          >
             <label htmlFor="search">Search: </label>
             <input
               type="text"
@@ -660,19 +689,22 @@ storiesOf("Worldview/GLText", module)
           style={{
             width: "100%",
             height: "100%",
-          }}>
+          }}
+        >
           <Container
             cameraState={{
               perspective: true,
               distance: 40,
             }}
-            backgroundColor={[0.2, 0.2, 0.4, 1]}>
+            backgroundColor={[0.2, 0.2, 0.4, 1]}
+          >
             <div
               style={{
                 position: "absolute",
                 top: "10px",
                 right: "10px",
-              }}>
+              }}
+            >
               <label htmlFor="highlight-color">Highlight Color: </label>
               <input
                 type="color"
@@ -760,7 +792,8 @@ storiesOf("Worldview/GLText", module)
         cameraState={{
           perspective: false,
           distance: 25,
-        }}>
+        }}
+      >
         <Cubes>{[cube]}</Cubes>
         <GLText>{[text]}</GLText>
         <Axes />
@@ -827,7 +860,8 @@ storiesOf("Worldview/GLText", module)
         cameraState={{
           perspective: false,
           distance: 25,
-        }}>
+        }}
+      >
         <Axes />
         <GLText scaleInvariantFontSize={30}>{[text]}</GLText>
         <Cubes>{[cube]}</Cubes>
@@ -894,7 +928,8 @@ storiesOf("Worldview/GLText", module)
         cameraState={{
           perspective: false,
           distance: 25,
-        }}>
+        }}
+      >
         <Cubes>{[cube]}</Cubes>
         <Axes />
         <GLText scaleInvariantFontSize={30}>{[text]}</GLText>

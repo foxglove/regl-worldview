@@ -185,7 +185,7 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     return null;
   }
 
-  componentDidMount() {
+  override componentDidMount() {
     if (!this._canvas.current) {
       return console.warn("missing canvas element");
     }
@@ -197,14 +197,14 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     const { worldviewContext } = this.state;
     worldviewContext.initialize(this._canvas.current);
     // trigger rendering in children that require camera to be present, e.g. Text component
-    this.setState({}); //eslint-disable-line
+    this.setState({});
 
     // call paint to set the correct viewportWidth and viewportHeight for camera so non-regl components
     // such as Text can get the correct screen coordinates for the first render
     worldviewContext.paint();
   }
 
-  componentWillUnmount() {
+  override componentWillUnmount() {
     if (this._tick) {
       cancelAnimationFrame(this._tick);
     }
@@ -216,7 +216,7 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     this.state.worldviewContext.destroy();
   }
 
-  componentDidUpdate() {
+  override componentDidUpdate() {
     const { worldviewContext } = this.state;
 
     // update internal cameraState
@@ -245,7 +245,7 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
       this._onMouseUp(e, true);
     }
   };
-  _handleContextLost = (ev) => {
+  _handleContextLost = (ev: Event) => {
     const {
       width,
       height,
@@ -281,17 +281,19 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     });
     ev.preventDefault();
   };
-  _handleContextRestored = (ev) => {
+  _handleContextRestored = () => {
     this.state.worldviewContext.initialize(this._canvas.current);
     // update internal dimensions
     this.state.worldviewContext.paint();
     // trigger rendering since our worldviewContext is initialized
-    this.setState({}); //eslint-disable-line
+    this.setState({});
   };
-  _onDoubleClick = (e: React.MouseEvent<HTMLCanvasElement>, fromOffscreenTarget: boolean) => {
+  // eslint-disable-next-line @foxglove/no-boolean-parameters
+  _onDoubleClick = (e: React.MouseEvent<HTMLCanvasElement>, fromOffscreenTarget?: boolean) => {
     this._onMouseInteraction(e, "onDoubleClick", fromOffscreenTarget);
   };
-  _onMouseDown = (e: React.MouseEvent<HTMLCanvasElement>, fromOffscreenTarget: boolean) => {
+  // eslint-disable-next-line @foxglove/no-boolean-parameters
+  _onMouseDown = (e: React.MouseEvent<HTMLCanvasElement>, fromOffscreenTarget?: boolean) => {
     this._dragStartPos = {
       x: e.clientX,
       y: e.clientY,
@@ -299,10 +301,12 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
 
     this._onMouseInteraction(e, "onMouseDown", fromOffscreenTarget);
   };
-  _onMouseMove = (e: React.MouseEvent<HTMLCanvasElement>, fromOffscreenTarget: boolean) => {
+  // eslint-disable-next-line @foxglove/no-boolean-parameters
+  _onMouseMove = (e: React.MouseEvent<HTMLCanvasElement>, fromOffscreenTarget?: boolean) => {
     this._onMouseInteraction(e, "onMouseMove", fromOffscreenTarget);
   };
-  _onMouseUp = (e: React.MouseEvent<HTMLCanvasElement>, fromOffscreenTarget: boolean) => {
+  // eslint-disable-next-line @foxglove/no-boolean-parameters
+  _onMouseUp = (e: React.MouseEvent<HTMLCanvasElement>, fromOffscreenTarget?: boolean) => {
     this._onMouseInteraction(e, "onMouseUp", fromOffscreenTarget);
 
     const { _dragStartPos } = this;
@@ -322,7 +326,8 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
   _onMouseInteraction = (
     e: React.MouseEvent<HTMLCanvasElement>,
     mouseEventName: MouseEventEnum,
-    fromOffscreenTarget: boolean
+    // eslint-disable-next-line @foxglove/no-boolean-parameters
+    fromOffscreenTarget?: boolean
   ) => {
     const { worldviewContext } = this.state;
     const worldviewHandler = this.props[mouseEventName];
@@ -335,7 +340,7 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     }
 
     // $FlowFixMe: Because of `fromOffscreenTarget`, target might not be an actual HTMLElement instance but still needs to implement `getBoundingClientRect`
-    const { top: clientTop, left: clientLeft } = e.target.getBoundingClientRect();
+    const { top: clientTop, left: clientLeft } = (e.target as HTMLElement).getBoundingClientRect();
     const { clientX, clientY } = e;
     const canvasX = clientX - clientLeft;
     const canvasY = clientY - clientTop;
@@ -392,7 +397,7 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     }
 
     const { regl } = initializedData;
-    const mem = window.performance.memory;
+    const mem = (window.performance as any).memory;
     const style = {
       bottom: 5,
       right: 10,
@@ -404,7 +409,7 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
       fontSize: 10,
     };
     const { counters, reglCommandObjects } = worldviewContext;
-    const data = mapValues(counters, (val) => `${val} ms`);
+    const data: { [key: string]: string } = mapValues(counters, (val) => `${val} ms`);
     data["draw calls"] = reglCommandObjects.reduce((total, cmd) => total + cmd.stats.count, 0);
 
     if (mem) {
@@ -427,19 +432,22 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
           style={{
             backgroundColor: "transparent",
             border: "none",
-          }}>
+          }}
+        >
           <td
             style={{
               paddingRight: 10,
               border: "none",
-            }}>
+            }}
+          >
             {key}
           </td>
           <td
             style={{
               width: "100%",
               border: "none",
-            }}>
+            }}
+          >
             {data[key]}
           </td>
         </tr>
@@ -452,7 +460,7 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     );
   }
 
-  render() {
+  override render() {
     const {
       width,
       height,
@@ -496,7 +504,8 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
           position: "relative",
           overflow: "hidden",
           ...style,
-        }}>
+        }}
+      >
         {/* skip rendering CameraListener if Worldview has a fixed camera */}
         {isFixedCamera ? (
           canvasHtml
@@ -505,7 +514,8 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
             cameraStore={worldviewContext.cameraStore}
             keyMap={keyMap}
             shiftKeys={shiftKeys}
-            ref={(el) => (this._cameraListener.current = el)}>
+            ref={(el) => (this._cameraListener.current = el)}
+          >
             {canvasHtml}
           </CameraListener>
         )}
@@ -522,7 +532,7 @@ export type Props = $Diff<
   JSX.LibraryManagedAttributes<typeof WorldviewBase, React.ComponentProps<typeof WorldviewBase>>,
   Dimensions
 >;
-const Worldview = React.forwardRef<Props, _>((props: Props, ref) => (
+const Worldview = React.forwardRef<WorldviewBase, Props>((props: Props, ref) => (
   <ContainerDimensions>
     {({ width, height, left, top }) => (
       <WorldviewBase width={width} height={height} left={left} top={top} ref={ref} {...props} />

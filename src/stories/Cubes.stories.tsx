@@ -18,7 +18,8 @@ class Wrapper extends React.Component<any> {
             top: 30,
             left: 30,
             background: "red",
-          }}>
+          }}
+        >
           <div>some randomly nested div </div>
           <Cubes>
             {cubes.map((c) => {
@@ -100,7 +101,8 @@ class DynamicCubes extends React.Component<any, any> {
             position: "absolute",
             top: 30,
             left: 30,
-          }}>
+          }}
+        >
           <div>Only the yellow cubes should be clickable</div>
           <div>you clicked on cube: {this.state.cubeId} </div>
           <button
@@ -108,7 +110,8 @@ class DynamicCubes extends React.Component<any, any> {
               this.setState({
                 cubeCount: cubeCount + 1,
               })
-            }>
+            }
+          >
             Add Cube
           </button>
         </div>
@@ -127,7 +130,8 @@ storiesOf("Worldview/Cubes", module)
         <Container
           cameraState={{
             perspective: true,
-          }}>
+          }}
+        >
           <Wrapper cubes={[marker]} />
         </Container>
       );
@@ -207,7 +211,8 @@ storiesOf("Worldview/Cubes", module)
       <Container
         cameraState={{
           perspective: true,
-        }}>
+        }}
+      >
         <Wrapper cubes={cubes} />
       </Container>
     );

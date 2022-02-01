@@ -20,7 +20,8 @@ storiesOf("Worldview/Spheres", module)
           perspective: true,
           phi: 1.83,
           thetaOffset: -1.1,
-        }}>
+        }}
+      >
         <Spheres>
           {withCustomRenderStates(
             [

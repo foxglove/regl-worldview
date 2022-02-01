@@ -10,7 +10,7 @@
   "editor.insertSpaces": true,
   "editor.tabSize": 2,
   "eslint.options": {
-    "reportUnusedDisableDirectives": true
+    "reportUnusedDisableDirectives": "error"
   },
   "files.associations": {
     "*.mdx": "markdown"
@@ -20,6 +20,5 @@
   "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
 
-  "flow.useNPMPackagedFlow": true,
   "javascript.validate.enable": false
 }

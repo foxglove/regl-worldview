@@ -72,7 +72,8 @@ storiesOf("Worldview/Points", module)
           thetaOffset: 0.7071,
           targetOffset: [0, 0, 30],
           perspective: true,
-        }}>
+        }}
+      >
         <Points>{[marker]}</Points>
       </Worldview>
     );
@@ -85,7 +86,8 @@ storiesOf("Worldview/Points", module)
           phi: 0.5 * Math.PI,
           targetOffset: [0, 0, 0],
           perspective: false,
-        }}>
+        }}
+      >
         <Points useWorldSpaceSize={true}>
           {[
             {
@@ -164,7 +166,8 @@ storiesOf("Worldview/Points", module)
           phi: 0.5 * Math.PI,
           targetOffset: [0, 0, 0],
           perspective: true,
-        }}>
+        }}
+      >
         <Points useWorldSpaceSize={true}>
           {[
             {
@@ -244,7 +247,8 @@ storiesOf("Worldview/Points", module)
           phi: 0.5 * Math.PI,
           targetOffset: [0, 0, 0],
           perspective: false,
-        }}>
+        }}
+      >
         <Points useWorldSpaceSize={true}>
           {[
             {
@@ -324,7 +328,8 @@ storiesOf("Worldview/Points", module)
           phi: 0.5 * Math.PI,
           targetOffset: [0, 0, 0],
           perspective: true,
-        }}>
+        }}
+      >
         <Points useWorldSpaceSize={true}>
           {[
             {
@@ -458,7 +463,8 @@ storiesOf("Worldview/Points", module)
           thetaOffset: 0.7071,
           targetOffset: [0, 0, 30],
           perspective: true,
-        }}>
+        }}
+      >
         <Points useWorldSpaceSize={true}>{[marker]}</Points>
         <Cubes>
           {points.map((p) => ({

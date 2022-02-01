@@ -20,7 +20,8 @@ storiesOf("Worldview/Cones", module)
           perspective: true,
           phi: 1.83,
           thetaOffset: -1.1,
-        }}>
+        }}
+      >
         <Cones>
           {withCustomRenderStates(
             [

@@ -78,7 +78,8 @@ storiesOf("Integration/Grid", module)
         <WorldviewWrapper
           onClick={(_, { objects }) => setTestData(objects)}
           defaultCameraState={defaultCameraState}
-          enableStackedObjectEvents>
+          enableStackedObjectEvents
+        >
           <Grid count={COUNT} />
           <Cubes>{[cube]}</Cubes>
         </WorldviewWrapper>

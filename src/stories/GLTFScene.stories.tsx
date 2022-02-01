@@ -19,7 +19,8 @@ storiesOf("Worldview/GLTFScene", module)
         defaultCameraState={{
           distance: 25,
           thetaOffset: (-3 * Math.PI) / 4,
-        }}>
+        }}
+      >
         <Axes />
         <Grid />
         <GLTFScene model={model}>
@@ -56,7 +57,8 @@ storiesOf("Worldview/GLTFScene", module)
           distance: 10,
           thetaOffset: (-3 * Math.PI) / 4,
           phi: (3 * Math.PI) / 8,
-        }}>
+        }}
+      >
         <Axes />
         <Grid />
         <GLTFScene model={model}>
@@ -88,7 +90,8 @@ storiesOf("Worldview/GLTFScene", module)
         defaultCameraState={{
           distance: 25,
           thetaOffset: (-3 * Math.PI) / 4,
-        }}>
+        }}
+      >
         <Axes />
         <Grid />
         <GLTFScene model={model}>
@@ -124,7 +127,8 @@ storiesOf("Worldview/GLTFScene", module)
         defaultCameraState={{
           distance: 25,
           thetaOffset: (-3 * Math.PI) / 4,
-        }}>
+        }}
+      >
         <Axes />
         <Grid />
         <GLTFScene model={model}>
@@ -160,7 +164,8 @@ storiesOf("Worldview/GLTFScene", module)
         defaultCameraState={{
           distance: 25,
           thetaOffset: (-3 * Math.PI) / 4,
-        }}>
+        }}
+      >
         <Axes />
         <Grid />
         <GLTFScene model={model}>
@@ -202,7 +207,8 @@ storiesOf("Worldview/GLTFScene", module)
         defaultCameraState={{
           distance: 25,
           thetaOffset: (-3 * Math.PI) / 4,
-        }}>
+        }}
+      >
         <Axes />
         <Grid />
         <GLTFScene model={model}>
