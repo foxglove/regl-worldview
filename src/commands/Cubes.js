@@ -47,8 +47,8 @@ export const cubes = withRenderStateOverrides(
       //back
       [0, 1, 4],
       [1, 4, 5],
-    ]
-  )
+    ],
+  ),
 );
 
 const getChildrenForHitmap = createInstancedGetChildrenForHitmap(1);

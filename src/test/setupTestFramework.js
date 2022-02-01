@@ -40,7 +40,7 @@ global.expect.extend({
         return `${this.utils.matcherHint(pass ? ".not.toContainOnly" : ".toContainOnly")}\n\nExpected value${
           pass ? " not" : ""
         } to contain only:\n  ${this.utils.printExpected(expectedArray)}\nReceived:\n  ${this.utils.printReceived(
-          receivedArray
+          receivedArray,
         )}\n\nDifference:\n\n${diffString}`;
       },
     };

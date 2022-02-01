@@ -24,7 +24,10 @@ function Example() {
   const pointArrow = {
     id: 2,
     color: { r: 1, g: 1, b: 1, a: 1 },
-    points: [{ x: 0, y: 0, z: 0 }, { x: 10, y: 10, z: 10 }],
+    points: [
+      { x: 0, y: 0, z: 0 },
+      { x: 10, y: 10, z: 10 },
+    ],
     scale: { x: 2, y: 2, z: 3 },
   };
 
@@ -34,11 +37,13 @@ function Example() {
         if (!objects.length) {
           setClickedObj(null);
         }
-      }}>
+      }}
+    >
       <Arrows
         onClick={(ev, { objects }) => {
           setClickedObj(objects[0].object);
-        }}>
+        }}
+      >
         {[poseArrow, pointArrow]}
       </Arrows>
       <Axes />
@@ -51,7 +56,8 @@ function Example() {
           width: 320,
           maxWidth: "100%",
           color: "white",
-        }}>
+        }}
+      >
         <div>{clickedObj ? "Clicked object details:" : "Click an object to see it's details"}</div>
         {clickedObj && <pre style={{ whiteSpace: "pre-wrap" }}>{JSON.stringify(clickedObj, null, 2)}</pre>}
       </div>

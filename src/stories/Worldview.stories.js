@@ -58,7 +58,8 @@ storiesOf("Worldview", module)
           perspective: false,
           target: [-812, 2959.64, 0],
           distance: 5,
-        }}>
+        }}
+      >
         <Lines>{markers}</Lines>
       </Container>
     );
@@ -81,5 +82,5 @@ storiesOf("Worldview", module)
           <FilledPolygons>{[polygon]}</FilledPolygons>
         </Container>
       );
-    })
+    }),
   );

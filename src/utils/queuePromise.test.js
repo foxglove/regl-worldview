@@ -35,11 +35,18 @@ describe("queuePromise", () => {
 
     await secondPromise.reject(new Error(""));
     expect(calls).toBe(2);
-    expect(callArgs).toEqual([[1, 2], [3, 4]]);
+    expect(callArgs).toEqual([
+      [1, 2],
+      [3, 4],
+    ]);
     await Promise.resolve();
 
     expect(calls).toBe(3);
-    expect(callArgs).toEqual([[1, 2], [3, 4], [5, 6]]);
+    expect(callArgs).toEqual([
+      [1, 2],
+      [3, 4],
+      [5, 6],
+    ]);
     await Promise.resolve();
     expect(queuedFn.currentPromise).toBeUndefined();
   });
@@ -57,7 +64,7 @@ describe("queuePromise", () => {
     promiseResults.forEach((promise, index) =>
       promise.then(() => {
         arePromisesResolved[index] = true;
-      })
+      }),
     );
     expect(calls).toEqual(1);
     expect(arePromisesResolved).toEqual([false, false]);

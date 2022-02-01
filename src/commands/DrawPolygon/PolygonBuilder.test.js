@@ -13,7 +13,12 @@ import PolygonBuilder from "./PolygonBuilder";
 const mag = 10;
 const buildPolygon = () => {
   const poly = new Polygon();
-  const p = [[mag, mag, 0], [mag, -mag, 0], [-mag, -mag, 0], [-mag, mag, 0]];
+  const p = [
+    [mag, mag, 0],
+    [mag, -mag, 0],
+    [-mag, -mag, 0],
+    [-mag, mag, 0],
+  ];
   poly.points = p.map((x) => new PolygonPoint(x));
   poly.points.push(poly.points[0]);
   return poly;
@@ -109,38 +114,72 @@ describe("PolygonBuilder", () => {
       builder.onMouseUp(event(true), getArgs([]));
       expect(builder.polygons).toHaveLength(1);
       const [polygon] = builder.polygons;
-      expect(polygon.points.map((p) => p.point)).toEqual([[1, 1, 0], [1, -1, 0], [-1, -1, 0], [1, 1, 0]]);
+      expect(polygon.points.map((p) => p.point)).toEqual([
+        [1, 1, 0],
+        [1, -1, 0],
+        [-1, -1, 0],
+        [1, 1, 0],
+      ]);
     });
   });
 
   describe("add polygon", () => {
     it("can add unclosed polygon from external set of points", () => {
       const builder = new PolygonBuilder();
-      const points = [{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: -1, y: -1 }];
+      const points = [
+        { x: 0, y: 0 },
+        { x: 1, y: 1 },
+        { x: -1, y: -1 },
+      ];
       builder.addPolygon({ points });
       expect(builder.polygons).toHaveLength(1);
       const [polygon] = builder.polygons;
-      expect(polygon.points.map((p) => p.point)).toEqual([[0, 0, 0], [1, 1, 0], [-1, -1, 0], [0, 0, 0]]);
+      expect(polygon.points.map((p) => p.point)).toEqual([
+        [0, 0, 0],
+        [1, 1, 0],
+        [-1, -1, 0],
+        [0, 0, 0],
+      ]);
     });
 
     it("can add closed polygon from external set of points", () => {
       const builder = new PolygonBuilder();
-      const points = [{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: -1, y: -1 }, { x: 0, y: 0 }];
+      const points = [
+        { x: 0, y: 0 },
+        { x: 1, y: 1 },
+        { x: -1, y: -1 },
+        { x: 0, y: 0 },
+      ];
       builder.addPolygon({ points });
       expect(builder.polygons).toHaveLength(1);
       const [polygon] = builder.polygons;
-      expect(polygon.points.map((p) => p.point)).toEqual([[0, 0, 0], [1, 1, 0], [-1, -1, 0], [0, 0, 0]]);
+      expect(polygon.points.map((p) => p.point)).toEqual([
+        [0, 0, 0],
+        [1, 1, 0],
+        [-1, -1, 0],
+        [0, 0, 0],
+      ]);
     });
 
     it("can add polygon with name and z-values", () => {
       const builder = new PolygonBuilder();
       const z = 1;
-      const points = [{ x: 0, y: 0, z }, { x: 1, y: 1, z }, { x: -1, y: -1, z }, { x: 0, y: 0, z }];
+      const points = [
+        { x: 0, y: 0, z },
+        { x: 1, y: 1, z },
+        { x: -1, y: -1, z },
+        { x: 0, y: 0, z },
+      ];
       builder.addPolygon({ name: "foo", points });
       expect(builder.polygons).toHaveLength(1);
       const [polygon] = builder.polygons;
       expect(polygon.name).toBe("foo");
-      expect(polygon.points.map((p) => p.point)).toEqual([[0, 0, z], [1, 1, z], [-1, -1, z], [0, 0, z]]);
+      expect(polygon.points.map((p) => p.point)).toEqual([
+        [0, 0, z],
+        [1, 1, z],
+        [-1, -1, z],
+        [0, 0, z],
+      ]);
     });
   });
 });

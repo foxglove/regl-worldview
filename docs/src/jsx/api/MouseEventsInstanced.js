@@ -61,11 +61,11 @@ function Example() {
     const messages = objects.map(({ object, instanceIndex }) => {
       if (object.points && instanceIndex >= 0 && instanceIndex <= points.length) {
         return `Clicked ${object.info}. The objectId is ${object.id} and its position is ${JSON.stringify(
-          object.points[instanceIndex]
+          object.points[instanceIndex],
         )}`;
       }
       return `Clicked ${object.info}. The objectId is ${object.id} and its position is ${JSON.stringify(
-        object.pose.position
+        object.pose.position,
       )}`;
     });
     setCommandMsgs(messages);
@@ -82,7 +82,8 @@ function Example() {
           maxWidth: "100%",
           color: "white",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
-        }}>
+        }}
+      >
         {commandMsgs.length ? <span>{commandMsgs.join("\n")}</span> : <span>Click any object</span>}
       </div>
       <Points>{[pointsMarker]}</Points>
@@ -136,7 +137,14 @@ function Example() {
           {
             id: 40001,
             pose: pointsMarker.pose,
-            points: [[-20, -10, 0], [-20, -5, 0], [-15, -10, 0], [-15, -5, 0], [-15, -10, 0], [-10, -5, 0]],
+            points: [
+              [-20, -10, 0],
+              [-20, -5, 0],
+              [-15, -10, 0],
+              [-15, -5, 0],
+              [-15, -10, 0],
+              [-10, -5, 0],
+            ],
             colors: pointsMarker.colors.slice(0, 6),
             info: "one point in a triangle",
           },

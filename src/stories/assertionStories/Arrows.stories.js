@@ -33,5 +33,5 @@ const twoArrowsInARow = [
 
 const stories = storiesOf("Integration/Arrows", module);
 generateNonInstancedClickAssertions<Arrow>("Arrow", Arrows, twoArrowsInARow).forEach(({ name, story }) =>
-  stories.add(name, story)
+  stories.add(name, story),
 );

@@ -20,7 +20,10 @@ const twoLinesInARow = [
     },
     scale: { x: 10, y: 10, z: 10 },
     color: { r: 1, g: 0, b: 1, a: 0.5 },
-    points: [[-10, 0, 0], [10, 0, 0]],
+    points: [
+      [-10, 0, 0],
+      [10, 0, 0],
+    ],
   },
   {
     pose: {
@@ -29,11 +32,14 @@ const twoLinesInARow = [
     },
     scale: { x: 10, y: 10, z: 10 },
     color: { r: 1, g: 0, b: 1, a: 0.5 },
-    points: [[-10, -20, 0], [10, -20, 0]],
+    points: [
+      [-10, -20, 0],
+      [10, -20, 0],
+    ],
   },
 ];
 
 const stories = storiesOf("Integration/Lines", module);
 generateNonInstancedClickAssertions<Line>("Line", Lines, twoLinesInARow).forEach(({ name, story }) =>
-  stories.add(name, story)
+  stories.add(name, story),
 );

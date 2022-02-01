@@ -56,7 +56,7 @@ storiesOf("Integration/Grid", module)
         expect(result.length).toEqual(1);
         expect(result[0].object).toEqual({ count: COUNT });
       },
-    })
+    }),
   )
   .add(
     "Clicks on a Grid with an object behind it - worldview event handler",
@@ -66,7 +66,8 @@ storiesOf("Integration/Grid", module)
         <WorldviewWrapper
           onClick={(_, { objects }) => setTestData(objects)}
           defaultCameraState={defaultCameraState}
-          enableStackedObjectEvents>
+          enableStackedObjectEvents
+        >
           <Grid count={COUNT} />
           <Cubes>{[cube]}</Cubes>
         </WorldviewWrapper>
@@ -78,5 +79,5 @@ storiesOf("Integration/Grid", module)
         expect(result[0].object).toEqual({ count: COUNT });
         expect(result[1].object).toEqual(cube);
       },
-    })
+    }),
   );

@@ -21,26 +21,11 @@ const TEMP_QUAT = [0, 0, 0, 0];
 
 const stateSelector = (state: CameraState) => state;
 
-const perspectiveSelector = createSelector(
-  stateSelector,
-  ({ perspective }) => perspective
-);
-const distanceSelector = createSelector(
-  stateSelector,
-  ({ distance }) => distance
-);
-const phiSelector = createSelector(
-  stateSelector,
-  ({ phi }) => phi
-);
-const thetaOffsetSelector = createSelector(
-  stateSelector,
-  ({ thetaOffset }) => thetaOffset
-);
-const targetOrientationSelector = createSelector(
-  stateSelector,
-  ({ targetOrientation }) => targetOrientation
-);
+const perspectiveSelector = createSelector(stateSelector, ({ perspective }) => perspective);
+const distanceSelector = createSelector(stateSelector, ({ distance }) => distance);
+const phiSelector = createSelector(stateSelector, ({ phi }) => phi);
+const thetaOffsetSelector = createSelector(stateSelector, ({ thetaOffset }) => thetaOffset);
+const targetOrientationSelector = createSelector(stateSelector, ({ targetOrientation }) => targetOrientation);
 
 // the heading direction of the target
 const targetHeadingSelector: (CameraState) => number = createSelector(
@@ -49,7 +34,7 @@ const targetHeadingSelector: (CameraState) => number = createSelector(
     const out = vec3.transformQuat(TEMP_VEC3, UNIT_X_VECTOR, targetOrientation);
     const heading = -Math.atan2(out[1], out[0]);
     return heading;
-  }
+  },
 );
 
 // orientation of the camera
@@ -66,7 +51,7 @@ const orientationSelector: (CameraState) => Vec4 = createSelector(
       quat.rotateX(result, result, phi);
     }
     return result;
-  }
+  },
 );
 
 // position of the camera
@@ -84,7 +69,7 @@ const positionSelector: (CameraState) => Vec3 = createSelector(
     position[2] = y;
 
     return position;
-  }
+  },
 );
 
 /*
@@ -189,7 +174,7 @@ const viewSelector: (CameraState) => Mat4 = createSelector(
     }
 
     return m;
-  }
+  },
 );
 
 const billboardRotation: (CameraState) => Mat4 = createSelector(
@@ -200,7 +185,7 @@ const billboardRotation: (CameraState) => Mat4 = createSelector(
     mat4.rotateZ(m, m, -targetHeading);
     mat4.multiply(m, m, mat4.fromQuat(TEMP_MAT, orientation));
     return m;
-  }
+  },
 );
 
 export default {

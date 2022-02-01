@@ -62,7 +62,10 @@ describe("getChildrenForHitmapDefaults", () => {
     });
 
     it("handles arrays correctly", () => {
-      const objects = [{ some: "garbage", color: [] }, { some: "other_garbage", color: [] }];
+      const objects = [
+        { some: "garbage", color: [] },
+        { some: "other_garbage", color: [] },
+      ];
       const hitmapProps = nonInstancedGetChildrenForHitmap(objects, assignNextColors, []);
       expect(hitmapProps).toEqual([
         {
@@ -80,7 +83,10 @@ describe("getChildrenForHitmapDefaults", () => {
     });
 
     it("filters already seen array members correctly", () => {
-      const objects = [{ some: "garbage", color: [] }, { some: "other_garbage", color: [] }];
+      const objects = [
+        { some: "garbage", color: [] },
+        { some: "other_garbage", color: [] },
+      ];
       const hitmapProps = nonInstancedGetChildrenForHitmap(objects, assignNextColors, toExcludedObjects([objects[0]]));
       expect(hitmapProps).toEqual([
         {
@@ -92,7 +98,10 @@ describe("getChildrenForHitmapDefaults", () => {
     });
 
     it("filters all array members correctly", () => {
-      const objects = [{ some: "garbage", color: [] }, { some: "other_garbage", color: [] }];
+      const objects = [
+        { some: "garbage", color: [] },
+        { some: "other_garbage", color: [] },
+      ];
       const hitmapProps = nonInstancedGetChildrenForHitmap(objects, assignNextColors, toExcludedObjects(objects));
       expect(hitmapProps).toEqual([]);
       expect(assignNextColors).toHaveBeenCalledTimes(0);
@@ -164,7 +173,7 @@ describe("getChildrenForHitmapDefaults", () => {
       const hitmapProps = createInstancedGetChildrenForHitmap(2)(
         object,
         assignNextColors,
-        toExcludedObjects([object], [1])
+        toExcludedObjects([object], [1]),
       );
       expect(hitmapProps).toEqual({
         some: "garbage",
@@ -180,7 +189,7 @@ describe("getChildrenForHitmapDefaults", () => {
       const hitmapProps = createInstancedGetChildrenForHitmap(1)(
         object,
         assignNextColors,
-        toExcludedObjects([object], [0])
+        toExcludedObjects([object], [0]),
       );
       expect(hitmapProps).toEqual(null);
     });

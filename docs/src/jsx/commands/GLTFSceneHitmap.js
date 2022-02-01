@@ -35,7 +35,8 @@ function Example() {
         if (!objects[0] || !duckMarkerIds.includes(objects[0].object.id)) {
           setMsg(defaultMsg);
         }
-      }}>
+      }}
+    >
       <Axes />
       {duckMarkers.map((duckMarker) => (
         <GLTFScene
@@ -43,7 +44,8 @@ function Example() {
           onClick={(ev, { objects }) => {
             setMsg(`Clicked on the duck. objectId: ${objects[0].object.id}`);
           }}
-          model={duckModel}>
+          model={duckModel}
+        >
           {duckMarker}
         </GLTFScene>
       ))}
@@ -59,7 +61,8 @@ function Example() {
           maxWidth: "100%",
           color: "white",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
-        }}>
+        }}
+      >
         <div>{msg}</div>
       </div>
     </Worldview>

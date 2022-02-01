@@ -178,7 +178,7 @@ const drawModel = (regl) => {
       for (const primitive of mesh.primitives) {
         if ((primitive.mode ?? 4) !== 4) {
           console.warn(
-            `GLTFScene: ignoring glTF primitive with mode ${primitive.mode}, only TRIANGLES are currently supported`
+            `GLTFScene: ignoring glTF primitive with mode ${primitive.mode}, only TRIANGLES are currently supported`,
           );
           continue;
         }
@@ -224,7 +224,7 @@ const drawModel = (regl) => {
             mat4.create(),
             node.rotation || [0, 0, 0, 1],
             node.translation || [0, 0, 0],
-            node.scale || [1, 1, 1]
+            node.scale || [1, 1, 1],
           );
       mat4.mul(nodeMatrix, parentMatrix, nodeMatrix);
       if (node.mesh != null) {
@@ -256,7 +256,7 @@ const drawModel = (regl) => {
           mat4.create(),
           orientationToVec4(props.pose.orientation),
           pointToVec3(props.pose.position),
-          props.scale ? pointToVec3(props.scale) : [1, 1, 1]
+          props.scale ? pointToVec3(props.scale) : [1, 1, 1],
         ),
       globalAlpha: (context, props) => (props.alpha == null ? 1 : props.alpha),
       hitmapColor: (context, props) => props.color || [0, 0, 0, 1],
@@ -304,7 +304,7 @@ function useAsyncValue<T>(fn: () => Promise<T>, deps: ?(any[])): ?T {
         setValue(undefined);
       };
     }, deps || [fn]),
-    deps || [fn]
+    deps || [fn],
   );
   return value;
 }

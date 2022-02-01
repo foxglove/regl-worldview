@@ -24,7 +24,7 @@ function Example() {
       setCount(newCount);
     },
     false,
-    []
+    [],
   );
 
   // map a number/index to a specific color
@@ -67,7 +67,8 @@ function Example() {
       cameraState={{
         phi: count * cameraMoveSpeed,
         thetaOffset: count * cameraMoveSpeed,
-      }}>
+      }}
+    >
       <Spheres>{[sphereMarker]}</Spheres>
       <Axes />
       {/* Download model: https://github.com/cruise-automation/webviz/blob/master/common/fixtures/Duck.glb  */}

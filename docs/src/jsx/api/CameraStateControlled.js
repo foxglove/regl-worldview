@@ -21,7 +21,8 @@ function Example() {
       onCameraStateChange={(newCamState) => {
         setCameraState(newCamState);
         setDistance(newCamState.distance);
-      }}>
+      }}
+    >
       <div
         style={{
           position: "absolute",
@@ -32,7 +33,8 @@ function Example() {
           padding: 10,
           display: "flex",
           flexDirection: "column",
-        }}>
+        }}
+      >
         <InputNumber
           label="distance"
           value={distance}

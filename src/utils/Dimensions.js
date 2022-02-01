@@ -54,7 +54,7 @@ export default function Dimensions({ children }: Props) {
         const newLeft = Math.round(entries[0].contentRect.left);
         const newTop = Math.round(entries[0].contentRect.top);
         setDimensions({ width: newWidth, height: newHeight, top: newTop, left: newLeft });
-      })
+      }),
   );
 
   // This should only fire once, because `dimensions` should only be undefined at the beginning.

@@ -38,7 +38,7 @@ const underCube = {
 async function emitMouseEvent(
   eventName: "mousemove" | "mousedown" | "mouseup" | "dblclick",
   clientX: number = WORLDVIEW_SIZE / 2,
-  clientY: number = WORLDVIEW_SIZE / 2
+  clientY: number = WORLDVIEW_SIZE / 2,
 ): Promise<void> {
   const [element] = document.getElementsByTagName("canvas");
   if (!element) {
@@ -79,7 +79,7 @@ stories
         expect(result.ray.point[1]).toBeCloseTo(75, 1);
         expect(result.ray.point[2]).toBeCloseTo(0);
       },
-    })
+    }),
   )
   .add(
     `Default object handler has a ray`,
@@ -108,7 +108,7 @@ stories
         expect(result.ray.point[1]).toBeCloseTo(75, 1);
         expect(result.ray.point[2]).toBeCloseTo(0);
       },
-    })
+    }),
   )
   .add(
     `onMouseMove does not pick up objects with hitmapOnMouseMove=false`,
@@ -123,7 +123,7 @@ stories
         const result = await getTestData();
         expect(result.length).toEqual(0);
       },
-    })
+    }),
   )
   .add(
     `onMouseMove picks up objects with hitmapOnMouseMove=true`,
@@ -139,7 +139,7 @@ stories
         expect(result.length).toEqual(1);
         expect(result[0].object).toEqual(cube);
       },
-    })
+    }),
   )
   .add(
     `onMouseMove picks up objects with disableHitmapForEvents=[]`,
@@ -155,7 +155,7 @@ stories
         expect(result.length).toEqual(1);
         expect(result[0].object).toEqual(cube);
       },
-    })
+    }),
   )
   .add(
     `onMouseMove does not pick up objects with disableHitmapForEvents=['onMouseMove']`,
@@ -163,7 +163,8 @@ stories
       story: (setTestData) => (
         <WorldviewWrapper
           onMouseMove={(_, { objects }) => setTestData(objects)}
-          disableHitmapForEvents={["onMouseMove"]}>
+          disableHitmapForEvents={["onMouseMove"]}
+        >
           <Cubes>{[cube]}</Cubes>
         </WorldviewWrapper>
       ),
@@ -172,7 +173,7 @@ stories
         const result = await getTestData();
         expect(result.length).toEqual(0);
       },
-    })
+    }),
   )
   .add(
     `onMouseUp detects objects`,
@@ -188,7 +189,7 @@ stories
         expect(result.length).toEqual(1);
         expect(result[0].object).toEqual(cube);
       },
-    })
+    }),
   )
   .add(
     `onMouseUp does not detect objects when disabled`,
@@ -203,7 +204,7 @@ stories
         const result = await getTestData();
         expect(result.length).toEqual(0);
       },
-    })
+    }),
   )
   .add(
     `onMouseDown detects objects`,
@@ -219,7 +220,7 @@ stories
         expect(result.length).toEqual(1);
         expect(result[0].object).toEqual(cube);
       },
-    })
+    }),
   )
   .add(
     `onMouseDown does not detect objects when disabled`,
@@ -227,7 +228,8 @@ stories
       story: (setTestData) => (
         <WorldviewWrapper
           onMouseDown={(_, { objects }) => setTestData(objects)}
-          disableHitmapForEvents={["onMouseDown"]}>
+          disableHitmapForEvents={["onMouseDown"]}
+        >
           <Cubes>{[cube]}</Cubes>
         </WorldviewWrapper>
       ),
@@ -236,7 +238,7 @@ stories
         const result = await getTestData();
         expect(result.length).toEqual(0);
       },
-    })
+    }),
   )
   .add(
     `onDoubleClick detects objects`,
@@ -252,7 +254,7 @@ stories
         expect(result.length).toEqual(1);
         expect(result[0].object).toEqual(cube);
       },
-    })
+    }),
   )
   .add(
     `a component's mouse handlers can stop event propagation to worldview's global mouse handlers`,
@@ -263,7 +265,8 @@ stories
             onMouseDown={(e, { objects }) => {
               e.stopPropagation();
               setTestData(objects);
-            }}>
+            }}
+          >
             {[cube]}
           </Cubes>
         </WorldviewWrapper>
@@ -274,7 +277,7 @@ stories
         expect(result.length).toEqual(1);
         expect(result[0].object).toEqual(cube);
       },
-    })
+    }),
   )
   .add(
     `when there are overlapping objects from different commands, the command on top of the drawing layer can stop event propagation to other commands`,
@@ -285,13 +288,15 @@ stories
             onMouseDown={(e, { objects }) => {
               e.stopPropagation();
               setTestData(objects);
-            }}>
+            }}
+          >
             {[cube]}
           </Cubes>
           <Cubes
             onMouseDown={() => {
               setTestData([]);
-            }}>
+            }}
+          >
             {[underCube]}
           </Cubes>
         </WorldviewWrapper>
@@ -302,7 +307,7 @@ stories
         expect(result.length).toEqual(1);
         expect(result[0].object).toEqual(cube);
       },
-    })
+    }),
   )
   .add(
     `Firing two mouse events at the same time does not cause an error`,
@@ -318,7 +323,7 @@ stories
         const result1 = await getTestData();
         expect(result1.objects[0].object).toEqual(cube);
       },
-    })
+    }),
   )
   .add(
     `(cached hitmap test) A second event at the same point correctly selects the same object`,
@@ -336,7 +341,7 @@ stories
         const result2 = await getTestData();
         expect(result2.objects[0].object).toEqual(cube);
       },
-    })
+    }),
   )
   .add(
     `(cached hitmap test) Repainting busts the cache`,
@@ -344,7 +349,8 @@ stories
       story: (setTestData, state) => (
         <WorldviewWrapper
           cameraState={state || defaultCameraState}
-          onMouseDown={(_, clickInfo) => setTestData(clickInfo)}>
+          onMouseDown={(_, clickInfo) => setTestData(clickInfo)}
+        >
           <Cubes>{[cube]}</Cubes>
         </WorldviewWrapper>
       ),
@@ -359,7 +365,7 @@ stories
         const result2 = await getTestData();
         expect(result2.objects.length).toEqual(0);
       },
-    })
+    }),
   )
   .add(
     `(cached hitmap test) A second event at a different point does not use the first cached point`,
@@ -378,5 +384,5 @@ stories
         const result2 = await getTestData();
         expect(result2.objects.length).toEqual(0);
       },
-    })
+    }),
   );

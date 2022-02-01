@@ -115,7 +115,7 @@
     "polygon-generator": "^1.1.2",
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-loader": "^3.0.0",
-    "prettier": "1.16.0",
+    "prettier": "^2.5.1",
     "puppeteer": "7.0.1",
     "quickhull3d": "2.0.4",
     "raw-loader": "^0.5.1",

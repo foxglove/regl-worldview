@@ -20,14 +20,20 @@ import { assertionTest } from "~/stories/assertionTestUtils";
 
 const defaultXAxis = {
   color: { a: 1, b: 0.4, g: 0.26, r: 0.95 },
-  points: [{ x: -100, y: 0, z: 0 }, { x: 100, y: 0, z: 0 }],
+  points: [
+    { x: -100, y: 0, z: 0 },
+    { x: 100, y: 0, z: 0 },
+  ],
   pose: { orientation: { w: 0, x: 0, y: 0, z: 0 }, position: { x: 0, y: 0, z: 0 } },
   scale: { x: 0.5, y: 0.5, z: 0.5 },
 };
 
 const defaultZAxis = {
   color: { a: 1, b: 0.92, g: 0.51, r: 0.11 },
-  points: [{ x: 0, y: 0, z: -100 }, { x: 0, y: 0, z: 100 }],
+  points: [
+    { x: 0, y: 0, z: -100 },
+    { x: 0, y: 0, z: 100 },
+  ],
   pose: { orientation: { w: 0, x: 0, y: 0, z: 0 }, position: { x: 0, y: 0, z: 0 } },
   scale: { x: 0.5, y: 0.5, z: 0.5 },
 };
@@ -58,7 +64,7 @@ stories
         expect(result.length).toEqual(1);
         expect(result[0].object).toEqual(defaultXAxis);
       },
-    })
+    }),
   )
   .add(
     `Clicks on Axes with an object behind it - worldview event handler`,
@@ -78,5 +84,5 @@ stories
         expect(result[1].object).toEqual(defaultZAxis);
         expect(result[2].object).toEqual(cube);
       },
-    })
+    }),
   );

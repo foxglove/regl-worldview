@@ -139,7 +139,7 @@ export class WorldviewContext {
           "oes_standard_derivatives",
         ],
         profile: getNodeEnv() !== "production",
-      })
+      }),
     );
 
     if (!regl) {
@@ -280,7 +280,7 @@ export class WorldviewContext {
       canvasX: number,
       canvasY: number,
       enableStackedObjectEvents: boolean,
-      maxStackedObjectCount: number
+      maxStackedObjectCount: number,
     ): Promise<Array<[MouseEventObject, Command<any>]>> => {
       if (!this.initializedData) {
         return Promise.reject(new Error("regl data not initialized yet"));
@@ -331,7 +331,7 @@ export class WorldviewContext {
               if (counter >= maxStackedObjectCount) {
                 // Provide a max number of layers so this while loop doesn't crash the page.
                 console.error(
-                  `Hit ${maxStackedObjectCount} iterations. There is either a bug or that number of rendered hitmap layers under the mouse cursor.`
+                  `Hit ${maxStackedObjectCount} iterations. There is either a bug or that number of rendered hitmap layers under the mouse cursor.`,
                 );
                 break;
               }
@@ -363,7 +363,7 @@ export class WorldviewContext {
                 // drawing a color into the hitmap that it shouldn't be.
                 if (currentObjectId > 0 && !mouseEventObject) {
                   console.error(
-                    `Clicked on an unknown object with id ${currentObjectId}. This likely means that a command is painting an incorrect color into the hitmap.`
+                    `Clicked on an unknown object with id ${currentObjectId}. This likely means that a command is painting an incorrect color into the hitmap.`,
                   );
                 }
                 // Check an error case: if we've already seen this object, then the getHitmapFromChildren function
@@ -371,12 +371,12 @@ export class WorldviewContext {
                 if (
                   excludedObjects.some(
                     ({ object, instanceIndex }) =>
-                      object === mouseEventObject.object && instanceIndex === mouseEventObject.instanceIndex
+                      object === mouseEventObject.object && instanceIndex === mouseEventObject.instanceIndex,
                   )
                 ) {
                   console.error(
                     `Saw object twice when reading from hitmap. There is likely an error in getHitmapFromChildren`,
-                    mouseEventObject
+                    mouseEventObject,
                   );
                   break;
                 }
@@ -401,7 +401,7 @@ export class WorldviewContext {
           });
         });
       });
-    }
+    },
   );
 
   _drawInput = (isHitmap?: boolean, excludedObjects?: MouseEventObject[]) => {

@@ -72,7 +72,8 @@ function createAssertionTest({
         <WorldviewWrapper
           defaultCameraState={{ perspective: true, distance: 10 }}
           onClick={(_, { objects }) => setTestData(objects)}
-          enableStackedObjectEvents={enableStackedObjectEvents}>
+          enableStackedObjectEvents={enableStackedObjectEvents}
+        >
           <GLText scaleInvariantFontSize={enableScaleInvariant ? 40 : undefined}>{markers}</GLText>
           <Cubes>{includeBackgroundObjects ? backgroundObjects : []}</Cubes>
         </WorldviewWrapper>
@@ -96,7 +97,7 @@ storiesOf("Integration/GLText", module)
       markers: textMarkers({
         text: "Click Me!",
       }),
-    })
+    }),
   )
   .add(
     `Clicks on a single GLText billboard object - worldview event handler`,
@@ -105,7 +106,7 @@ storiesOf("Integration/GLText", module)
         text: "Click Me!",
         billboard: true,
       }),
-    })
+    }),
   )
   .add(
     `Clicks on a single GLText object with background - worldview event handler`,
@@ -114,7 +115,7 @@ storiesOf("Integration/GLText", module)
         text: "Click Me!",
         background: true,
       }),
-    })
+    }),
   )
   .add(
     `Clicks on a single GLText billboard object with background - worldview event handler`,
@@ -124,14 +125,14 @@ storiesOf("Integration/GLText", module)
         billboard: true,
         background: true,
       }),
-    })
+    }),
   )
   .add(
     `Clicks on a single GLText object using scale invariance - worldview event handler`,
     createAssertionTest({
       markers: textMarkers({ text: "Click Me!", billboard: true }),
       enableScaleInvariant: true,
-    })
+    }),
   )
   .add(
     `Clicks on a single GLText object with a hole in a glyph - worldview event handler`,
@@ -139,7 +140,7 @@ storiesOf("Integration/GLText", module)
       markers: textMarkers({
         text: "O",
       }),
-    })
+    }),
   )
   .add(
     `Clicks on GLText with an object behind it. Stacked objects disabled - worldview event handler`,
@@ -149,7 +150,7 @@ storiesOf("Integration/GLText", module)
         billboard: true,
       }),
       includeBackgroundObjects: true,
-    })
+    }),
   )
   .add(
     `Clicks on GLText with an object behind it - worldview event handler`,
@@ -160,7 +161,7 @@ storiesOf("Integration/GLText", module)
       }),
       includeBackgroundObjects: true,
       enableStackedObjectEvents: true,
-    })
+    }),
   )
   .add(
     `Clicks on GLText with a hole and an object behind it. Stacked objects disabled - worldview event handler`,
@@ -170,7 +171,7 @@ storiesOf("Integration/GLText", module)
         billboard: true,
       }),
       includeBackgroundObjects: true,
-    })
+    }),
   )
   .add(
     `Clicks on GLText with a hole and an object behind it - worldview event handler`,
@@ -181,5 +182,5 @@ storiesOf("Integration/GLText", module)
       }),
       includeBackgroundObjects: true,
       enableStackedObjectEvents: true,
-    })
+    }),
   );

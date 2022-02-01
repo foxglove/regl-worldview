@@ -47,7 +47,8 @@ function Example() {
     <Worldview
       defaultCameraState={{
         target: [20, 20, 100],
-      }}>
+      }}
+    >
       <Spheres>{[marker]}</Spheres>
     </Worldview>
   );

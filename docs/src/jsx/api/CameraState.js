@@ -56,7 +56,7 @@ export default function Example() {
         cameraStateSelectors.position({
           ...cameraState,
           distance: cameraState.distance + arrowLength,
-        })
+        }),
       )
     : [0, 0, cameraState.distance + arrowLength];
   vec3.add(cameraPosition, cameraPosition, cameraState.targetOffset);
@@ -96,7 +96,8 @@ export default function Example() {
         display: "flex",
         flexDirection: "column",
         width: "100%",
-      }}>
+      }}
+    >
       <CameraStateControls cameraState={cameraState} setCameraState={setCameraState} />
       <div style={{ display: "flex", height: 500, overflow: "hidden" }}>
         <div style={{ flex: "1 1 0" }}>
@@ -118,7 +119,8 @@ export default function Example() {
               target: [0, 0, 0],
               targetOffset: [0, 0, 0],
               targetOrientation: [0, 0, 0, 1],
-            }}>
+            }}
+          >
             <Arrows>{[poseArrowMarker, cameraArrowMarker]}</Arrows>
             <Spheres>{[sphereMarker]}</Spheres>
             <Axes />

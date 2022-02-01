@@ -41,7 +41,8 @@ function Example() {
           top: 10,
           left: 10,
           padding: 10,
-        }}>
+        }}
+      >
         <button onClick={() => setCubeCount(cubeCount + 1)}>Add cube</button>
         <button onClick={() => setCubeCount(cubeCount - 1)}>Remove cube</button>
       </div>

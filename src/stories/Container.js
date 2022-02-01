@@ -44,7 +44,8 @@ export default class Container extends React.Component<Props> {
               fontSize: "0.8rem",
               color: "gray",
               whiteSpace: "pre-line",
-            }}>
+            }}
+          >
             {worldviewCamStateInfo}
           </div>
         )}
@@ -52,7 +53,8 @@ export default class Container extends React.Component<Props> {
           {...this.props}
           defaultCameraState={undefined}
           cameraState={worldviewCamState}
-          onCameraStateChange={this.onCameraStateChange}>
+          onCameraStateChange={this.onCameraStateChange}
+        >
           {this.props.children}
         </Worldview>
       </div>

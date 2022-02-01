@@ -18,7 +18,8 @@ function Example() {
     <Worldview
       defaultCameraState={{
         distance,
-      }}>
+      }}
+    >
       <div
         style={{
           position: "absolute",
@@ -29,7 +30,8 @@ function Example() {
           padding: 10,
           display: "flex",
           flexDirection: "column",
-        }}>
+        }}
+      >
         <InputNumber label="distance" value={distance} min={0} max={400} step={1} onChange={setDistance} />
       </div>
 

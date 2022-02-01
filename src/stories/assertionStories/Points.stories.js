@@ -39,18 +39,24 @@ const instancedPoints = {
     position: { x: 0, y: 0, z: 0 },
   },
   scale: { x: 20, y: 20, z: 20 },
-  colors: [{ r: 1, g: 0, b: 1, a: 0.5 }, { r: 1, g: 1, b: 0, a: 0.5 }],
-  points: [[0, 0, 0], [0, -20, 0]],
+  colors: [
+    { r: 1, g: 0, b: 1, a: 0.5 },
+    { r: 1, g: 1, b: 0, a: 0.5 },
+  ],
+  points: [
+    [0, 0, 0],
+    [0, -20, 0],
+  ],
 };
 
 const stories = storiesOf("Integration/Points", module);
 
 // $FlowFixMe - Flow does not like that `<Points />` has optional properties
 generateNonInstancedClickAssertions<PointType>("Point", Points, twoPointsInARow).forEach(({ name, story }) =>
-  stories.add(name, story)
+  stories.add(name, story),
 );
 
 // $FlowFixMe - Flow does not like that `<Points />` has optional properties
 generateInstancedClickAssertions<PointType>("Point", Points, instancedPoints).forEach(({ name, story }) =>
-  stories.add(name, story)
+  stories.add(name, story),
 );

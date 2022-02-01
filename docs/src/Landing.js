@@ -128,7 +128,8 @@ const Landing = () => (
             href="https://github.com/cruise-automation/webviz"
             className="monospace"
             target="_blank"
-            rel="noopener noreferrer">
+            rel="noopener noreferrer"
+          >
             <GitHubLogo width={20} />
             GitHub
           </GitHubLink>

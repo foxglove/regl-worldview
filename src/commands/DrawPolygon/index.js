@@ -65,7 +65,7 @@ type Props = {
 const polygonLinesGetChildrenForHitmap: GetChildrenForHitmap = <T: any>(
   props: T,
   assignNextColors,
-  excludedObjects
+  excludedObjects,
 ) => {
   // This is almost identical to the default nonInstancedGetChildrenForHitmap, with changes marked.
   return props
@@ -116,7 +116,7 @@ class PolygonLines extends React.Component<Props> {
 const polygonPointsGetChildrenForHitmap: GetChildrenForHitmap = <T: any>(
   props: T,
   assignNextColors,
-  excludedObjects
+  excludedObjects,
 ) => {
   // This is similar to the default nonInstancedGetChildrenForHitmap, with changes marked.
   return props

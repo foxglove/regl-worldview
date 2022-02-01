@@ -23,7 +23,7 @@ function Example() {
       setCount(newCount);
     },
     false,
-    []
+    [],
   );
 
   // map a number/index to a specific color
@@ -75,7 +75,7 @@ function Example() {
   quat.rotateY(
     duckOrientation,
     duckOrientation,
-    -Math.atan(tangentVecO[2] / Math.hypot(tangentVecO[0], tangentVecO[1]))
+    -Math.atan(tangentVecO[2] / Math.hypot(tangentVecO[0], tangentVecO[1])),
   );
   quat.rotateZ(duckOrientation, duckOrientation, -Math.PI / 2);
 
@@ -88,7 +88,8 @@ function Example() {
         // zoom out a little so we can see better
         distance: 160,
         thetaOffset: -Math.PI / 2, // rotate the camera so the duck is facing right
-      }}>
+      }}
+    >
       <Spheres>{[sphereMarker]}</Spheres>
       <Axes />
       {/* Download model: https://github.com/cruise-automation/webviz/blob/master/common/fixtures/Duck.glb  */}
