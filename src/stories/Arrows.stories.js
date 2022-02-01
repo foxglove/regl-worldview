@@ -36,7 +36,10 @@ storiesOf("Worldview/Arrows", module)
   .add("<Arrows> with points and custom depth and blend values", () => {
     const pointArrow = (shift) => ({
       color: { r: 0, g: 0, b: 1, a: 1 },
-      points: [{ x: 0 + shift, y: 0, z: 0 }, { x: 10 + shift, y: 10, z: 10 }],
+      points: [
+        { x: 0 + shift, y: 0, z: 0 },
+        { x: 10 + shift, y: 10, z: 10 },
+      ],
       scale: { x: 2, y: 2, z: 3 },
     });
 

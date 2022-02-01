@@ -98,7 +98,8 @@ storiesOf("Worldview/GLText", module)
           target: [target.x, target.y, target.z],
           perspective: true,
           distance: 3,
-        }}>
+        }}
+      >
         <GLText>{markers}</GLText>
         <Axes />
       </Container>
@@ -113,7 +114,8 @@ storiesOf("Worldview/GLText", module)
           target: [target.x, target.y, target.z],
           perspective: true,
           distance: 3,
-        }}>
+        }}
+      >
         <GLText resolution={80}>{markers}</GLText>
         <Axes />
       </Container>
@@ -128,7 +130,8 @@ storiesOf("Worldview/GLText", module)
           target: [target.x, target.y, target.z],
           perspective: true,
           distance: 3,
-        }}>
+        }}
+      >
         <GLText resolution={40}>{markers}</GLText>
         <Axes />
       </Container>
@@ -143,7 +146,8 @@ storiesOf("Worldview/GLText", module)
           target: [target.x, target.y + 2, target.z],
           perspective: true,
           distance: 8,
-        }}>
+        }}
+      >
         <GLText>{markers}</GLText>
         <Axes />
       </Container>
@@ -206,7 +210,8 @@ storiesOf("Worldview/GLText", module)
       return (
         <div
           style={{ width: hasRenderedOnce ? 500 : 250, height: hasRenderedOnce ? 500 : 250, background: "black" }}
-          ref={refFn}>
+          ref={refFn}
+        >
           <Container cameraState={{ perspective: true, distance: 40 }}>
             <GLText scaleInvariantFontSize={20}>{markers}</GLText>
             <Axes />
@@ -284,7 +289,7 @@ storiesOf("Worldview/GLText", module)
   })
   .add("overlapping mixed fixed", () => {
     const markers = overlappingMarkers({ text: "Hello Worldview", billboard: true }).concat(
-      textMarkers({ text: "Hello Worldview", billboard: true })
+      textMarkers({ text: "Hello Worldview", billboard: true }),
     );
     return (
       <Container cameraState={{ perspective: true, distance: 25 }}>

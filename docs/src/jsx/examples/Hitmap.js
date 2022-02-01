@@ -145,7 +145,8 @@ function Example() {
             setClickedId(objects[0].object.id);
           }
         }
-      }}>
+      }}
+    >
       <Cubes>{cubes}</Cubes>
       <Spheres>{spheres}</Spheres>
       <Overlay
@@ -183,12 +184,14 @@ function Example() {
                 fontSize: 12,
                 padding: 8,
                 whiteSpace: "pre-line",
-              }}>
+              }}
+            >
               <div style={{ color: getCSSColor(color) }}>{title}</div>
               <div>{text}</div>
             </div>
           );
-        }}>
+        }}
+      >
         {textMarkers}
       </Overlay>
       <Axes />

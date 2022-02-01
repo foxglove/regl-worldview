@@ -70,7 +70,8 @@ function Example() {
           targetOffset: oldState.targetOffset,
           phi: oldState.phi,
         }))
-      }>
+      }
+    >
       <GLText scaleInvariantFontSize={FONT_SIZE}>{markers}</GLText>
       <GLText>{centerMarker}</GLText>
       <Grid count={10} />

@@ -105,7 +105,8 @@ function Example() {
             left: 30,
             width: "400px",
             backgroundColor: "rgba(165, 94, 255, 0.1)",
-          }}>
+          }}
+        >
           <div>click on a cube to see its details</div>
           <div>double click on a cube to remove it</div>
           <br />

@@ -139,7 +139,8 @@ function CodeEditor({
         <StyledEditor
           isRowView={isRowView}
           onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}>
+          onMouseLeave={() => setHovered(false)}
+        >
           {hovered && (
             <StyledActions>
               <CopyToClipboard text={copyCode} onCopy={() => setCopied(true)}>

@@ -141,7 +141,8 @@ const Docs = (props) => {
                     <NavLink
                       to={`${route.path}${subRoute.path}`}
                       onClick={() => toggleMobileNav(false)}
-                      activeClassName="active">
+                      activeClassName="active"
+                    >
                       {subRoute.name || subRoute.main}
                     </NavLink>
                   </li>

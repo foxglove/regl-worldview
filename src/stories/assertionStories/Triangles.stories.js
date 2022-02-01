@@ -19,8 +19,16 @@ const twoTrianglesInARow = [
       position: { x: 0, y: 0, z: 0 },
     },
     scale: { x: 20, y: 20, z: 20 },
-    colors: [{ r: 1, g: 1, b: 0, a: 0.5 }, { r: 1, g: 1, b: 0, a: 0.5 }, { r: 1, g: 1, b: 0, a: 0.5 }],
-    points: [[-10, 0, 0], [0, 0, 10], [10, 0, -10]],
+    colors: [
+      { r: 1, g: 1, b: 0, a: 0.5 },
+      { r: 1, g: 1, b: 0, a: 0.5 },
+      { r: 1, g: 1, b: 0, a: 0.5 },
+    ],
+    points: [
+      [-10, 0, 0],
+      [0, 0, 10],
+      [10, 0, -10],
+    ],
   },
   {
     pose: {
@@ -29,8 +37,16 @@ const twoTrianglesInARow = [
     },
     scale: { x: 20, y: 20, z: 20 },
     color: { r: 1, g: 0, b: 1, a: 0.5 },
-    colors: [{ r: 1, g: 0, b: 1, a: 0.5 }, { r: 1, g: 0, b: 1, a: 0.5 }, { r: 1, g: 0, b: 1, a: 0.5 }],
-    points: [[-10, -20, 0], [0, -20, 10], [10, -20, -10]],
+    colors: [
+      { r: 1, g: 0, b: 1, a: 0.5 },
+      { r: 1, g: 0, b: 1, a: 0.5 },
+      { r: 1, g: 0, b: 1, a: 0.5 },
+    ],
+    points: [
+      [-10, -20, 0],
+      [0, -20, 10],
+      [10, -20, -10],
+    ],
   },
 ];
 
@@ -49,18 +65,25 @@ const instancedTriangles = {
     { r: 1, g: 0, b: 1, a: 0.5 },
     { r: 1, g: 0, b: 1, a: 0.5 },
   ],
-  points: [[-10, 0, 0], [0, 0, 10], [10, 0, -10], [-10, -20, 0], [0, -20, 10], [10, -20, -10]],
+  points: [
+    [-10, 0, 0],
+    [0, 0, 10],
+    [10, 0, -10],
+    [-10, -20, 0],
+    [0, -20, 10],
+    [10, -20, -10],
+  ],
 };
 
 const stories = storiesOf("Integration/Triangles", module);
 generateNonInstancedClickAssertions<TriangleList>("Triangle", Triangles, twoTrianglesInARow).forEach(
-  ({ name, story }) => stories.add(name, story)
+  ({ name, story }) => stories.add(name, story),
 );
 generateNonInstancedClickAssertions<TriangleList>(
   "Triangle with onlyRenderInHitmap=true",
   Triangles,
-  twoTrianglesInARow.map((triangle) => ({ ...triangle, onlyRenderInHitmap: true }))
+  twoTrianglesInARow.map((triangle) => ({ ...triangle, onlyRenderInHitmap: true })),
 ).forEach(({ name, story }) => stories.add(name, story));
 generateInstancedClickAssertions<TriangleList>("Triangle", Triangles, instancedTriangles).forEach(({ name, story }) =>
-  stories.add(name, story)
+  stories.add(name, story),
 );

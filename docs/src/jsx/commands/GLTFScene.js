@@ -20,7 +20,8 @@ function Example() {
       defaultCameraState={{
         distance: 25,
         thetaOffset: (-3 * Math.PI) / 4,
-      }}>
+      }}
+    >
       <button style={{ position: "absolute", top: 0, left: 0 }} onClick={() => setSwapped(!swapped)}>
         Swap Models
       </button>

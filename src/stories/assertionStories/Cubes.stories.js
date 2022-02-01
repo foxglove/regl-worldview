@@ -37,14 +37,20 @@ const instancedCube = {
     position: { x: 0, y: 0, z: 0 },
   },
   scale: { x: 10, y: 10, z: 10 },
-  colors: [{ r: 1, g: 0, b: 1, a: 0.5 }, { r: 1, g: 0, b: 1, a: 0.5 }],
-  points: [[0, 0, 0], [0, -20, 0]],
+  colors: [
+    { r: 1, g: 0, b: 1, a: 0.5 },
+    { r: 1, g: 0, b: 1, a: 0.5 },
+  ],
+  points: [
+    [0, 0, 0],
+    [0, -20, 0],
+  ],
 };
 
 const stories = storiesOf("Integration/Cubes", module);
 generateNonInstancedClickAssertions<Cube>("Cube", Cubes, twoCubesInARow).forEach(({ name, story }) =>
-  stories.add(name, story)
+  stories.add(name, story),
 );
 generateInstancedClickAssertions<Cube>("Cube", Cubes, instancedCube).forEach(({ name, story }) =>
-  stories.add(name, story)
+  stories.add(name, story),
 );

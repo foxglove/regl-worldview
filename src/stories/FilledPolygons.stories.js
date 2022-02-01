@@ -20,7 +20,12 @@ storiesOf("Worldview/FilledPolygons", module)
         <FilledPolygons>
           {[
             {
-              points: [{ x: 0, y: 10, z: 0 }, { x: 10, y: 10, z: 0 }, { x: 10, y: 0, z: 10 }, { x: 0, y: 0, z: 10 }],
+              points: [
+                { x: 0, y: 10, z: 0 },
+                { x: 10, y: 10, z: 0 },
+                { x: 10, y: 0, z: 10 },
+                { x: 0, y: 0, z: 10 },
+              ],
               color: { r: 0, g: 1, b: 0, a: 1 },
             },
           ]}
@@ -35,16 +40,26 @@ storiesOf("Worldview/FilledPolygons", module)
           {withCustomRenderStates(
             [
               {
-                points: [{ x: 0, y: 10, z: 0 }, { x: 10, y: 10, z: 0 }, { x: 10, y: 0, z: 10 }, { x: 0, y: 0, z: 10 }],
+                points: [
+                  { x: 0, y: 10, z: 0 },
+                  { x: 10, y: 10, z: 0 },
+                  { x: 10, y: 0, z: 10 },
+                  { x: 0, y: 0, z: 10 },
+                ],
                 color: { r: 0, g: 1, b: 0, a: 1 },
               },
             ],
             [
               {
-                points: [{ x: -5, y: 10, z: 0 }, { x: 5, y: 10, z: 0 }, { x: 5, y: 0, z: 10 }, { x: -5, y: 0, z: 10 }],
+                points: [
+                  { x: -5, y: 10, z: 0 },
+                  { x: 5, y: 10, z: 0 },
+                  { x: 5, y: 0, z: 10 },
+                  { x: -5, y: 0, z: 10 },
+                ],
                 color: { r: 0, g: 1, b: 0, a: 1 },
               },
-            ]
+            ],
           )}
         </FilledPolygons>
       </Container>

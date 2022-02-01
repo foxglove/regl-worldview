@@ -12,7 +12,7 @@ function nonInstancedGetChildrenForHitmapFromSingleProp<T: any>(
   prop: T,
   assignNextColors: AssignNextColorsFn,
   excludedObjects: MouseEventObject[],
-  useOriginalMarkerProp: boolean = false
+  useOriginalMarkerProp: boolean = false,
 ): ?T {
   // The marker that we send to event callbacks.
   const eventCallbackMarker = useOriginalMarkerProp ? prop.originalMarker : prop;
@@ -31,7 +31,7 @@ function nonInstancedGetChildrenForHitmapFromSingleProp<T: any>(
 export const nonInstancedGetChildrenForHitmap = <T: any>(
   props: T,
   assignNextColors: AssignNextColorsFn,
-  excludedObjects: MouseEventObject[]
+  excludedObjects: MouseEventObject[],
 ): ?T => {
   if (Array.isArray(props)) {
     return props
@@ -46,7 +46,7 @@ export const nonInstancedGetChildrenForHitmap = <T: any>(
 export const getChildrenForHitmapWithOriginalMarker = <T: any>(
   props: T,
   assignNextColors: AssignNextColorsFn,
-  excludedObjects: MouseEventObject[]
+  excludedObjects: MouseEventObject[],
 ) => {
   if (Array.isArray(props)) {
     return props
@@ -60,7 +60,7 @@ function instancedGetChildrenForHitmapFromSingleProp<T: any>(
   prop: T,
   assignNextColors: AssignNextColorsFn,
   excludedObjects: MouseEventObject[],
-  pointCountPerInstance
+  pointCountPerInstance,
 ): ?T {
   const matchedExcludedObjects = excludedObjects.filter(({ object, instanceIndex }) => object === prop);
   const filteredIndices = matchedExcludedObjects
@@ -85,10 +85,10 @@ function instancedGetChildrenForHitmapFromSingleProp<T: any>(
     hitmapProp.colors = allColors;
     if (filteredIndices.length) {
       hitmapProp.points = hitmapProp.points.filter(
-        (_, index) => !filteredIndices.includes(Math.floor(index / pointCountPerInstance))
+        (_, index) => !filteredIndices.includes(Math.floor(index / pointCountPerInstance)),
       );
       hitmapProp.colors = hitmapProp.colors.filter(
-        (_, index) => !filteredIndices.includes(Math.floor(index / pointCountPerInstance))
+        (_, index) => !filteredIndices.includes(Math.floor(index / pointCountPerInstance)),
       );
     } else if (matchedExcludedObjects.length) {
       // if we don't have instance indices, just filter out the whole object.
@@ -103,17 +103,15 @@ function instancedGetChildrenForHitmapFromSingleProp<T: any>(
   return hitmapProp;
 }
 
-export const createInstancedGetChildrenForHitmap = (pointCountPerInstance: number) => <T: any>(
-  props: T,
-  assignNextColors: AssignNextColorsFn,
-  excludedObjects: MouseEventObject[]
-): ?T => {
-  if (Array.isArray(props)) {
-    return props
-      .map((prop) =>
-        instancedGetChildrenForHitmapFromSingleProp(prop, assignNextColors, excludedObjects, pointCountPerInstance)
-      )
-      .filter(Boolean);
-  }
-  return instancedGetChildrenForHitmapFromSingleProp(props, assignNextColors, excludedObjects, pointCountPerInstance);
-};
+export const createInstancedGetChildrenForHitmap =
+  (pointCountPerInstance: number) =>
+  <T: any>(props: T, assignNextColors: AssignNextColorsFn, excludedObjects: MouseEventObject[]): ?T => {
+    if (Array.isArray(props)) {
+      return props
+        .map((prop) =>
+          instancedGetChildrenForHitmapFromSingleProp(prop, assignNextColors, excludedObjects, pointCountPerInstance),
+        )
+        .filter(Boolean);
+    }
+    return instancedGetChildrenForHitmapFromSingleProp(props, assignNextColors, excludedObjects, pointCountPerInstance);
+  };

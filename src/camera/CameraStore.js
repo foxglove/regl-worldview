@@ -54,7 +54,7 @@ export default class CameraStore {
 
   constructor(
     handler: (CameraState) => void = () => {},
-    initialCameraState: $Shape<CameraState> = DEFAULT_CAMERA_STATE
+    initialCameraState: $Shape<CameraState> = DEFAULT_CAMERA_STATE,
   ) {
     this._onChange = handler;
     this.setCameraState(initialCameraState);

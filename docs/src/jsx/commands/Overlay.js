@@ -76,20 +76,23 @@ function Example() {
                   whiteSpace: "pre-line",
                   top: 0,
                   left: 0,
-                }}>
+                }}
+              >
                 <div>{title}</div>
                 <div>{text}</div>
                 <a
                   style={{ pointerEvents: "visible" }}
                   href="http://www.getcruise.com"
                   target="_blank"
-                  rel="noopener noreferrer">
+                  rel="noopener noreferrer"
+                >
                   custom link
                 </a>
                 <div>range: {range.toFixed(2)}</div>
               </div>
             );
-          }}>
+          }}
+        >
           {textMarkers}
         </Overlay>
         <Axes />

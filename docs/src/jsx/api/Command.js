@@ -35,7 +35,11 @@ function Triangle({ color }) {
     <Command reglCommand={reglTriangle}>
       {{
         color,
-        points: [[-1, 0], [0, -1], [1, 1]],
+        points: [
+          [-1, 0],
+          [0, -1],
+          [1, 1],
+        ],
       }}
     </Command>
   );

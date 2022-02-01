@@ -76,7 +76,7 @@ function handleWorldviewMouseInteraction(
   objects: MouseEventObject[],
   ray: Ray,
   e: SyntheticMouseEvent<HTMLCanvasElement>,
-  handler: MouseHandler
+  handler: MouseHandler,
 ) {
   const args = { ray, objects };
 
@@ -124,7 +124,7 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     if (onCameraStateChange) {
       if (!cameraState) {
         console.warn(
-          "You provided `onCameraStateChange` without `cameraState`. Use Worldview as a controlled component with `cameraState` and `onCameraStateChange`, or uncontrolled with `defaultCameraState`."
+          "You provided `onCameraStateChange` without `cameraState`. Use Worldview as a controlled component with `cameraState` and `onCameraStateChange`, or uncontrolled with `defaultCameraState`.",
         );
       }
       if (cameraState && defaultCameraState) {
@@ -133,7 +133,7 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     } else {
       if (cameraState) {
         console.warn(
-          "You provided `cameraState` without an `onCameraStateChange` handler. This will prevent moving the camera. If the camera should be movable, use `defaultCameraState`, otherwise set `onCameraStateChange`."
+          "You provided `cameraState` without an `onCameraStateChange` handler. This will prevent moving the camera. If the camera should be movable, use `defaultCameraState`, otherwise set `onCameraStateChange`.",
         );
       }
     }
@@ -141,11 +141,11 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     if (hitmapOnMouseMove) {
       if (disableHitmapForEvents) {
         throw new Error(
-          "Property 'hitmapOnMouseMove' is deprectated and will be ignored when used along with 'disableHitmapForEvents'."
+          "Property 'hitmapOnMouseMove' is deprectated and will be ignored when used along with 'disableHitmapForEvents'.",
         );
       } else {
         console.warn(
-          "Property 'hitmapOnMouseMove' is deprectated. Please use 'disableHitmapForEvents' property instead."
+          "Property 'hitmapOnMouseMove' is deprectated. Please use 'disableHitmapForEvents' property instead.",
         );
       }
     }
@@ -300,7 +300,7 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
   _onMouseInteraction = (
     e: SyntheticMouseEvent<HTMLCanvasElement>,
     mouseEventName: MouseEventEnum,
-    fromOffscreenTarget: boolean
+    fromOffscreenTarget: boolean,
   ) => {
     const { worldviewContext } = this.state;
     const worldviewHandler = this.props[mouseEventName];
@@ -382,7 +382,10 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
       data["heap used"] = `${((mem.usedJSHeapSize / mem.jsHeapSizeLimit) * 100).toFixed(3)}%`;
     }
 
-    Object.assign(data, pickBy(regl.stats, (val) => typeof val === "number" && val !== 0));
+    Object.assign(
+      data,
+      pickBy(regl.stats, (val) => typeof val === "number" && val !== 0),
+    );
     if (regl.stats.bufferCount > 1000) {
       throw new Error("Memory leak: Buffer count > 1000.");
     }
@@ -446,7 +449,8 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
             cameraStore={worldviewContext.cameraStore}
             keyMap={keyMap}
             shiftKeys={shiftKeys}
-            ref={(el) => (this._cameraListener.current = el)}>
+            ref={(el) => (this._cameraListener.current = el)}
+          >
             {canvasHtml}
           </CameraListener>
         )}

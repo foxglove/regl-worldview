@@ -158,7 +158,7 @@ const createMemoizedGenerateAtlas = () =>
         textureHeight,
         textureData,
       };
-    }
+    },
   );
 
 const createMemoizedDrawAtlasTexture = () =>
@@ -379,8 +379,18 @@ function makeTextCommand(alphabet?: string[]) {
       instances: regl.prop("instances"),
       count: 4,
       attributes: {
-        position: [[0, 0], [0, -1], [1, 0], [1, -1]],
-        texCoord: [[0, 0], [0, 1], [1, 0], [1, 1]], // flipped
+        position: [
+          [0, 0],
+          [0, -1],
+          [1, 0],
+          [1, -1],
+        ],
+        texCoord: [
+          [0, 0],
+          [0, 1],
+          [1, 0],
+          [1, 1],
+        ], // flipped
         srcOffset: (ctx, props) => ({ buffer: props.srcOffsets, divisor: 1 }),
         destOffset: (ctx, props) => ({ buffer: props.destOffsets, divisor: 1 }),
         srcWidth: (ctx, props) => ({ buffer: props.srcWidths, divisor: 1 }),
@@ -458,11 +468,11 @@ function makeTextCommand(alphabet?: string[]) {
         // the foreground color (which needs to be converted to RGBA since it's a vec4).
         // See comment on fragment shader above
         const fgColor = toColor(
-          isHitmap ? marker.color || [0, 0, 0, 1] : marker.colors?.[0] || marker.color || BG_COLOR_LIGHT
+          isHitmap ? marker.color || [0, 0, 0, 1] : marker.colors?.[0] || marker.color || BG_COLOR_LIGHT,
         );
         const outline = marker.colors?.[1] != null || command.autoBackgroundColor;
         const bgColor = toColor(
-          marker.colors?.[1] || (command.autoBackgroundColor && isColorDark(fgColor) ? BG_COLOR_LIGHT : BG_COLOR_DARK)
+          marker.colors?.[1] || (command.autoBackgroundColor && isColorDark(fgColor) ? BG_COLOR_LIGHT : BG_COLOR_DARK),
         );
         const hlColor = marker?.highlightColor || { r: 1, b: 0, g: 1, a: 1 };
 

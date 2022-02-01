@@ -91,13 +91,13 @@ storiesOf("Worldview/Cubes", module)
           <Wrapper cubes={[marker]} />
         </Container>
       );
-    })
+    }),
   )
   .add(
     "<Cubes> - dynamic hitmap",
     withRange((range) => {
       return <DynamicCubes range={range} />;
-    })
+    }),
   )
   .add(
     "<Cubes> - instanced",
@@ -117,7 +117,7 @@ storiesOf("Worldview/Cubes", module)
           <Cubes>{[cube]}</Cubes>
         </Container>
       );
-    })
+    }),
   )
   .add(
     "<Cubes> - per-instance colors",
@@ -139,7 +139,7 @@ storiesOf("Worldview/Cubes", module)
           <Cubes>{[cube]}</Cubes>
         </Container>
       );
-    })
+    }),
   )
   .add("<Cubes> - with custom depth and blend values", () => {
     const cubes = withCustomRenderStates([cube(0)], [cube(1)]);

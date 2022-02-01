@@ -44,7 +44,8 @@ export default function InputNumber({ value, onChange, min = 0.5, max = 20, step
               flexDirection: "row",
             }
           : {}
-      }>
+      }
+    >
       <div className="monospace">{label}</div>
       <input
         type="number"

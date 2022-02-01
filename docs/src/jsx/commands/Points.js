@@ -41,7 +41,8 @@ function Example() {
         distance: 124,
         phi: 1,
         targetOffset: [3, 6, 0],
-      }}>
+      }}
+    >
       <Points>{[marker]}</Points>
       <Axes />
     </Worldview>

@@ -132,7 +132,7 @@ export default async function parseGLB(arrayBuffer: ArrayBuffer): Promise<GLBMod
     return new arrayType(
       binary.buffer,
       binary.byteOffset + (bufferView.byteOffset || 0) + (accessorInfo.byteOffset || 0),
-      accessorInfo.count * numComponents
+      accessorInfo.count * numComponents,
     );
   });
 
@@ -147,10 +147,10 @@ export default async function parseGLB(arrayBuffer: ArrayBuffer): Promise<GLBMod
         const data = new DataView(
           binary.buffer,
           binary.byteOffset + (bufferView.byteOffset || 0),
-          bufferView.byteLength
+          bufferView.byteLength,
         );
         return self.createImageBitmap(new Blob([data], { type: imgInfo.mimeType }));
-      })
+      }),
     ));
 
   return { json, accessors, images };

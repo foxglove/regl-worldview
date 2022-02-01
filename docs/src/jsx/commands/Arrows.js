@@ -20,7 +20,10 @@ function Example() {
   };
   const pointArrow = {
     color: { r: 1, g: 1, b: 1, a: 1 },
-    points: [{ x: 0, y: 0, z: 0 }, { x: 10, y: 10, z: 10 }],
+    points: [
+      { x: 0, y: 0, z: 0 },
+      { x: 10, y: 10, z: 10 },
+    ],
     scale: { x: 2, y: 2, z: 3 },
   };
 

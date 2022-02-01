@@ -23,9 +23,12 @@ const CHAR_HEIGHT = 1.1; // vertical space between characters
 const STEP_INTERVAL = 100; // how often the code rain "falls"
 const ALPHABET = [].concat(
   // all characters to pick from
-  ...[[0x30, 0x39], [0x41, 0x5a], [0x410, 0x42f], [0x3041, 0x3096]].map(([start, end]) =>
-    new Array(end - start + 1).fill().map((_, i) => String.fromCodePoint(start + i))
-  )
+  ...[
+    [0x30, 0x39],
+    [0x41, 0x5a],
+    [0x410, 0x42f],
+    [0x3041, 0x3096],
+  ].map(([start, end]) => new Array(end - start + 1).fill().map((_, i) => String.fromCodePoint(start + i))),
 );
 
 function randomChar() {
@@ -100,7 +103,10 @@ class MatrixText {
         quat.rotateX(spin, spin, Math.PI / 2);
         markers.push({
           text: char,
-          colors: [{ r: newness, g: oldness, b: newness, a: oldness }, { r: 0, g: 0, b: 0, a: oldness }],
+          colors: [
+            { r: newness, g: oldness, b: newness, a: oldness },
+            { r: 0, g: 0, b: 0, a: oldness },
+          ],
           pose: {
             position: { x, y, z: z - i * CHAR_HEIGHT },
             orientation: { x: spin[0], y: spin[1], z: spin[2], w: spin[3] },
@@ -157,7 +163,7 @@ function Example() {
       lastFrameTime.current = timestamp;
     },
     inScreenshotTests(),
-    []
+    [],
   );
 
   return (
@@ -170,7 +176,8 @@ function Example() {
           targetOffset: oldState.targetOffset,
           phi: oldState.phi,
         }))
-      }>
+      }
+    >
       <GLText alphabet={ALPHABET} resolution={40}>
         {matrix.toMarkers()}
       </GLText>

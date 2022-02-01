@@ -56,7 +56,7 @@ stories
         const result = getTestData();
         expect(result).toEqual([{ object: firstModelPosition, instanceIndex: undefined }]);
       },
-    })
+    }),
   )
   .add(
     `Clicks on a GLTFSCene object with an object behind it - worldview event handler`,
@@ -71,7 +71,8 @@ stories
                 testData = testData.concat(objects);
                 setTestData(testData);
               }}
-              model={duckModel}>
+              model={duckModel}
+            >
               {firstModelPosition}
             </GLTFScene>
             <GLTFScene
@@ -79,7 +80,8 @@ stories
                 testData = testData.concat(objects);
                 setTestData(testData);
               }}
-              model={duckModel}>
+              model={duckModel}
+            >
               {secondModelPosition}
             </GLTFScene>
           </WorldviewWrapper>
@@ -94,5 +96,5 @@ stories
           { object: secondModelPosition, instanceIndex: undefined },
         ]);
       },
-    })
+    }),
   );

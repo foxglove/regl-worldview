@@ -52,7 +52,8 @@ function Example() {
         perspective: false,
         target: [-812, 2959.64, 0],
         distance: 5,
-      }}>
+      }}
+    >
       <Lines>{markers}</Lines>
     </Worldview>
   );

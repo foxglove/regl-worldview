@@ -23,7 +23,7 @@ function Example() {
       setCount(newCount);
     },
     false,
-    []
+    [],
   );
 
   // map a number/index to a specific color
@@ -83,23 +83,26 @@ function Example() {
       defaultCameraState={{
         distance: 160,
         thetaOffset: -Math.PI / 2, // rotate the camera so the duck is facing right
-      }}>
+      }}
+    >
       <Spheres
         onClick={(ev, { objects }) => {
           setClickedObjectIds([
             ...clickedObjectIds,
             { id: objects[0].object.id, instanceIndex: objects[0].instanceIndex },
           ]);
-        }}>
+        }}
+      >
         {[sphereMarker]}
       </Spheres>
       <Cubes
         onClick={(ev, { objects }) => {
           const newClickedObjectIds = clickedObjectIds.filter(
-            ({ id, instanceIndex }) => id + instanceIndex !== objects[0].object.clickedObjectId
+            ({ id, instanceIndex }) => id + instanceIndex !== objects[0].object.clickedObjectId,
           );
           setClickedObjectIds(newClickedObjectIds);
-        }}>
+        }}
+      >
         {obstacleMarkers}
       </Cubes>
       <Axes />

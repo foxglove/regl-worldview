@@ -90,15 +90,15 @@ const fontFamily = {
 
 // keeping `px` for now so we could easily switch to rem later, if needed
 const fontSize = {
-  "12": "12px",
-  "14": "14px",
-  "16": "16px",
-  "20": "20px",
-  "24": "24px",
-  "32": "32px",
-  "48": "48px",
-  "64": "64px",
-  "128": "128px",
+  12: "12px",
+  14: "14px",
+  16: "16px",
+  20: "20px",
+  24: "24px",
+  32: "32px",
+  48: "48px",
+  64: "64px",
+  128: "128px",
   h1: "38px",
   h1Sm: "32px", // h1 on small and medium sized screens
   h2: "20px",
@@ -106,18 +106,18 @@ const fontSize = {
   body: "16px",
 };
 
-const fontWeight = { "300": 300, "400": 400, "500": 500 };
+const fontWeight = { 300: 300, 400: 400, 500: 500 };
 const spacing = {
-  "0": 0,
-  "4": "4px",
-  "8": "8px",
-  "16": "16px",
-  "32": "32px",
-  "48": "48px",
-  "64": "64px",
-  "128": "128px",
-  "256": "256px",
-  "512": "512px",
+  0: 0,
+  4: "4px",
+  8: "8px",
+  16: "16px",
+  32: "32px",
+  48: "48px",
+  64: "64px",
+  128: "128px",
+  256: "256px",
+  512: "512px",
 };
 
 const color = darkThemeColors;

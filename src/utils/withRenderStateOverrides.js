@@ -22,7 +22,7 @@ const withRenderStateOverrides = (command: any) => (regl: any) => {
       const { depth, blend } = props;
       return regl({ ...reglCommand, depth, blend });
     },
-    (...args) => JSON.stringify(args)
+    (...args) => JSON.stringify(args),
   );
 
   const renderElement = (props) => {

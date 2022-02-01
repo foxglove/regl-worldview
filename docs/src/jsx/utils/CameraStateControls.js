@@ -56,7 +56,7 @@ function ScrubberArray({ value, onChange }) {
           newArray[i] = num;
           onChange(newArray);
         }}
-      />
+      />,
     );
     if (i + 1 < value.length) {
       elements.push(", ");

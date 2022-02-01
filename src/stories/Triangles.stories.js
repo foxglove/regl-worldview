@@ -19,8 +19,16 @@ const singleTriangle = (x, y, z) => {
       position: { x, y, z },
     },
     scale: { x: 20, y: 20, z: 20 },
-    colors: [{ r: 1, g: 1, b: 0, a: 1 }, { r: 1, g: 1, b: 0, a: 1 }, { r: 1, g: 1, b: 0, a: 1 }],
-    points: [[-10, 0, 0], [0, 0, 10], [10, 0, -10]],
+    colors: [
+      { r: 1, g: 1, b: 0, a: 1 },
+      { r: 1, g: 1, b: 0, a: 1 },
+      { r: 1, g: 1, b: 0, a: 1 },
+    ],
+    points: [
+      [-10, 0, 0],
+      [0, 0, 10],
+      [10, 0, -10],
+    ],
   };
 };
 
@@ -40,7 +48,14 @@ const instancedTriangles = (x, y, z) => {
       { r: 1, g: 0, b: 0, a: 1 },
       { r: 1, g: 0, b: 0, a: 1 },
     ],
-    points: [[-10, 0, 0], [0, 0, 10], [10, 0, -10], [-10, -20, 0], [0, -20, 10], [10, -20, -10]],
+    points: [
+      [-10, 0, 0],
+      [0, 0, 10],
+      [10, 0, -10],
+      [-10, -20, 0],
+      [0, -20, 10],
+      [10, -20, -10],
+    ],
   };
 };
 
@@ -80,7 +95,7 @@ storiesOf("Worldview/Triangles", module)
     <Example
       triangles={withCustomRenderStates(
         [withSingleColor(singleTriangle(0, 0, 0), { r: 1, g: 1, b: 0, a: 1 })],
-        [withSingleColor(singleTriangle(5.0, 0.1, 0), { r: 0, g: 1, b: 1, a: 1 })]
+        [withSingleColor(singleTriangle(5.0, 0.1, 0), { r: 0, g: 1, b: 1, a: 1 })],
       )}
     />
   ));

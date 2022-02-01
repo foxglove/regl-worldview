@@ -353,7 +353,7 @@ export const lines = (regl: any) => {
       count: VERTICES_PER_INSTANCE,
       instances: regl.prop("instances"),
       primitive: regl.prop("primitive"),
-    })
+    }),
   );
 
   let colorArray = new Float32Array(VERTICES_PER_INSTANCE * 4);
@@ -399,7 +399,7 @@ export const lines = (regl: any) => {
 
   function fillPoseArrays(
     instances: number,
-    poses: Pose[]
+    poses: Pose[],
   ): { positionData: Float32Array, rotationData: Float32Array } {
     if (positionArray.length < instances * 3) {
       positionArray = new Float32Array(instances * 3);
@@ -434,7 +434,7 @@ export const lines = (regl: any) => {
     color: ?Color | ?Vec4,
     colors: ?((Color | Vec4)[]),
     monochrome: boolean,
-    shouldClose: boolean
+    shouldClose: boolean,
   ): Float32Array {
     if (monochrome) {
       if (colorArray.length < VERTICES_PER_INSTANCE * 4) {
@@ -487,7 +487,7 @@ export const lines = (regl: any) => {
       const { depth = defaultReglDepth, blend = defaultReglBlend } = props;
       return regl({ depth, blend });
     },
-    (...args) => JSON.stringify(args)
+    (...args) => JSON.stringify(args),
   );
 
   // Disable depth for debug rendering (so lines stay visible)
@@ -549,7 +549,7 @@ export const lines = (regl: any) => {
           instances,
           scaleInvariant,
           hasInstancedPoses,
-        })
+        }),
       );
       if (debug) {
         command(
@@ -561,7 +561,7 @@ export const lines = (regl: any) => {
             instances,
             scaleInvariant,
             hasInstancedPoses,
-          })
+          }),
         );
       }
     });

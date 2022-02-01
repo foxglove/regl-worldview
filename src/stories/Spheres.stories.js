@@ -38,7 +38,7 @@ storiesOf("Worldview/Spheres", module)
                 scale: { x: 10, y: 10, z: 10 },
                 color: { r: 1, g: 0, b: 1, a: 0.5 },
               },
-            ]
+            ],
           )}
         </Spheres>
       </Container>

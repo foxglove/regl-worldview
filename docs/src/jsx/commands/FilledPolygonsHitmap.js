@@ -42,11 +42,13 @@ function Example() {
         if (!objects.length) {
           setClickedObj(null);
         }
-      }}>
+      }}
+    >
       <FilledPolygons
         onClick={(ev, { objects }) => {
           setClickedObj(objects[0].object);
-        }}>
+        }}
+      >
         {polygons}
       </FilledPolygons>
       <Axes />
@@ -59,7 +61,8 @@ function Example() {
           maxWidth: "100%",
           color: "white",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
-        }}>
+        }}
+      >
         {clickedObj ? <span>Clicked polygon id: {clickedObj.id}</span> : <span>Click any polygon</span>}
       </div>
     </Worldview>

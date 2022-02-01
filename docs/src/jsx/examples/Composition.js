@@ -100,7 +100,8 @@ function Example() {
         phi: 0.4,
         targetOffset: [2, 3, 0],
         thetaOffset: 0.3,
-      }}>
+      }}
+    >
       <Triangles>
         {[
           {

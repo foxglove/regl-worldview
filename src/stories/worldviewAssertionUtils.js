@@ -72,7 +72,7 @@ export function generateNonInstancedClickAssertions<Type>(
   overrideOptions?: {
     overrideExpectedSingleObjects?: any,
     overrideExpectedMultipleObjects?: any,
-  }
+  },
 ): Array<{ name: string, story: () => React$Element<any> }> {
   const options = overrideOptions || {};
   return [
@@ -90,7 +90,7 @@ export function generateNonInstancedClickAssertions<Type>(
           expect(result).toEqual(
             options.overrideExpectedSingleObjects
               ? options.overrideExpectedSingleObjects
-              : [{ object: renderedObjects[0], instanceIndex: undefined }]
+              : [{ object: renderedObjects[0], instanceIndex: undefined }],
           );
         },
       }),
@@ -109,7 +109,7 @@ export function generateNonInstancedClickAssertions<Type>(
           expect(result).toEqual(
             options.overrideExpectedSingleObjects
               ? options.overrideExpectedSingleObjects
-              : [{ object: renderedObjects[0], instanceIndex: undefined }]
+              : [{ object: renderedObjects[0], instanceIndex: undefined }],
           );
         },
       }),
@@ -131,7 +131,7 @@ export function generateNonInstancedClickAssertions<Type>(
               : [
                   { object: renderedObjects[0], instanceIndex: undefined },
                   { object: renderedObjects[1], instanceIndex: undefined },
-                ]
+                ],
           );
         },
       }),
@@ -153,7 +153,7 @@ export function generateNonInstancedClickAssertions<Type>(
               : [
                   { object: renderedObjects[0], instanceIndex: undefined },
                   { object: renderedObjects[1], instanceIndex: undefined },
-                ]
+                ],
           );
         },
       }),
@@ -170,7 +170,7 @@ export function generateNonInstancedClickAssertions<Type>(
 export function generateInstancedClickAssertions<Type>(
   commandName: string,
   CommandInstance: ComponentType<{ ...CommonCommandProps, children: Array<Type> }>,
-  renderedObject: Type
+  renderedObject: Type,
 ): Array<{ name: string, story: () => React$Element<any> }> {
   return [
     {

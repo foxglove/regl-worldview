@@ -11,10 +11,7 @@ import React from "react";
 import WorldviewCodeEditor from "./utils/WorldviewCodeEditor";
 
 function makeCodeComponent(raw, componentName, { isRowView, insertCodeSandboxStyle, noInline } = {}) {
-  const code = raw
-    .split("// #BEGIN EXAMPLE")[1]
-    .split("// #END EXAMPLE")[0]
-    .split("// #BEGIN EDITABLE");
+  const code = raw.split("// #BEGIN EXAMPLE")[1].split("// #END EXAMPLE")[0].split("// #BEGIN EDITABLE");
 
   if (code.length !== 2) {
     throw new Error("Demo code must contain `// #BEGIN EXAMPLE`,  `// #BEGIN EDITABLE`, and `// #END EXAMPLE`");
@@ -39,12 +36,12 @@ function makeCodeComponent(raw, componentName, { isRowView, insertCodeSandboxSty
 
 export const CameraStateControlled = makeCodeComponent(
   require("!!raw-loader!./api/CameraStateControlled"),
-  "CameraStateControlled"
+  "CameraStateControlled",
 );
 
 export const CameraStateUncontrolled = makeCodeComponent(
   require("!!raw-loader!./api/CameraStateUncontrolled"),
-  "CameraStateUncontrolled"
+  "CameraStateUncontrolled",
 );
 
 export const MouseEvents = makeCodeComponent(require("!!raw-loader!./api/MouseEvents"), "MouseEvents", {
@@ -53,14 +50,14 @@ export const MouseEvents = makeCodeComponent(require("!!raw-loader!./api/MouseEv
 
 export const MouseEventsInstanced = makeCodeComponent(
   require("!!raw-loader!./api/MouseEventsInstanced"),
-  "MouseEventsInstanced"
+  "MouseEventsInstanced",
 );
 
 export const Arrows = makeCodeComponent(require("!!raw-loader!./commands/Arrows"), "Arrows");
 
 export const ArrowsInteractive = makeCodeComponent(
   require("!!raw-loader!./commands/ArrowsInteractive"),
-  "ArrowsInteractive"
+  "ArrowsInteractive",
 );
 
 export const Cones = makeCodeComponent(require("!!raw-loader!./commands/Cones"), "Cones");
@@ -75,7 +72,7 @@ export const FilledPolygons = makeCodeComponent(require("!!raw-loader!./commands
 
 export const FilledPolygonsHitmap = makeCodeComponent(
   require("!!raw-loader!./commands/FilledPolygonsHitmap"),
-  "FilledPolygonsHitmap"
+  "FilledPolygonsHitmap",
 );
 
 export const GLText = makeCodeComponent(require("!!raw-loader!./commands/GLText"), "GLText", { noInline: true });
@@ -83,7 +80,7 @@ export const GLText = makeCodeComponent(require("!!raw-loader!./commands/GLText"
 export const GLTextScaleInvariant = makeCodeComponent(
   require("!!raw-loader!./commands/GLTextScaleInvariant"),
   "GLTextScaleInvariant",
-  { noInline: true }
+  { noInline: true },
 );
 
 export const GLTFScene = makeCodeComponent(require("!!raw-loader!./commands/GLTFScene"), "GLTFScene");
@@ -106,12 +103,12 @@ export const Points = makeCodeComponent(require("!!raw-loader!./commands/Points"
 
 export const SpheresInstanced = makeCodeComponent(
   require("!!raw-loader!./commands/SpheresInstanced"),
-  "SpheresInstanced"
+  "SpheresInstanced",
 );
 
 export const SpheresInstancedColor = makeCodeComponent(
   require("!!raw-loader!./commands/SpheresInstancedColor"),
-  "SpheresInstancedColor"
+  "SpheresInstancedColor",
 );
 
 export const SpheresSingle = makeCodeComponent(require("!!raw-loader!./commands/SpheresSingle"), "SpheresSingle");
@@ -134,7 +131,7 @@ export const Wireframe = makeCodeComponent(require("!!raw-loader!./examples/Wire
 
 export const AddRemoveObstacles = makeCodeComponent(
   require("!!raw-loader!./tutorials/AddRemoveObstacles"),
-  "AddingInteractivity"
+  "AddingInteractivity",
 );
 
 export const ColorfulKnot = makeCodeComponent(require("!!raw-loader!./tutorials/ColorfulKnot"), "RenderingObjects");
@@ -145,19 +142,19 @@ export const FollowObject = makeCodeComponent(require("!!raw-loader!./tutorials/
 
 export const FollowObjectOrientation = makeCodeComponent(
   require("!!raw-loader!./tutorials/FollowObjectOrientation"),
-  "ManagingTheCamera"
+  "ManagingTheCamera",
 );
 
 export const HelloWorld = makeCodeComponent(require("!!raw-loader!./tutorials/HelloWorld"), "RenderingObjects");
 
 export const InstancedRendering = makeCodeComponent(
   require("!!raw-loader!./tutorials/InstancedRendering"),
-  "RenderingObjects"
+  "RenderingObjects",
 );
 
 export const MoveCamera = makeCodeComponent(require("!!raw-loader!./tutorials/MoveCamera"), "ManagingTheCamera");
 
 export const StopReleaseDuck = makeCodeComponent(
   require("!!raw-loader!./tutorials/StopReleaseDuck"),
-  "AddingInteractivity"
+  "AddingInteractivity",
 );

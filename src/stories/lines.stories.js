@@ -31,7 +31,10 @@ storiesOf("Worldview/Lines", module)
           orientation: { x: 0, y: 0, z: 0, w: 1 },
         },
         scale: { x: 2, y: 0, z: 0 },
-        points: [[0, -4, 0], [0, 4, 0]],
+        points: [
+          [0, -4, 0],
+          [0, 4, 0],
+        ],
         color: [1, 1, 1, 1],
       },
     ];
@@ -66,7 +69,10 @@ storiesOf("Worldview/Lines", module)
                 orientation: { x: 0, y: 0, z: 0, w: 1 },
               },
               scale: { x: 2, y: 0, z: 0 },
-              points: [[0, -4, 0], [0, 4, 0]],
+              points: [
+                [0, -4, 0],
+                [0, 4, 0],
+              ],
               color: [1, 1, 1, 1],
               blend: {
                 enable: true,

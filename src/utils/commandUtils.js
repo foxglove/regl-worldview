@@ -179,7 +179,7 @@ export function colorBuffer(regl: any) {
     data: [],
   });
 
-  return function(color: any, colors: any, length: number) {
+  return function (color: any, colors: any, length: number) {
     let data, divisor;
     if (!colors || !colors.length) {
       data = shouldConvert(color) ? toRGBA(color) : color;

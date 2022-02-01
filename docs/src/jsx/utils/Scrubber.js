@@ -43,7 +43,7 @@ export default function Scrubber({ value, onChange, speed = 1, vertical = false 
       const delta = vertical ? start.position.clientY - event.clientY : event.clientX - start.position.clientX;
       onChange(start.value + delta * speed);
     },
-    []
+    [],
   );
   useEventListener(
     window,
@@ -52,7 +52,7 @@ export default function Scrubber({ value, onChange, speed = 1, vertical = false 
     (event: MouseEvent) => {
       setDragging(false);
     },
-    []
+    [],
   );
 
   return (
@@ -65,7 +65,8 @@ export default function Scrubber({ value, onChange, speed = 1, vertical = false 
           value,
           position: { clientX: event.clientX, clientY: event.clientY },
         });
-      }}>
+      }}
+    >
       {value.toFixed(1)}
     </StyledNumber>
   );

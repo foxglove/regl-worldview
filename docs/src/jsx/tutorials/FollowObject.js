@@ -22,7 +22,7 @@ function Example() {
       setCount(newCount);
     },
     false,
-    []
+    [],
   );
 
   // map a number/index to a specific color
@@ -69,7 +69,8 @@ function Example() {
         thetaOffset: -Math.PI / 2, // rotate the camera so the duck is facing right
         // zoom out a little so we can see better
         distance: 160,
-      }}>
+      }}
+    >
       <Spheres>{[sphereMarker]}</Spheres>
       <Axes />
       {/* Download model: https://github.com/cruise-automation/webviz/blob/master/common/fixtures/Duck.glb  */}

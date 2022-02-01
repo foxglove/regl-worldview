@@ -15,7 +15,12 @@ function Example() {
   const defaultMsg = "Click on top of the green lines or inside the red area.";
   const [msg, setMsg] = useState(defaultMsg);
 
-  const points = [{ x: 0, y: 0, z: 2 }, { x: 0, y: 3, z: 2 }, { x: 3, y: 3, z: 2 }, { x: 3, y: 0, z: 2 }];
+  const points = [
+    { x: 0, y: 0, z: 2 },
+    { x: 0, y: 3, z: 2 },
+    { x: 3, y: 3, z: 2 },
+    { x: 3, y: 0, z: 2 },
+  ];
   const lines = [
     {
       id: 191,
@@ -38,11 +43,13 @@ function Example() {
           setMsg(defaultMsg);
         }
       }}
-      defaultCameraState={{ distance: 10 }}>
+      defaultCameraState={{ distance: 10 }}
+    >
       <Lines
         onClick={(ev, { objects }) => {
           setMsg(`Clicked on the lines. objectId: ${objects[0].object.id}`);
-        }}>
+        }}
+      >
         {lines}
       </Lines>
       <LinesWithClickableInterior
@@ -51,7 +58,8 @@ function Example() {
         }}
         enableClickableInterior
         showBorder
-        fillColor={{ r: 1, g: 0, b: 0, a: 0.2 }}>
+        fillColor={{ r: 1, g: 0, b: 0, a: 0.2 }}
+      >
         {[
           {
             ...lines[0],
@@ -73,7 +81,8 @@ function Example() {
           maxWidth: "100%",
           color: "white",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
-        }}>
+        }}
+      >
         <div>{msg}</div>
       </div>
     </Worldview>

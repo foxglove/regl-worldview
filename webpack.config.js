@@ -218,7 +218,7 @@ if (WEBVIZ_DEV) {
   module.exports.plugins.push(
     new HtmlWebpackPlugin({
       template: path.resolve(`${__dirname}/packages/webviz-core/public/index.html`),
-    })
+    }),
   );
 }
 

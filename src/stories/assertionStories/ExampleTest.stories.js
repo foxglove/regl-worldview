@@ -22,5 +22,5 @@ storiesOf("Integration/ExampleTest", module).add(
     assertions: async (getTestData) => {
       expect(true).toEqual(false);
     },
-  })
+  }),
 );
