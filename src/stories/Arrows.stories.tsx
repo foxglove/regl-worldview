@@ -5,7 +5,7 @@
 //  You may not use this file except in compliance with the License.
 import { withKnobs } from "@storybook/addon-knobs";
 import { storiesOf } from "@storybook/react";
-import React from "react";
+import * as React from "react";
 
 import Worldview, { Arrows, Axes } from "../index";
 import { withCustomRenderStates } from "./util";

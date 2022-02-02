@@ -6,6 +6,7 @@
 import flatten from "lodash/flatten";
 import memoize from "lodash/memoize";
 import * as React from "react";
+import * as REGL from "regl";
 
 import type { Line, Vec4, Color, Pose, DepthState, BlendState } from "../types";
 import {
@@ -241,7 +242,7 @@ function pointsEqual(a, b) {
   return ax === bx && ay === by && az === bz;
 }
 
-export const lines = (regl: any) => {
+export const lines = (regl: REGL.Regl) => {
   if (!regl) {
     throw new Error("Invalid regl instance");
   }

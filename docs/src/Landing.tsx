@@ -3,7 +3,7 @@
 //  This source code is licensed under the Apache License, Version 2.0,
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
-import React from "react";
+import * as React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Demo from "./Demo";
@@ -97,7 +97,8 @@ const DocsFooterLink = styled(Link)`
   font-size: 18px;
 `;
 
-const Landing = () => <OuterContainer>
+const Landing = () => (
+  <OuterContainer>
     <InnerContainer>
       <Header>
         <Logo width={170} />
@@ -114,7 +115,12 @@ const Landing = () => <OuterContainer>
           . Performance, ease of use, and extensibility are top priorities.
         </h2>
         <HeaderLinks>
-          <GitHubLink href="https://github.com/cruise-automation/webviz" className="monospace" target="_blank" rel="noopener noreferrer">
+          <GitHubLink
+            href="https://github.com/cruise-automation/webviz"
+            className="monospace"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <GitHubLogo width={20} />
             GitHub
           </GitHubLink>
@@ -128,13 +134,19 @@ const Landing = () => <OuterContainer>
         <DocsFooterLink to="/docs" className="monospace">
           Get started →
         </DocsFooterLink>
-        <a href="https://getcruise.com" target="_blank" rel="noopener noreferrer" style={{
-        color: "currentColor"
-      }}>
+        <a
+          href="https://getcruise.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            color: "currentColor",
+          }}
+        >
           <CruiseLogo height={20} />
         </a>
       </Footer>
     </InnerContainer>
-  </OuterContainer>;
+  </OuterContainer>
+);
 
 export default Landing;

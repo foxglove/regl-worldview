@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/react";
-import React from "react";
+import * as React from "react";
 
 import { Cubes, DEFAULT_CAMERA_STATE } from "..";
 import type { MouseHandler } from "../types";

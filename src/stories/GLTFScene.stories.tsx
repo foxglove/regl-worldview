@@ -5,7 +5,7 @@
 //  You may not use this file except in compliance with the License.
 import { storiesOf } from "@storybook/react";
 import { quat } from "gl-matrix";
-import React from "react";
+import * as React from "react";
 
 import Worldview, { Axes, GLTFScene, Grid } from "../index";
 import { vec4ToOrientation } from "../utils/commandUtils";

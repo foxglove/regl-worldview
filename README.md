@@ -17,7 +17,7 @@ Then try rendering the [basic example](https://cruise-automation.github.io/webvi
 ![Image of the basic example](basic-example.png)
 
 ```js
-import React from "react";
+import * as React from "react";
 
 import Worldview, { Cubes, Axes } from "@foxglove/regl-worldview";
 

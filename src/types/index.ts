@@ -14,24 +14,6 @@ export type Dimensions = {
   left: number;
   top: number;
 };
-export type ReglCommand = {
-  vert: string | ((props: unknown, context: unknown) => string);
-  frag: string;
-  uniforms?: any;
-};
-export type CompiledReglCommand<T> = (props: T, context: any) => void;
-export type ReglFn = <T>(arg0: ReglCommand) => CompiledReglCommand<T>;
-type Command<T> = (arg0: T | T[], ...args: any[]) => void;
-export type RawCommand<T> = (regl: any) => {} | Command<T>;
-export type Regl = {
-  limits: {
-    pointSizeDims: [number, number];
-  };
-  prop: (arg0: string) => any;
-  context: (arg0: string) => any;
-};
-export type CommandProps = Record<string, any>;
-export type CommandDict = Record<string, Command<any>>;
 // [left, top, width, height]
 export type Viewport = [number, number, number, number];
 export type Vec2 = [number, number];
@@ -59,7 +41,7 @@ export interface CameraCommand {
   getProjection(): Mat4;
   getView(): Mat4;
   toScreenCoord(viewport: Viewport, point: Vec3): Vec3 | null | undefined;
-  draw(props: {}, arg1: (ctx: any) => void): void;
+  draw(props: CameraState, arg1: (ctx: any) => void): void;
 }
 export type ReglContext = {
   regl: ReglFn;

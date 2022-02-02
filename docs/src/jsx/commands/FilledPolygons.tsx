@@ -6,7 +6,7 @@
 // #BEGIN EXAMPLE
 import Worldview, { FilledPolygons, Axes } from "@foxglove/regl-worldview";
 import polygonGenerator from "polygon-generator";
-import React from "react";
+import * as React from "react";
 import useRange from "../utils/useRange";
 
 // #BEGIN EDITABLE
@@ -16,29 +16,29 @@ function Example() {
   const startingAngle = 15 * range;
   const numSides = Math.floor(range * 15) + 1;
   const randomPolygon = polygonGenerator.coordinates(numSides, sideLength, startingAngle);
-  const vertices = randomPolygon.map(({
-    x,
-    y
-  }) => ({
+  const vertices = randomPolygon.map(({ x, y }) => ({
     x,
     y,
-    z: 0
+    z: 0,
   }));
-  const polygons = [{
-    points: vertices,
-    color: {
-      r: 1 - range * 0.5,
-      g: range,
-      b: 1,
-      a: 1 - range * 0.3
+  const polygons = [
+    {
+      points: vertices,
+      color: {
+        r: 1 - range * 0.5,
+        g: range,
+        b: 1,
+        a: 1 - range * 0.3,
+      },
+      id: 1,
     },
-    id: 1
-  }];
-  return <Worldview>
+  ];
+  return (
+    <Worldview>
       <FilledPolygons>{polygons}</FilledPolygons>
       <Axes />
-    </Worldview>;
+    </Worldview>
+  );
 } // #END EXAMPLE
-
 
 export default Example;

@@ -3,7 +3,9 @@
 //  This source code is licensed under the Apache License, Version 2.0,
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
-import type { Color, Point, Orientation, ReglCommand, Vec4, Vec3 } from "../types";
+import * as REGL from "regl";
+
+import type { Color, Point, Orientation, Vec4, Vec3 } from "../types";
 
 const rotateGLSL = `
   uniform vec3 _position;
@@ -64,7 +66,12 @@ export const vec4ToRGBA = (color: Vec4): Color => ({
   b: color[2],
   a: color[3],
 });
-export const toColor = (val: Color | Vec4): Color => (Array.isArray(val) ? vec4ToRGBA(val) : val);
+export function toColor(val: Color | Vec4): Color;
+export function toColor(val: undefined): undefined;
+export function toColor(val: Color | Vec4 | undefined): Color | undefined;
+export function toColor(val: Color | Vec4 | undefined): Color | undefined {
+  return Array.isArray(val) ? vec4ToRGBA(val) : val;
+}
 export function getCSSColor(color: Color = DEFAULT_TEXT_COLOR) {
   const { r, g, b, a } = color;
   return `rgba(${(r * 255).toFixed()}, ${(g * 255).toFixed()}, ${(b * 255).toFixed()}, ${a.toFixed(3)})`;
@@ -117,20 +124,21 @@ export const defaultReglDepth = {
   mask: true,
 };
 export const defaultDepth = {
-  enable: (context: any, props: any) => (props.depth && props.depth.enable) || defaultReglDepth.enable,
-  mask: (context: any, props: any) => (props.depth && props.depth.mask) || defaultReglDepth.mask,
+  enable: (context: any, props: { depth?: { enable?: boolean } }) => props.depth?.enable || defaultReglDepth.enable,
+  mask: (context: any, props: { depth?: { mask?: boolean } }) => props.depth?.mask || defaultReglDepth.mask,
 };
 export const defaultBlend = {
   ...defaultReglBlend,
-  enable: (context: any, props: any) => (props.blend && props.blend.enable) || defaultReglBlend.enable,
-  func: (context: any, props: any) => (props.blend && props.blend.func) || defaultReglBlend.func,
+  enable: (context: any, props: { blend?: { enable?: boolean } }) => props.blend?.enable || defaultReglBlend.enable,
+  func: (context: any, props: { blend?: { func?: string } }) => props.blend?.func || defaultReglBlend.func,
 };
-// TODO: deprecating, remove before 1.x release
-export const blend = defaultBlend;
+
 // takes a regl command definition object and injects
 // position and rotation from the object pose and also
 // inserts some glsl helpers to apply the pose to points in a fragment shader
-export function withPose(command: ReglCommand): ReglCommand {
+export function withPose<Uniforms, Attributes, Props, OwnContext, ParentContext extends REGL.DefaultContext>(
+  command: REGL.DrawConfig<Uniforms, Attributes, Props, OwnContext, ParentContext>
+): REGL.DrawConfig<Uniforms, Attributes, Props, OwnContext, ParentContext> {
   const { vert, uniforms } = command;
   const newVert =
     typeof vert === "function"
@@ -178,7 +186,7 @@ function hasNestedArrays(arr: any[]) {
 // and returns a color attribute buffer for use in regl.
 // If there are multiple colors in the colors array, one color will be assigned to each instance.
 // In the case of a single color, the same color will be used for all instances.
-export function colorBuffer(regl: any) {
+export function colorBuffer(regl: REGL.Regl) {
   const buffer = regl.buffer({
     usage: "dynamic",
     data: [],

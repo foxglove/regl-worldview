@@ -6,7 +6,7 @@
 import { withKnobs } from "@storybook/addon-knobs";
 import { storiesOf } from "@storybook/react";
 import polygonGenerator from "polygon-generator";
-import React from "react";
+import * as React from "react";
 
 import { FilledPolygons, Lines, DEFAULT_CAMERA_STATE } from "..";
 import Container from "./Container";

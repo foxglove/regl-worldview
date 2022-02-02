@@ -102,7 +102,7 @@ const generateArrowPrimitives = (markers: Arrow[]) => {
   };
 };
 
-export const makeArrowsCommand = () => (regl: any) => {
+export const makeArrowsCommand = () => (regl: REGL.Regl) => {
   const cylindersCommand = cylinders(regl);
   const conesCommand = cones(regl);
   return (props: any) => {

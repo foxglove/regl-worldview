@@ -5,7 +5,7 @@
 //  You may not use this file except in compliance with the License.
 // #BEGIN EXAMPLE
 import Worldview, { Spheres, Axes } from "@foxglove/regl-worldview";
-import React from "react";
+import * as React from "react";
 
 // #BEGIN EDITABLE
 function Example() {
@@ -13,7 +13,7 @@ function Example() {
 
   // map a number/index to a specific color
   function numberToColor(number, max, a = 1) {
-    const i = number * 255 / max;
+    const i = (number * 255) / max;
     const r = Math.round(Math.sin(0.024 * i + 0) * 127 + 128) / 255;
     const g = Math.round(Math.sin(0.024 * i + 2) * 127 + 128) / 255;
     const b = Math.round(Math.sin(0.024 * i + 4) * 127 + 128) / 255;
@@ -21,39 +21,47 @@ function Example() {
       r,
       g,
       b,
-      a
+      a,
     };
   }
 
   // the object index needs to be multipled by this scale so it's evenly distributed in the space
-  const scale = Math.PI * 2 / steps;
-  const sphereMarkers = new Array(steps).fill().map((_, idx) => [// generate x, y, z coordinates based on trefoil equation
-  Math.sin(idx * scale) + 2 * Math.sin(2 * idx * scale), Math.cos(idx * scale) - 2 * Math.cos(2 * idx * scale), -Math.sin(3 * idx * scale)]).map(([x, y, z], idx) => ({
-    pose: {
-      orientation: {
-        x: 0,
-        y: 0,
-        z: 0,
-        w: 1
+  const scale = (Math.PI * 2) / steps;
+  const sphereMarkers = new Array(steps)
+    .fill()
+    .map((_, idx) => [
+      // generate x, y, z coordinates based on trefoil equation
+      Math.sin(idx * scale) + 2 * Math.sin(2 * idx * scale),
+      Math.cos(idx * scale) - 2 * Math.cos(2 * idx * scale),
+      -Math.sin(3 * idx * scale),
+    ])
+    .map(([x, y, z], idx) => ({
+      pose: {
+        orientation: {
+          x: 0,
+          y: 0,
+          z: 0,
+          w: 1,
+        },
+        position: {
+          x: 20 * x,
+          y: 20 * y,
+          z: 20 * z,
+        },
       },
-      position: {
-        x: 20 * x,
-        y: 20 * y,
-        z: 20 * z
-      }
-    },
-    scale: {
-      x: 1,
-      y: 1,
-      z: 1
-    },
-    color: numberToColor(idx, steps)
-  }));
-  return <Worldview>
+      scale: {
+        x: 1,
+        y: 1,
+        z: 1,
+      },
+      color: numberToColor(idx, steps),
+    }));
+  return (
+    <Worldview>
       <Spheres>{sphereMarkers}</Spheres>
       <Axes />
-    </Worldview>;
+    </Worldview>
+  );
 } // #END EXAMPLE
-
 
 export default Example;

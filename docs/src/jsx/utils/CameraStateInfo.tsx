@@ -3,7 +3,7 @@
 //  This source code is licensed under the Apache License, Version 2.0,
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
-import React from "react";
+import * as React from "react";
 import styled from "styled-components";
 const TextWrapper = styled.div`
   position: absolute;
@@ -17,9 +17,9 @@ const TextWrapper = styled.div`
   color: gray;
   white-space: pre-line;
 `;
-export default function CameraStateInfo({
-  cameraState
-}) {
-  const cameraStateInfo = Object.keys(cameraState).map(key => `${key}: ${cameraState[key]}`).join("\n");
+export default function CameraStateInfo({ cameraState }) {
+  const cameraStateInfo = Object.keys(cameraState)
+    .map((key) => `${key}: ${cameraState[key]}`)
+    .join("\n");
   return <TextWrapper>{cameraStateInfo}</TextWrapper>;
 }

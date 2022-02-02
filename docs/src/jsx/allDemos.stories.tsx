@@ -4,7 +4,7 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import { storiesOf } from "@storybook/react";
-import React from "react";
+import * as React from "react";
 import CameraStateControlled from "./api/CameraStateControlled";
 import CameraStateUncontrolled from "./api/CameraStateUncontrolled";
 import MouseEvents from "./api/MouseEvents";
@@ -57,27 +57,35 @@ const allDemos = {
   GLText,
   GLTextScaleInvariant,
   Triangles,
-  GLTFScene
+  GLTFScene,
 };
 // Some of these demos have movement, which we do want to allow, but which doesn't play well with screenshot tests.
 const demosWithoutScreenshotTests = [DynamicCommands, FilledPolygons, Overlay, Points, SpheresInstanced];
 
 for (const [demoName, Component] of Object.entries(allDemos)) {
   const story = () => {
-    return <div style={{
-      width: "100%",
-      height: "100%"
-    }}>
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+      >
         <Component />
-      </div>;
+      </div>
+    );
   };
 
   const hasScreenshotTest = !demosWithoutScreenshotTests.includes(Component);
-  storiesOf("Worldview docs", module).addParameters({
-    screenshot: hasScreenshotTest ? {
-      delay: 200
-    } : {
-      skip: true
-    }
-  }).add(demoName, story);
+  storiesOf("Worldview docs", module)
+    .addParameters({
+      screenshot: hasScreenshotTest
+        ? {
+            delay: 200,
+          }
+        : {
+            skip: true,
+          },
+    })
+    .add(demoName, story);
 }

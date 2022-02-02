@@ -4,7 +4,7 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import LZString from "lz-string";
-import React from "react";
+import * as React from "react";
 import styled from "styled-components";
 import CodeSandboxIcon from "./icons/CodeSandbox";
 import { palette } from "./theme";
@@ -29,35 +29,34 @@ function convertAbsoluteImportsToRelativeImports(code) {
   return code.replace(/from "~\/common/g, `from "./common`);
 }
 
-function CodeSandboxButton({
-  codeSandboxCode,
-  codeSandboxConfig = {}
-}) {
+function CodeSandboxButton({ codeSandboxCode, codeSandboxConfig = {} }) {
   const dependencies = codeSandboxConfig.dependencies || {};
   const files = codeSandboxConfig.files || {};
   let parameters = {
     files: {
       "package.json": {
         content: {
-          dependencies
-        }
+          dependencies,
+        },
       },
       "index.js": {
-        content: convertAbsoluteImportsToRelativeImports(codeSandboxCode)
+        content: convertAbsoluteImportsToRelativeImports(codeSandboxCode),
       },
       "index.html": {
-        content: '<div id="root"></div>'
+        content: '<div id="root"></div>',
       },
-      ...files
-    }
+      ...files,
+    },
   };
   parameters = LZString.compressToBase64(JSON.stringify(parameters));
-  return <form action="https://codesandbox.io/api/v1/sandboxes/define" method="POST" target="_blank">
+  return (
+    <form action="https://codesandbox.io/api/v1/sandboxes/define" method="POST" target="_blank">
       <input type="hidden" name="parameters" value={parameters} />
       <StyledActionButton type="submit" title="Open in CodeSandbox">
         <CodeSandboxIcon />
       </StyledActionButton>
-    </form>;
+    </form>
+  );
 }
 
 export default CodeSandboxButton;

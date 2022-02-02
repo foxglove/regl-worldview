@@ -6,6 +6,7 @@
 import * as React from "react";
 
 import type { WorldviewContextType } from "../WorldviewContext";
+import WorldviewReactContext from "../WorldviewReactContext";
 import type {
   ComponentMouseHandler,
   GetChildrenForHitmap,
@@ -17,8 +18,6 @@ import type {
 } from "../types";
 import { Ray } from "../utils/Raycast";
 import { getNodeEnv } from "../utils/common";
-import "../WorldviewContext";
-import WorldviewReactContext from "../WorldviewReactContext";
 
 export const SUPPORTED_MOUSE_EVENTS = ["onClick", "onMouseUp", "onMouseMove", "onMouseDown", "onDoubleClick"];
 export type MarkerDefault = {

@@ -4,11 +4,12 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import memoize from "lodash/memoize";
+import * as REGL from "regl";
 
 import type { DepthState, BlendState } from "../types";
 import { defaultReglDepth, defaultReglBlend } from "./commandUtils";
 
-const withRenderStateOverrides = (command: any) => (regl: any) => {
+const withRenderStateOverrides = (command: any) => (regl: REGL.Regl) => {
   // Generate the render command once
   const reglCommand = command(regl);
   // Use memoization to avoid generating multiple render commands for the same render states

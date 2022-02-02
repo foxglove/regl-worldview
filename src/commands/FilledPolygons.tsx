@@ -4,7 +4,8 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import earcut from "earcut";
-import React from "react";
+import * as React from "react";
+import * as REGL from "regl";
 
 import type { Vec3, Point, PolygonType } from "../types";
 import { shouldConvert, pointToVec3 } from "../utils/commandUtils";
@@ -70,7 +71,7 @@ const generateTriangles = (polygons: PolygonType[]) => {
   });
 };
 
-export const makeFilledPolygonsCommand = () => (regl: any) => {
+export const makeFilledPolygonsCommand = () => (regl: REGL.Regl) => {
   const trianglesCommand = makeTrianglesCommand()(regl);
   return (props: any) => {
     trianglesCommand(generateTriangles(props), false);

@@ -5,10 +5,9 @@
 //  You may not use this file except in compliance with the License.
 import * as React from "react";
 
-import type { Point, Vec3, Dimensions, Pose } from "../types";
 import type { WorldviewContextType } from "../WorldviewContext";
-import "../WorldviewContext";
 import WorldviewReactContext from "../WorldviewReactContext";
+import type { Point, Vec3, Dimensions, Pose } from "../types";
 
 type PoseObj = {
   pose: Pose;

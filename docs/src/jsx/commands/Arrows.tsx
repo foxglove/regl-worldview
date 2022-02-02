@@ -5,7 +5,7 @@
 //  You may not use this file except in compliance with the License.
 // #BEGIN EXAMPLE
 import Worldview, { Arrows, Axes } from "@foxglove/regl-worldview";
-import React from "react";
+import * as React from "react";
 
 // #BEGIN EDITABLE
 function Example() {
@@ -15,53 +15,57 @@ function Example() {
         x: 0,
         y: 0,
         z: -1,
-        w: 0.5
+        w: 0.5,
       },
       position: {
         x: 0,
         y: 0,
-        z: 0
-      }
+        z: 0,
+      },
     },
     scale: {
       x: 20,
       y: 3,
-      z: 3
+      z: 3,
     },
     color: {
       r: 1,
       g: 0,
       b: 1,
-      a: 1
-    }
+      a: 1,
+    },
   };
   const pointArrow = {
     color: {
       r: 1,
       g: 1,
       b: 1,
-      a: 1
+      a: 1,
     },
-    points: [{
-      x: 0,
-      y: 0,
-      z: 0
-    }, {
-      x: 10,
-      y: 10,
-      z: 10
-    }],
+    points: [
+      {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+      {
+        x: 10,
+        y: 10,
+        z: 10,
+      },
+    ],
     scale: {
       x: 2,
       y: 2,
-      z: 3
-    }
+      z: 3,
+    },
   };
-  return <Worldview>
+  return (
+    <Worldview>
       <Arrows>{[poseArrow, pointArrow]}</Arrows>
       <Axes />
-    </Worldview>;
+    </Worldview>
+  );
 } // #END EXAMPLE
-
 
 export default Example;

@@ -51,7 +51,8 @@ const Container = styled.div`
 const HelloWorldview = () => {
   const [spheresPerAxis, setSpheresPerAxis] = useState(6);
   const [distance, setDistance] = useState(30);
-  return <React.Fragment>
+  return (
+    <React.Fragment>
       <Container>
         <div>
           <h3 className="monospace">Rendering objects</h3>
@@ -76,7 +77,10 @@ const HelloWorldview = () => {
           </label>
         </div>
       </Container>
-      <WorldviewCodeEditor height={750} componentName="" code={`
+      <WorldviewCodeEditor
+        height={750}
+        componentName=""
+        code={`
 function Example() {
   const n = ${spheresPerAxis};
   const points = [], colors = [];
@@ -113,10 +117,14 @@ function Example() {
       </Spheres>
     </Worldview>
   );
-}`} nonEditableCode={`
-import React from "react";
-import { Worldview, Spheres } from "@foxglove/regl-worldview"`} hideNonEditableCode />
-    </React.Fragment>;
+}`}
+        nonEditableCode={`
+import * as React from "react";
+import { Worldview, Spheres } from "@foxglove/regl-worldview"`}
+        hideNonEditableCode
+      />
+    </React.Fragment>
+  );
 };
 
 export default HelloWorldview;

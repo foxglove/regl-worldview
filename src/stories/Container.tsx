@@ -5,7 +5,7 @@
 //  You may not use this file except in compliance with the License.
 // TODO(JP): Should remove this and properly fix Flow.
 
-import React from "react";
+import * as React from "react";
 
 import type { Props } from "../index";
 import Worldview from "../index";

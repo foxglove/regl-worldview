@@ -5,41 +5,44 @@
 //  You may not use this file except in compliance with the License.
 // #BEGIN EXAMPLE
 import Worldview, { Axes, Spheres } from "@foxglove/regl-worldview";
-import React from "react";
+import * as React from "react";
 
 // #BEGIN EDITABLE
 function Example() {
-  const markers = [{
-    pose: {
-      orientation: {
-        x: 0,
-        y: 0,
-        z: 0,
-        w: 1
+  const markers = [
+    {
+      pose: {
+        orientation: {
+          x: 0,
+          y: 0,
+          z: 0,
+          w: 1,
+        },
+        position: {
+          x: 0,
+          y: 0,
+          z: 0,
+        },
       },
-      position: {
-        x: 0,
-        y: 0,
-        z: 0
-      }
+      scale: {
+        x: 10,
+        y: 10,
+        z: 10,
+      },
+      color: {
+        r: 1,
+        g: 0,
+        b: 1,
+        a: 0.5,
+      },
     },
-    scale: {
-      x: 10,
-      y: 10,
-      z: 10
-    },
-    color: {
-      r: 1,
-      g: 0,
-      b: 1,
-      a: 0.5
-    }
-  }];
-  return <Worldview>
+  ];
+  return (
+    <Worldview>
       <Spheres>{markers}</Spheres>
       <Axes />
-    </Worldview>;
+    </Worldview>
+  );
 } // #END EXAMPLE
-
 
 export default Example;

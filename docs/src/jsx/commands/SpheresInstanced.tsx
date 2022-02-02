@@ -5,7 +5,7 @@
 //  You may not use this file except in compliance with the License.
 // #BEGIN EXAMPLE
 import Worldview, { Spheres } from "@foxglove/regl-worldview";
-import React from "react";
+import * as React from "react";
 import useRange from "../utils/useRange";
 
 // #BEGIN EDITABLE
@@ -24,7 +24,7 @@ function Example() {
         coords.push({
           x: i * step,
           y: j * step,
-          z: k * step
+          z: k * step,
         });
       }
     }
@@ -37,32 +37,33 @@ function Example() {
     scale: {
       x: scaleX,
       y: scaleX,
-      z: scaleX
+      z: scaleX,
     },
     color: {
       r: 1,
       g: range,
       b: 1,
-      a: 1
+      a: 1,
     },
     pose: {
       position: {
         x: range,
         y: range,
-        z: range
+        z: range,
       },
       orientation: {
         x: 0,
         y: 0,
         z: 0,
-        w: 1
-      }
-    }
+        w: 1,
+      },
+    },
   };
-  return <Worldview>
+  return (
+    <Worldview>
       <Spheres>{[sphereList]}</Spheres>
-    </Worldview>;
+    </Worldview>
+  );
 } // #END EXAMPLE
-
 
 export default Example;

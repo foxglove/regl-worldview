@@ -11,8 +11,8 @@ import type { Vec3, Vec4, Mat4 } from "../types";
 
 const NEAR_RANGE = 0;
 const FAR_RANGE = 1;
-const tmp4 = [0, 0, 0, 0];
-export default function cameraProject(out: any, vec: Vec3, viewport: Vec4, combinedProjView: Mat4): Vec4 {
+const tmp4: Vec4 = [0, 0, 0, 0];
+export default function cameraProject(out: Vec4, vec: Vec3, viewport: Vec4, combinedProjView: Mat4): Vec4 {
   const vX = viewport[0],
     vY = viewport[1],
     vWidth = viewport[2],

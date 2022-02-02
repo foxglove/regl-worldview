@@ -5,7 +5,7 @@
 //  You may not use this file except in compliance with the License.
 // #BEGIN EXAMPLE
 import Worldview, { Spheres } from "@foxglove/regl-worldview";
-import React from "react";
+import * as React from "react";
 import seedrandom from "seedrandom";
 
 // #BEGIN EDITABLE
@@ -24,49 +24,54 @@ function Example() {
         coords.push({
           x: i * step,
           y: j * step,
-          z: k * step
+          z: k * step,
         });
       }
     }
   }
 
   const rng = seedrandom(SEED);
-  window.colors = window.colors || coords.map((coord, i) => {
-    return {
-      r: rng(),
-      g: rng(),
-      b: rng(),
-      a: 1
-    };
-  });
+  window.colors =
+    window.colors ||
+    coords.map((coord, i) => {
+      return {
+        r: rng(),
+        g: rng(),
+        b: rng(),
+        a: 1,
+      };
+    });
   const marker = {
     points: coords,
     scale: {
       x: 0.25,
       y: 0.25,
-      z: 0.25
+      z: 0.25,
     },
     colors: window.colors,
     pose: {
       position: {
         x: 3,
         y: 3,
-        z: 3
+        z: 3,
       },
       orientation: {
         x: 0,
         y: 0,
         z: 0,
-        w: 1
-      }
-    }
+        w: 1,
+      },
+    },
   };
-  return <Worldview defaultCameraState={{
-    target: [20, 20, 100]
-  }}>
+  return (
+    <Worldview
+      defaultCameraState={{
+        target: [20, 20, 100],
+      }}
+    >
       <Spheres>{[marker]}</Spheres>
-    </Worldview>;
+    </Worldview>
+  );
 } // #END EXAMPLE
-
 
 export default Example;

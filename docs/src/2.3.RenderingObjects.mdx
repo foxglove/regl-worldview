@@ -22,7 +22,7 @@ Create a new file titled `Example.js` in the `src/` directory, and add the code 
 
 ```js
 // src/Example.js
-import React from "react";
+import * as React from "react";
 import Worldview, { Cubes, Axes, Text } from "@foxglove/regl-worldview";
 
 export default function Example() {
@@ -65,7 +65,7 @@ Replace the contents of `src/index.js` with the following code to render your `E
 
 ```js
 // src/index.js
-import React from "react";
+import * as React from "react";
 import ReactDOM from "react-dom";
 import Example from "./Example";
 

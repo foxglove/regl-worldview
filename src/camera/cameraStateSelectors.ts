@@ -9,11 +9,11 @@ import { createSelector } from "reselect";
 import type { CameraState, Vec4, Vec3, Mat4 } from "../types";
 import { fromSpherical } from "../utils/commandUtils";
 
-const UNIT_X_VECTOR = Object.freeze([1, 0, 0]);
+const UNIT_X_VECTOR = Object.freeze([1, 0, 0]) as readonly [number, number, number];
 // reusable arrays for intermediate calculations
-const TEMP_VEC3 = [0, 0, 0];
-const TEMP_MAT = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-const TEMP_QUAT = [0, 0, 0, 0];
+const TEMP_VEC3: Vec3 = [0, 0, 0];
+const TEMP_MAT: Mat4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+const TEMP_QUAT: Vec4 = [0, 0, 0, 0];
 
 const stateSelector = (state: CameraState) => state;
 
@@ -37,7 +37,7 @@ const orientationSelector: (arg0: CameraState) => Vec4 = createSelector(
   phiSelector,
   thetaOffsetSelector,
   (perspective, phi, thetaOffset) => {
-    const result = quat.identity([0, 0, 0, 0]);
+    const result = quat.identity([0, 0, 0, 0]) as Vec4;
     quat.rotateZ(result, result, -thetaOffset);
 
     // phi is ignored in 2D mode
@@ -133,7 +133,7 @@ const viewSelector: (arg0: CameraState) => Mat4 = createSelector(
   orientationSelector,
   positionSelector,
   ({ target, targetOffset, targetOrientation, perspective }, orientation, position) => {
-    const m = mat4.identity([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    const m = mat4.identity([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) as Mat4;
     // apply the steps described above in reverse because we use right-multiplication
     // 5. rotate camera to point forward
     mat4.multiply(m, m, mat4.fromQuat(TEMP_MAT, quat.invert(TEMP_QUAT, orientation)));
@@ -163,7 +163,7 @@ const viewSelector: (arg0: CameraState) => Mat4 = createSelector(
     return m;
   }
 );
-const billboardRotation: (arg0: CameraState) => Mat4 = createSelector(
+const billboardRotation: (arg0: CameraState) => mat4 = createSelector(
   orientationSelector,
   targetHeadingSelector,
   (orientation, targetHeading) => {

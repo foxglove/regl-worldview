@@ -4,7 +4,7 @@
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
 import type { CameraState, Quat } from "@foxglove/regl-worldview";
-import React from "react";
+import * as React from "react";
 import styled from "styled-components";
 import Scrubber from "./Scrubber";
 import Slider, { SWrapper, SEndpoint } from "./Slider";
@@ -38,18 +38,22 @@ function normalizeQuaternion([x, y, z, w]: number[]): Quat {
   return [x / h, y / h, z / h, w / h];
 }
 
-function ScrubberArray({
-  value,
-  onChange
-}) {
+function ScrubberArray({ value, onChange }) {
   const elements = ["["];
 
   for (let i = 0; i < value.length; i++) {
-    elements.push(<Scrubber key={i} value={value[i]} speed={0.2} onChange={num => {
-      const newArray = Array.from(value);
-      newArray[i] = num;
-      onChange(newArray);
-    }} />);
+    elements.push(
+      <Scrubber
+        key={i}
+        value={value[i]}
+        speed={0.2}
+        onChange={(num) => {
+          const newArray = Array.from(value);
+          newArray[i] = num;
+          onChange(newArray);
+        }}
+      />
+    );
 
     if (i + 1 < value.length) {
       elements.push(", ");
@@ -64,97 +68,133 @@ type Props = {
   cameraState: CameraState;
   setCameraState: (arg0: CameraState) => void;
 };
-export default function CameraStateControls({
-  cameraState,
-  setCameraState
-}: Props) {
-  const {
-    target,
-    targetOrientation,
-    targetOffset
-  } = cameraState;
-  return <ControlsTable className="monospace">
+export default function CameraStateControls({ cameraState, setCameraState }: Props) {
+  const { target, targetOrientation, targetOffset } = cameraState;
+  return (
+    <ControlsTable className="monospace">
       <tbody>
         <tr>
           <td>perspective</td>
           <td>
-            <Switch on={cameraState.perspective} onChange={perspective => setCameraState({ ...cameraState,
-            perspective
-          })} />
+            <Switch
+              on={cameraState.perspective}
+              onChange={(perspective) => setCameraState({ ...cameraState, perspective })}
+            />
           </td>
         </tr>
         <tr>
           <td>target</td>
           <td>
-            <ScrubberArray value={target} onChange={target => setCameraState({ ...cameraState,
-            target
-          })} />
+            <ScrubberArray value={target} onChange={(target) => setCameraState({ ...cameraState, target })} />
           </td>
         </tr>
         <tr>
           <td>targetOrientation</td>
           <td>
-            <ScrubberArray value={targetOrientation} onChange={quat => setCameraState({ ...cameraState,
-            targetOrientation: normalizeQuaternion(quat)
-          })} />
+            <ScrubberArray
+              value={targetOrientation}
+              onChange={(quat) => setCameraState({ ...cameraState, targetOrientation: normalizeQuaternion(quat) })}
+            />
           </td>
         </tr>
         <tr>
           <td>targetOffset</td>
           <td>
-            <ScrubberArray value={targetOffset} onChange={targetOffset => setCameraState({ ...cameraState,
-            targetOffset
-          })} />
+            <ScrubberArray
+              value={targetOffset}
+              onChange={(targetOffset) => setCameraState({ ...cameraState, targetOffset })}
+            />
           </td>
         </tr>
         <tr>
           <td>distance</td>
           <td>
-            <Slider minLabel maxLabel value={cameraState.distance} min={0} max={400} step={1} onChange={distance => setCameraState({ ...cameraState,
-            distance
-          })} />
+            <Slider
+              minLabel
+              maxLabel
+              value={cameraState.distance}
+              min={0}
+              max={400}
+              step={1}
+              onChange={(distance) => setCameraState({ ...cameraState, distance })}
+            />
           </td>
         </tr>
         <tr>
           <td>phi</td>
           <td>
-            <Slider value={cameraState.phi} minLabel maxLabel="π" min={0} max={Math.PI} step={0.01} onChange={phi => setCameraState({ ...cameraState,
-            phi
-          })} />
+            <Slider
+              value={cameraState.phi}
+              minLabel
+              maxLabel="π"
+              min={0}
+              max={Math.PI}
+              step={0.01}
+              onChange={(phi) => setCameraState({ ...cameraState, phi })}
+            />
           </td>
         </tr>
         <tr>
           <td>thetaOffset</td>
           <td>
-            <Slider showEndpoints minLabel maxLabel="2π" value={cameraState.thetaOffset} min={0} max={Math.PI * 2} step={0.01} onChange={thetaOffset => setCameraState({ ...cameraState,
-            thetaOffset
-          })} />
+            <Slider
+              showEndpoints
+              minLabel
+              maxLabel="2π"
+              value={cameraState.thetaOffset}
+              min={0}
+              max={Math.PI * 2}
+              step={0.01}
+              onChange={(thetaOffset) => setCameraState({ ...cameraState, thetaOffset })}
+            />
           </td>
         </tr>
         <tr>
           <td>fovy</td>
           <td>
-            <Slider showEndpoints minLabel maxLabel="π" value={cameraState.fovy} min={0} max={Math.PI} step={0.01} onChange={fovy => setCameraState({ ...cameraState,
-            fovy
-          })} />
+            <Slider
+              showEndpoints
+              minLabel
+              maxLabel="π"
+              value={cameraState.fovy}
+              min={0}
+              max={Math.PI}
+              step={0.01}
+              onChange={(fovy) => setCameraState({ ...cameraState, fovy })}
+            />
           </td>
         </tr>
         <tr>
           <td>near</td>
           <td>
-            <Slider showEndpoints minLabel maxLabel value={cameraState.near} min={0.01} max={200} step={0.01} onChange={near => setCameraState({ ...cameraState,
-            near
-          })} />
+            <Slider
+              showEndpoints
+              minLabel
+              maxLabel
+              value={cameraState.near}
+              min={0.01}
+              max={200}
+              step={0.01}
+              onChange={(near) => setCameraState({ ...cameraState, near })}
+            />
           </td>
         </tr>
         <tr>
           <td>far</td>
           <td>
-            <Slider showEndpoints minLabel maxLabel value={cameraState.far} min={10} max={1000} step={0.001} onChange={far => setCameraState({ ...cameraState,
-            far
-          })} />
+            <Slider
+              showEndpoints
+              minLabel
+              maxLabel
+              value={cameraState.far}
+              min={10}
+              max={1000}
+              step={0.001}
+              onChange={(far) => setCameraState({ ...cameraState, far })}
+            />
           </td>
         </tr>
       </tbody>
-    </ControlsTable>;
+    </ControlsTable>
+  );
 }

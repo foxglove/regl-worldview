@@ -3,13 +3,12 @@
 //  This source code is licensed under the Apache License, Version 2.0,
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
-import React from "react";
+import * as React from "react";
 
 import type { WorldviewContextType } from "../WorldviewContext";
-import type { Point, CameraCommand, Dimensions, Color, Pose, Scale, Vec4 } from "../types";
-import { getCSSColor, toColor } from "../utils/commandUtils";
-import "../WorldviewContext";
 import WorldviewReactContext from "../WorldviewReactContext";
+import type { Point, CameraCommand, Dimensions, Color, Pose, Scale, Vec4, Vec3 } from "../types";
+import { getCSSColor, toColor } from "../utils/commandUtils";
 
 const BG_COLOR_LIGHT = "#ffffff";
 const BG_COLOR_DARK = "rgba(0,0,0,0.8)";
@@ -98,11 +97,12 @@ class TextElement {
     this.wrapper.style.color = getCSSColor(DEFAULT_TEXT_COLOR);
   }
 
+  // eslint-disable-next-line @foxglove/no-boolean-parameters
   update(marker: TextMarker, left: number, top: number, autoBackgroundColor?: boolean) {
     this.wrapper.style.transform = `translate(${left.toFixed()}px,${top.toFixed()}px)`;
     const { color, colors = [] } = marker;
     const hasBgColor = colors.length >= 2;
-    const textColor = toColor(hasBgColor ? colors[0] : color || [0, 0, 0, 1]);
+    const textColor = toColor(hasBgColor ? colors[0]! : color || [0, 0, 0, 1]);
 
     if (textColor) {
       const backgroundColor = toColor(colors[1]);
@@ -126,7 +126,7 @@ class TextElement {
           const isTextColorDark = isColorDark(textColor);
           const hexBgColor = isTextColorDark ? BG_COLOR_LIGHT : BG_COLOR_DARK;
           this._inner.style.background = hexBgColor;
-        } else if (hasBgColor && this._prevBgColor && !isColorEqual(backgroundColor, this._prevBgColor)) {
+        } else if (hasBgColor && this._prevBgColor && !isColorEqual(backgroundColor!, this._prevBgColor)) {
           // update background color with colors[1] data
           this._prevBgColor = backgroundColor;
           this._inner.style.background = getCSSColor(backgroundColor);
@@ -159,13 +159,13 @@ export default class Text extends React.Component<Props> {
     children: [],
   };
 
-  componentDidMount() {
+  override componentDidMount() {
     if (this._context) {
       this._context.registerPaintCallback(this.paint);
     }
   }
 
-  componentWillUnmount = () => {
+  override componentWillUnmount = () => {
     if (this._context) {
       this._context.unregisterPaintCallback(this.paint);
     }
@@ -175,7 +175,7 @@ export default class Text extends React.Component<Props> {
     const textComponents = this._textComponents;
     const { children: markers, autoBackgroundColor } = this.props;
     const { current: textContainer } = this._textContainerRef;
-    const initializedData = context && context.initializedData;
+    const initializedData = context?.initializedData;
 
     if (!textContainer || !context || !initializedData) {
       return;
@@ -228,13 +228,13 @@ export default class Text extends React.Component<Props> {
     }
   };
   project = (point: Point, camera: CameraCommand, dimension: Dimensions) => {
-    const vec = [point.x, point.y, point.z];
+    const vec: Vec3 = [point.x, point.y, point.z];
     const { left, top, width, height } = dimension;
-    const viewport = [left, top, width, height];
+    const viewport: Vec4 = [left, top, width, height];
     return camera.toScreenCoord(viewport, vec);
   };
 
-  render() {
+  override render() {
     return (
       <React.Fragment>
         <div ref={this._textContainerRef} />

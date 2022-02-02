@@ -2,6 +2,7 @@ import TinySDF from "@mapbox/tiny-sdf";
 import difference from "lodash/difference";
 import memoizeOne from "memoize-one";
 import React, { useState } from "react";
+import * as REGL from "regl";
 
 import type { Color } from "../types";
 import { defaultBlend, defaultDepth, toColor } from "../utils/commandUtils";
@@ -351,7 +352,7 @@ function makeTextCommand(alphabet?: string[]) {
   const memoizedGenerateAtlas = createMemoizedGenerateAtlas();
   const memoizedDrawAtlasTexture = createMemoizedDrawAtlasTexture();
 
-  const command = (regl: any) => {
+  const command = (regl: REGL.Regl) => {
     if (!regl) {
       throw new Error("Invalid regl instance");
     }

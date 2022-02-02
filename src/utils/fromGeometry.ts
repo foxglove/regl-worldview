@@ -3,13 +3,14 @@
 //  This source code is licensed under the Apache License, Version 2.0,
 //  found in the LICENSE file in the root directory of this source tree.
 //  You may not use this file except in compliance with the License.
+import * as REGL from "regl";
+
 import type { ReglCommand, Vec3 } from "../types";
 import { withPose, pointToVec3, defaultBlend, defaultDepth, shouldConvert, colorBuffer } from "./commandUtils";
-
 // Creates a regl command factory which will render any geometry described by point positions
 // and elements (indexes into the array of positions), and apply the object's pose, scale, and color to it.
 export default (positions: Vec3[], elements: Vec3[]) =>
-  (regl: any): ReglCommand => {
+  (regl: REGL.Regl): ReglCommand => {
     const vertexArray = Float32Array.from([].concat(...positions));
 
     if (elements.some((face) => face.some((i) => i < 0 || i >= 1 << 16))) {

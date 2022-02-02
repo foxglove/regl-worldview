@@ -5,7 +5,7 @@
 //  You may not use this file except in compliance with the License.
 import type { CommonCommandProps, Line } from "@foxglove/regl-worldview";
 import { Lines, FilledPolygons } from "@foxglove/regl-worldview";
-import React from "react";
+import * as React from "react";
 
 // type LineProps = CommandProps<Line> & {
 //   // when enabled, a polygon will be drawn using the line points, and the user will get the original
@@ -30,22 +30,26 @@ function LinesWithClickableInterior({
   showBorder: boolean;
 }) {
   if (enableClickableInterior) {
-    return <React.Fragment>
+    return (
+      <React.Fragment>
         {showBorder && <Lines {...rest}>{children}</Lines>}
         <FilledPolygons onClick={onClick}>
-          {children.map(item => ({
-          id: item.id,
-          points: item.points,
-          lineObject: item,
-          color: fillColor
-        }))}
+          {children.map((item) => ({
+            id: item.id,
+            points: item.points,
+            lineObject: item,
+            color: fillColor,
+          }))}
         </FilledPolygons>
-      </React.Fragment>;
+      </React.Fragment>
+    );
   }
 
-  return <Lines {...rest} onClick={onClick}>
+  return (
+    <Lines {...rest} onClick={onClick}>
       {children}
-    </Lines>;
+    </Lines>
+  );
 }
 
 LinesWithClickableInterior.defaultProps = {
@@ -53,8 +57,8 @@ LinesWithClickableInterior.defaultProps = {
     r: 0,
     g: 0,
     b: 0,
-    a: 0
+    a: 0,
   },
-  showBorder: false
+  showBorder: false,
 };
 export default LinesWithClickableInterior;

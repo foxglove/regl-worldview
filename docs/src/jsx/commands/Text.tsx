@@ -5,7 +5,7 @@
 //  You may not use this file except in compliance with the License.
 // #BEGIN EXAMPLE
 import Worldview, { Text, Axes } from "@foxglove/regl-worldview";
-import React from "react";
+import * as React from "react";
 
 // #BEGIN EDITABLE
 function Example() {
@@ -16,34 +16,34 @@ function Example() {
       r: 1,
       g: 1,
       b: 1,
-      a: 1
+      a: 1,
     },
     pose: {
       orientation: {
         x: 0,
         y: 0,
         z: 0,
-        w: 1
+        w: 1,
       },
       position: {
         x: 10,
         y: 10,
-        z: 1
-      }
+        z: 1,
+      },
     },
     scale: {
       x: 1,
       y: 1,
-      z: 1
-    } // uncomment colors and remove autoBackgroundColor prop to set text and background colors
+      z: 1,
+    }, // uncomment colors and remove autoBackgroundColor prop to set text and background colors
     // colors: [{ r: 1, g: 1, b: 1, a: 1 }, { r: 1, g: 0, b: 0, a: 0.8 }],
-
   };
-  return <Worldview>
+  return (
+    <Worldview>
       <Text autoBackgroundColor>{[labelMarker]}</Text>
       <Axes />
-    </Worldview>;
+    </Worldview>
+  );
 } // #END EXAMPLE
-
 
 export default Example;

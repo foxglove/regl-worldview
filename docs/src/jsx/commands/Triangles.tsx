@@ -5,7 +5,7 @@
 //  You may not use this file except in compliance with the License.
 // #BEGIN EXAMPLE
 import Worldview, { Triangles, Axes } from "@foxglove/regl-worldview";
-import React from "react";
+import * as React from "react";
 import seedrandom from "seedrandom";
 
 // #BEGIN EDITABLE
@@ -16,7 +16,7 @@ function Example() {
     r: rng(),
     g: rng(),
     b: rng(),
-    a: 1
+    a: 1,
   }));
   const colors = [];
   const points = [];
@@ -33,23 +33,24 @@ function Example() {
       position: {
         x: 0,
         y: 0,
-        z: 0
+        z: 0,
       },
       orientation: {
         x: 0,
         y: 0,
         z: 0,
-        w: 1
-      }
+        w: 1,
+      },
     },
     points,
-    colors
+    colors,
   };
-  return <Worldview>
+  return (
+    <Worldview>
       <Triangles>{[marker]}</Triangles>
       <Axes />
-    </Worldview>;
+    </Worldview>
+  );
 } // #END EXAMPLE
-
 
 export default Example;
