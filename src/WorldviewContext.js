@@ -101,6 +101,7 @@ export class WorldviewContext {
   // group all initialized data together so it can be checked for existence to verify initialization is complete
   initializedData: ?InitializedData;
   contextAttributes: ?{ [string]: any };
+  destroyed = false;
 
   constructor({
     dimension,
@@ -168,6 +169,7 @@ export class WorldviewContext {
   }
 
   destroy() {
+    this.destroyed = true;
     if (this.initializedData) {
       this.initializedData.regl.destroy();
     }
