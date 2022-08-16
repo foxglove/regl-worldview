@@ -39,10 +39,10 @@ const GlobalStyle = createGlobalStyle`
 addDecorator((StoryFn) => {
   document.querySelectorAll("[data-modalcontainer]").forEach((el) => el.remove()); // Remove leftover modals
   return (
-    <React.Fragment>
+    <React.StrictMode>
       <GlobalStyle />
       <StoryFn />
-    </React.Fragment>
+    </React.StrictMode>
   );
 });
 
@@ -56,12 +56,3 @@ addParameters({
 });
 
 prepareForScreenshots();
-
-// automatically import all files ending in *.stories.js
-const req = require.context("../src", true, /\.stories\.js$/);
-// $FlowFixMe - require.context seems not correctly typed.
-const reqDocs = require.context("../docs", true, /\.stories\.js$/);
-
-// load the stories
-req.keys().forEach((filename) => req(filename));
-reqDocs.keys().forEach((filename) => reqDocs(filename));

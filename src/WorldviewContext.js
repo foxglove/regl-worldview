@@ -101,6 +101,7 @@ export class WorldviewContext {
   // group all initialized data together so it can be checked for existence to verify initialization is complete
   initializedData: ?InitializedData;
   contextAttributes: ?{ [string]: any };
+  destroyed = false;
 
   constructor({
     dimension,
@@ -168,6 +169,7 @@ export class WorldviewContext {
   }
 
   destroy() {
+    this.destroyed = true;
     if (this.initializedData) {
       this.initializedData.regl.destroy();
     }
@@ -177,7 +179,7 @@ export class WorldviewContext {
   }
 
   // compile a command when it is first mounted, and try to register in _commands and _compiled maps
-  onMount(instance: React.Component<any>, command: RawCommand<any>) {
+  onMount(instance: any, command: RawCommand<any>) {
     const { initializedData } = this;
     // do nothing if regl hasn't been initialized yet
     if (!initializedData || this._commands.has(command)) {
@@ -190,7 +192,7 @@ export class WorldviewContext {
   }
 
   // unregister children hitmap and draw calls
-  onUnmount(instance: React.Component<any>) {
+  onUnmount(instance: any) {
     this._drawCalls.delete(instance);
   }
 

@@ -175,13 +175,50 @@ export class WorldviewBase extends React.Component<BaseProps, State> {
     this._canvas.current.addEventListener("webglcontextlost", this._handleContextLost);
     this._canvas.current.addEventListener("webglcontextrestored", this._handleContextRestored);
 
-    const { worldviewContext } = this.state;
-    worldviewContext.initialize(this._canvas.current);
-    // trigger rendering in children that require camera to be present, e.g. Text component
-    this.setState({}); //eslint-disable-line
-    // call paint to set the correct viewportWidth and viewportHeight for camera so non-regl components
-    // such as Text can get the correct screen coordinates for the first render
-    worldviewContext.paint();
+    const initialize = () => {
+      const { worldviewContext } = this.state;
+      worldviewContext.initialize(this._canvas.current);
+      // trigger rendering in children that require camera to be present, e.g. Text component
+      this.setState({}); //eslint-disable-line
+      // call paint to set the correct viewportWidth and viewportHeight for camera so non-regl components
+      // such as Text can get the correct screen coordinates for the first render
+      worldviewContext.paint();
+    };
+    if (this.state.worldviewContext.destroyed) {
+      const {
+        width,
+        height,
+        top,
+        left,
+        backgroundColor,
+        cameraState,
+        defaultCameraState,
+        onCameraStateChange,
+        contextAttributes,
+      } = this.props;
+
+      // prepare a new worldview context for when we are restored
+      this.setState(
+        {
+          worldviewContext: new WorldviewContext({
+            dimension: {
+              width,
+              height,
+              top,
+              left,
+            },
+            canvasBackgroundColor: backgroundColor || DEFAULT_BACKGROUND_COLOR,
+            // DEFAULT_CAMERA_STATE is applied if both `cameraState` and `defaultCameraState` are not present
+            cameraState: cameraState || defaultCameraState || DEFAULT_CAMERA_STATE,
+            onCameraStateChange: onCameraStateChange || undefined,
+            contextAttributes: contextAttributes || {},
+          }),
+        },
+        initialize,
+      );
+    } else {
+      initialize();
+    }
   }
 
   componentWillUnmount() {
