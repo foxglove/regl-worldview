@@ -1,3 +1,9 @@
+⚠️⚠️⚠️
+
+**This repository is no longer maintained. It was a fork of [regl-worldview](https://github.com/cruise-automation/webviz/tree/master/packages/regl-worldview) used by [Foxglove Studio](https://github.com/foxglove/studio). Foxglove Studio now uses Three.js instead of Worldview.**
+
+⚠️⚠️⚠️
+
 # @foxglove/regl-worldview
 
 **Worldview** is a React library for rendering 2D and 3D scenes using [regl](https://github.com/regl-project/regl).
